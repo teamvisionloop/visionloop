@@ -1,12 +1,11 @@
+import { useEffect, useRef, useState } from "react";
 import { Infinity, Zap, Shield, Users } from "lucide-react";
-import CountUp from "react-countup";
-import { useInView } from "react-intersection-observer";
 
 const About = () => {
   const stats = [
-    { number: 50, suffix: "+", label: "Projects Delivered" },
-    { number: 100, suffix: "%", label: "Client Satisfaction" },
-    { number: 3, suffix: "+", label: "Years Experience" },
+    { number: 50, label: "Projects Delivered" },
+    { number: 100, label: "Client Satisfaction" },
+    { number: 3, label: "Years Experience" },
   ];
 
   const features = [
@@ -27,11 +26,44 @@ const About = () => {
     },
   ];
 
-  // Intersection observer hook
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.3,
-  });
+  const [counts, setCounts] = useState<number[]>(stats.map(() => 0));
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          // animate numbers
+          stats.forEach((stat, index) => {
+            let start = 0;
+            const duration = 1500; // 1.5 seconds
+            const increment = stat.number / (duration / 16); // approx 60fps
+
+            const animate = () => {
+              start += increment;
+              if (start < stat.number) {
+                setCounts((prev) =>
+                  prev.map((val, i) => (i === index ? Math.floor(start) : val))
+                );
+                requestAnimationFrame(animate);
+              } else {
+                setCounts((prev) =>
+                  prev.map((val, i) => (i === index ? stat.number : val))
+                );
+              }
+            };
+            animate();
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) observer.observe(statsRef.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="about" className="section-padding bg-secondary">
@@ -74,12 +106,14 @@ const About = () => {
           </div>
         </div>
 
-        {/* Stats with count-up */}
-        <div ref={ref} className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 border-t border-border">
+        <div
+          ref={statsRef}
+          className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 border-t border-border"
+        >
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
-                {inView ? <CountUp start={0} end={stat.number} duration={2.5} /> : 0}{stat.suffix}
+                {counts[index]}{stat.label === "Client Satisfaction" ? "%" : ""}
               </div>
               <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
             </div>
