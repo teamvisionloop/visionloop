@@ -82,7 +82,7 @@ const Pricing = () => {
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-4">
               {plans.map((plan, index) => (
-                <div key={index} className="flex-[0_0_85%] min-w-0 pl-4 first:pl-0 last:pr-4 relative">
+                <div key={index} className="flex-[0_0_85%] min-w-0 pl-4 first:pl-0 last:pr-4">
                   <PricingCard plan={plan} />
                 </div>
               ))}
@@ -130,21 +130,21 @@ interface PricingCardProps {
 }
 
 const PricingCard = ({ plan }: PricingCardProps) => (
-  <div className="relative p-6 md:p-8 border transition-all hover-lift h-full">
+  <div className="relative p-6 md:p-8 border transition-all hover-lift h-full rounded-md overflow-visible">
     {/* Most Popular Badge */}
     {plan.popular && (
       <div
         className="
-          absolute -top-3 left-1/2 -translate-x-1/2
-          px-3 py-1 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap
-          bg-primary text-primary-foreground rounded-md shadow-md z-10
+          absolute -top-4 left-1/2 transform -translate-x-1/2
+          px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap
+          bg-primary text-primary-foreground rounded-md shadow-md z-20
         "
       >
-        <Star size={10} fill="currentColor" /> Most Popular
+        <Star size={12} fill="currentColor" /> Most Popular
       </div>
     )}
 
-    <div className="mt-4 mb-4 md:mb-6">
+    <div className="mt-6 mb-4 md:mb-6">
       <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
       <div className="flex items-baseline gap-1">
         <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
