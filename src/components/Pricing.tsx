@@ -1,4 +1,4 @@
-import { Check, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import { useEffect, useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -9,9 +9,6 @@ const Pricing = () => {
     [Autoplay({ delay: 5000, stopOnInteraction: false })]
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -32,36 +29,21 @@ const Pricing = () => {
       name: "Basic",
       price: "2,500",
       currency: "EGP",
-      features: [
-        "12 products",
-        "4 pages",
-        "Premium theme",
-        "No free revisions",
-      ],
+      features: ["12 products", "4 pages", "Premium theme", "No free revisions"],
       popular: false,
     },
     {
       name: "Starter",
       price: "4,500",
       currency: "EGP",
-      features: [
-        "25 products",
-        "5 page website",
-        "Premium theme",
-        "2 free revisions",
-      ],
+      features: ["25 products", "5 page website", "Premium theme", "2 free revisions"],
       popular: false,
     },
     {
       name: "Pro",
       price: "6,500",
       currency: "EGP",
-      features: [
-        "35 products",
-        "5 page website",
-        "Premium theme",
-        "3 free revisions",
-      ],
+      features: ["35 products", "5 page website", "Premium theme", "3 free revisions"],
       popular: true,
     },
     {
@@ -109,22 +91,8 @@ const Pricing = () => {
             </div>
           </div>
 
-          <button
-            onClick={scrollPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-10 h-10 bg-background border border-border flex items-center justify-center hover:bg-secondary transition-colors z-10"
-            aria-label="Previous plan"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <button
-            onClick={scrollNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 w-10 h-10 bg-background border border-border flex items-center justify-center hover:bg-secondary transition-colors z-10"
-            aria-label="Next plan"
-          >
-            <ChevronRight size={18} />
-          </button>
-
-          <div className="flex justify-center gap-2 mt-6">
+          {/* Dots */}
+          <div className="flex justify-center gap-2 mt-4">
             {plans.map((_, index) => (
               <button
                 key={index}
@@ -139,13 +107,13 @@ const Pricing = () => {
         </div>
 
         {/* Desktop Grid */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {plans.map((plan, index) => (
-            <PricingCard key={index} plan={plan} />
+            <PricingCard key={index} plan={plan} compact />
           ))}
         </div>
 
-        <p className="text-center text-muted-foreground text-xs md:text-sm mt-8 md:mt-12 px-4">
+        <p className="text-center text-muted-foreground text-xs md:text-sm mt-6 md:mt-8 px-4">
           All prices are in Egyptian Pounds (EGP). Custom packages available upon request.
         </p>
       </div>
@@ -161,15 +129,16 @@ interface PricingCardProps {
     features: string[];
     popular: boolean;
   };
+  compact?: boolean;
 }
 
-const PricingCard = ({ plan }: PricingCardProps) => (
+const PricingCard = ({ plan, compact }: PricingCardProps) => (
   <div
-    className={`relative p-6 md:p-8 border transition-all hover-lift h-full ${
+    className={`relative p-4 md:p-6 border transition-all hover-lift ${
       plan.popular
         ? "border-primary bg-secondary"
         : "border-border hover:border-primary"
-    }`}
+    } ${compact ? "h-64 md:h-72" : "h-full"}`}
   >
     {plan.popular && (
       <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 md:px-4 py-1 text-xs font-medium flex items-center gap-1 whitespace-nowrap">
@@ -177,18 +146,18 @@ const PricingCard = ({ plan }: PricingCardProps) => (
       </div>
     )}
 
-    <div className="mb-4 md:mb-6">
-      <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
+    <div className="mb-3 md:mb-4">
+      <h3 className="text-lg md:text-xl font-bold mb-1">{plan.name}</h3>
       <div className="flex items-baseline gap-1">
-        <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
+        <span className="text-2xl md:text-3xl font-bold">{plan.price}</span>
         <span className="text-muted-foreground text-xs md:text-sm">{plan.currency}</span>
       </div>
     </div>
 
-    <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+    <ul className={`space-y-2 md:space-y-3 mb-4 md:mb-6`}>
       {plan.features.map((feature, featureIndex) => (
         <li key={featureIndex} className="flex items-start gap-2 md:gap-3">
-          <Check size={16} className="mt-0.5 flex-shrink-0" />
+          <Check size={14} className="mt-0.5 flex-shrink-0" />
           <span className="text-xs md:text-sm">{feature}</span>
         </li>
       ))}
@@ -196,7 +165,7 @@ const PricingCard = ({ plan }: PricingCardProps) => (
 
     <a
       href="#contact"
-      className={`block w-full py-2.5 md:py-3 text-center text-xs md:text-sm font-medium transition-colors ${
+      className={`block w-full py-2 text-center text-xs md:text-sm font-medium transition-colors ${
         plan.popular
           ? "bg-primary text-primary-foreground hover:bg-primary/90"
           : "border border-primary hover:bg-secondary"
