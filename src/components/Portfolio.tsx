@@ -17,7 +17,11 @@ interface Project {
 
 const Portfolio = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "start" },
+    {
+      loop: true,
+      align: "start",
+      containScroll: "trimSnaps", // ensures spacing at start/end
+    },
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -84,11 +88,11 @@ const Portfolio = () => {
 
         <div className="relative">
           <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex">
+            <div className="flex gap-4 px-4 sm:px-0">
               {projects.map((project, index) => (
                 <div
                   key={index}
-                  className="flex-[0_0_100%] min-w-0 sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] pl-4 first:pl-0 sm:first:pl-4"
+                  className="flex-[0_0_80%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
                 >
                   <a
                     href={project.link || "#contact"}
@@ -134,19 +138,7 @@ const Portfolio = () => {
             </div>
           </div>
 
-          {/* Dots */}
-          <div className="flex justify-center gap-2 mt-6 md:mt-8">
-            {projects.map((_, index) => (
-              <button
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === selectedIndex ? "bg-primary" : "bg-border"
-                }`}
-                onClick={() => emblaApi?.scrollTo(index)}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
+          {/* Removed dots */}
         </div>
 
         <div className="text-center mt-8 md:mt-12">
