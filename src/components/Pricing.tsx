@@ -51,7 +51,7 @@ const plans: Plan[] = [
   },
 ];
 
-const CARD_HEIGHT = "550px"; // Set all cards to Enterprise height
+const CARD_HEIGHT = "450px"; // Set all cards to Enterprise height
 
 const Pricing = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
