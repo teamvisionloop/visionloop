@@ -86,33 +86,26 @@ const Pricing = () => {
         </div>
 
         {/* Mobile Carousel */}
-        <div className="md:hidden relative overflow-x-hidden" ref={emblaRef}>
-          <div className="flex">
-            {plans.map((plan, index) => (
-              <div key={index} className="relative pl-4 first:pl-0 flex-[0_0_85%] min-w-0">
-                {plan.popular && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
-                    <Star size={12} fill="currentColor" /> Most Popular
-                  </div>
-                )}
-                <PricingCard plan={plan} />
-              </div>
-            ))}
+        <div className="md:hidden relative overflow-x-hidden">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex px-4"> {/* Container padding */}
+              {plans.map((plan, index) => (
+                <div
+                  key={index}
+                  className="relative flex-[0_0_85%] min-w-0 mx-2" // spacing between slides
+                >
+                  {plan.popular && (
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
+                      <Star size={12} fill="currentColor" /> Most Popular
+                    </div>
+                  )}
+                  <PricingCard plan={plan} />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Dots */}
-          <div className="flex justify-center gap-2 mt-6">
-            {plans.map((_, index) => (
-              <button
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === selectedIndex ? "bg-primary" : "bg-border"
-                }`}
-                onClick={() => emblaApi?.scrollTo(index)}
-                aria-label={`Go to plan ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Desktop Grid */}
