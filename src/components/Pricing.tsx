@@ -132,16 +132,14 @@ interface PricingCardProps {
 }
 
 const PricingCard = ({ plan }: PricingCardProps) => (
-  <div className={`relative p-6 md:p-8 border transition-all hover-lift h-full`}>
+  <div
+    className={`relative p-6 md:p-8 border transition-all hover-lift h-full pt-12`} // Extra top padding
+  >
     {plan.popular && (
       <div
-        className={`absolute 
-          -top-3 md:-top-3 
-          left-1/2 transform -translate-x-1/2
-          md:px-4 px-3 py-1
-          text-xs font-medium flex items-center gap-1 whitespace-nowrap
-          bg-primary text-primary-foreground
-          sm:-top-1`} // Push down on small screens
+        className={`absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+          px-3 py-1 text-xs font-medium flex items-center gap-1 whitespace-nowrap
+          bg-primary text-primary-foreground`}
       >
         <Star size={10} fill="currentColor" /> Most Popular
       </div>
