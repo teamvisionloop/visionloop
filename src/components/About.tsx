@@ -1,10 +1,12 @@
 import { Infinity, Zap, Shield, Users } from "lucide-react";
+import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
 
 const About = () => {
   const stats = [
-    { number: "50+", label: "Projects Delivered" },
-    { number: "100%", label: "Client Satisfaction" },
-    { number: "3+", label: "Years Experience" },
+    { number: 50, suffix: "+", label: "Projects Delivered" },
+    { number: 100, suffix: "%", label: "Client Satisfaction" },
+    { number: 3, suffix: "+", label: "Years Experience" },
   ];
 
   const features = [
@@ -24,6 +26,12 @@ const About = () => {
       description: "We're with you every step of the way, from launch and beyond.",
     },
   ];
+
+  // Intersection observer hook
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.3,
+  });
 
   return (
     <section id="about" className="section-padding bg-secondary">
@@ -66,10 +74,13 @@ const About = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 border-t border-border">
+        {/* Stats with count-up */}
+        <div ref={ref} className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 border-t border-border">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">{stat.number}</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
+                {inView ? <CountUp start={0} end={stat.number} duration={2.5} /> : 0}{stat.suffix}
+              </div>
               <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
             </div>
           ))}
