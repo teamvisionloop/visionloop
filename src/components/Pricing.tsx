@@ -87,20 +87,21 @@ const Pricing = () => {
 
         {/* Mobile Carousel */}
         <div className="md:hidden relative overflow-x-hidden">
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex px-4"> {/* Container padding */}
+          <div className="overflow-visible" ref={emblaRef}>
+            <div className="flex px-4">
               {plans.map((plan, index) => (
                 <div
                   key={index}
                   className="relative flex-[0_0_85%] min-w-0 mx-2"
                 >
-                  <PricingCard plan={plan} />
+                  <div className="relative">
+                    <PricingCard plan={plan} />
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Dots */}
           <div className="flex justify-center gap-2 mt-6">
             {plans.map((_, index) => (
               <button
@@ -140,12 +141,12 @@ const PricingCard = ({ plan }: PricingCardProps) => (
   <div className="relative">
     {/* Badge on top of card */}
     {plan.popular && (
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
+      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-20">
         <Star size={12} fill="currentColor" /> Most Popular
       </div>
     )}
 
-    <div className="p-6 md:p-8 border rounded-md hover-lift w-full h-[500px] flex flex-col justify-between">
+    <div className="p-6 md:p-8 border rounded-md hover-lift w-full h-[500px] flex flex-col justify-between relative z-10">
       <div>
         <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
         <div className="flex items-baseline gap-1">
