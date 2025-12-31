@@ -19,9 +19,7 @@ const Pricing = () => {
     if (!emblaApi) return;
     onSelect();
     emblaApi.on("select", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
-    };
+    return () => emblaApi.off("select", onSelect);
   }, [emblaApi, onSelect]);
 
   const plans = [
@@ -132,21 +130,21 @@ interface PricingCardProps {
 }
 
 const PricingCard = ({ plan }: PricingCardProps) => (
-  <div className="relative p-6 md:p-8 border transition-all hover-lift h-full pt-8">
+  <div className="relative p-6 md:p-8 border transition-all hover-lift h-full">
     {/* Most Popular Badge */}
     {plan.popular && (
       <div
         className="
-          absolute -top-5 left-1/2 -translate-x-1/2
+          absolute -top-3 left-1/2 -translate-x-1/2
           px-3 py-1 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap
-          bg-primary text-primary-foreground rounded-b-md shadow-md
+          bg-primary text-primary-foreground rounded-md shadow-md z-10
         "
       >
         <Star size={10} fill="currentColor" /> Most Popular
       </div>
     )}
 
-    <div className="mb-4 md:mb-6">
+    <div className="mt-4 mb-4 md:mb-6">
       <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
       <div className="flex items-baseline gap-1">
         <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
