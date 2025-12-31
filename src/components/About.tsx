@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
 import { Infinity, Zap, Shield, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const About = () => {
   const stats = [
-    { number: 50, label: "Projects Delivered" },
-    { number: 100, label: "Client Satisfaction" },
-    { number: 2+, label: "Years Experience" },
+    { number: 35, suffix: "+", label: "Projects Delivered" },
+    { number: 100, suffix: "%", label: "Client Satisfaction" },
+    { number: 2, suffix: "+", label: "Years Experience" },
   ];
 
   const features = [
@@ -26,44 +26,40 @@ const About = () => {
     },
   ];
 
-  const [counts, setCounts] = useState<number[]>(stats.map(() => 0));
-  const statsRef = useRef<HTMLDivElement>(null);
+  const [counts, setCounts] = useState(stats.map(() => 0));
+  const [animated, setAnimated] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          // animate numbers
-          stats.forEach((stat, index) => {
-            let start = 0;
-            const duration = 1500; // 1.5 seconds
-            const increment = stat.number / (duration / 16); // approx 60fps
+    const handleScroll = () => {
+      const section = document.getElementById("about");
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      if (!animated && rect.top < window.innerHeight - 100) {
+        setAnimated(true);
+        stats.forEach((stat, index) => {
+          let start = 0;
+          const end = stat.number;
+          const duration = 1500;
+          const increment = Math.ceil(end / (duration / 16));
+          const interval = setInterval(() => {
+            start += increment;
+            if (start >= end) {
+              start = end;
+              clearInterval(interval);
+            }
+            setCounts((prev) => {
+              const updated = [...prev];
+              updated[index] = start;
+              return updated;
+            });
+          }, 16);
+        });
+      }
+    };
 
-            const animate = () => {
-              start += increment;
-              if (start < stat.number) {
-                setCounts((prev) =>
-                  prev.map((val, i) => (i === index ? Math.floor(start) : val))
-                );
-                requestAnimationFrame(animate);
-              } else {
-                setCounts((prev) =>
-                  prev.map((val, i) => (i === index ? stat.number : val))
-                );
-              }
-            };
-            animate();
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (statsRef.current) observer.observe(statsRef.current);
-
-    return () => observer.disconnect();
-  }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [animated, stats]);
 
   return (
     <section id="about" className="section-padding bg-secondary">
@@ -106,14 +102,12 @@ const About = () => {
           </div>
         </div>
 
-        <div
-          ref={statsRef}
-          className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 border-t border-border"
-        >
+        <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 border-t border-border">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
-                {counts[index]}{stat.label === "Client Satisfaction" ? "%" : ""}
+                {counts[index]}
+                {stat.suffix}
               </div>
               <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
             </div>
