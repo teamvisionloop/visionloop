@@ -92,17 +92,7 @@ const Pricing = () => {
           </div>
 
           {/* Dots */}
-          <div className="flex justify-center gap-2 mt-4">
-            {plans.map((_, index) => (
-              <button
-                key={index}
-                className={`w-2 h-2 rounded-full ${
-                  index === selectedIndex ? "bg-primary" : "bg-border"
-                }`}
-                onClick={() => emblaApi?.scrollTo(index)}
-              />
-            ))}
-          </div>
+
         </div>
 
         {/* Desktop Grid */}
