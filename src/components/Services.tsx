@@ -92,18 +92,7 @@ const Services = () => {
           </div>
 
           {/* Dots */}
-          <div className="flex justify-center gap-2 mt-6 md:mt-8">
-            {services.map((_, index) => (
-              <button
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === selectedIndex ? "bg-primary-foreground" : "bg-primary-foreground/30"
-                }`}
-                onClick={() => emblaApi?.scrollTo(index)}
-                aria-label={`Go to service ${index + 1}`}
-              />
-            ))}
-          </div>
+
         </div>
       </div>
     </section>
