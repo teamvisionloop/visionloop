@@ -94,7 +94,7 @@ const Pricing = () => {
                   key={index}
                   className="relative flex-[0_0_85%] min-w-0 mx-2"
                 >
-                  <PricingCard plan={plan} mobile />
+                  <PricingCard plan={plan} />
                 </div>
               ))}
             </div>
@@ -134,20 +134,17 @@ const Pricing = () => {
 
 interface PricingCardProps {
   plan: Plan;
-  mobile?: boolean;
 }
 
-const PricingCard = ({ plan, mobile }: PricingCardProps) => (
+const PricingCard = ({ plan }: PricingCardProps) => (
   <div className="relative">
+    {/* Badge on top of card */}
     {plan.popular && (
-      <div
-        className={`absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10 ${
-          mobile ? "md:hidden" : ""
-        }`}
-      >
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
         <Star size={12} fill="currentColor" /> Most Popular
       </div>
     )}
+
     <div className="p-6 md:p-8 border rounded-md hover-lift w-full h-[500px] flex flex-col justify-between">
       <div>
         <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
