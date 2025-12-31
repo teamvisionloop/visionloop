@@ -86,7 +86,7 @@ const Pricing = () => {
         </div>
 
         {/* Mobile Carousel */}
-        <div className="md:hidden relative" ref={emblaRef}>
+        <div className="md:hidden relative overflow-x-hidden" ref={emblaRef}>
           <div className="flex">
             {plans.map((plan, index) => (
               <div key={index} className="relative pl-4 first:pl-0 flex-[0_0_85%] min-w-0">
