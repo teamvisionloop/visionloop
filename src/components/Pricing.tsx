@@ -138,8 +138,8 @@ const Pricing = () => {
 };
 
 const PricingCard = ({ plan }: { plan: Plan }) => (
-  <div className="p-6 md:p-8 border rounded-md hover-lift h-full">
-    <div className="mb-4 md:mb-6">
+  <div className="p-6 md:p-8 border rounded-md hover-lift h-[480px] md:h-[500px] flex flex-col justify-between">
+    <div>
       <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
       <div className="flex items-baseline gap-1">
         <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
