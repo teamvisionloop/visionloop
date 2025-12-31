@@ -135,9 +135,9 @@ const PricingCard = ({ plan }: PricingCardProps) => (
     {plan.popular && (
       <div
         className="
-          absolute -top-4 left-1/2 transform -translate-x-1/2
+          absolute -top-5 left-1/2 transform -translate-x-1/2
           px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap
-          bg-primary text-primary-foreground rounded-md shadow-md z-20
+          bg-primary text-primary-foreground rounded-md shadow-md z-50
         "
       >
         <Star size={12} fill="currentColor" /> Most Popular
