@@ -39,8 +39,10 @@ const About = () => {
         stats.forEach((stat, index) => {
           let start = 0;
           const end = stat.number;
-          const duration = 1500;
-          const increment = Math.ceil(end / (duration / 16));
+          const duration = 1500; // 1.5s
+          const stepTime = 16; // ~60fps
+          const increment = end / (duration / stepTime);
+
           const interval = setInterval(() => {
             start += increment;
             if (start >= end) {
@@ -49,10 +51,10 @@ const About = () => {
             }
             setCounts((prev) => {
               const updated = [...prev];
-              updated[index] = start;
+              updated[index] = Math.floor(start);
               return updated;
             });
-          }, 16);
+          }, stepTime);
         });
       }
     };
