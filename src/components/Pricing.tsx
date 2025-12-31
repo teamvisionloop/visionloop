@@ -89,7 +89,7 @@ const Pricing = () => {
         <div className="md:hidden relative" ref={emblaRef}>
           <div className="flex">
             {plans.map((plan, index) => (
-              <div key={index} className="relative pl-4 first:pl-0">
+              <div key={index} className="relative pl-4 first:pl-0 flex-[0_0_85%] min-w-0">
                 {plan.popular && (
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
                     <Star size={12} fill="currentColor" /> Most Popular
@@ -138,7 +138,7 @@ const Pricing = () => {
 };
 
 const PricingCard = ({ plan }: { plan: Plan }) => (
-  <div className="p-6 md:p-8 border rounded-md hover-lift h-[480px] md:h-[500px] flex flex-col justify-between">
+  <div className="p-6 md:p-8 border rounded-md hover-lift w-full h-[500px] flex flex-col justify-between">
     <div>
       <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
       <div className="flex items-baseline gap-1">
