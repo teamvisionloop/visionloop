@@ -20,10 +20,11 @@ const Portfolio = () => {
     {
       loop: true,
       align: "start",
-      containScroll: "trimSnaps", // ensures spacing at start/end
+      containScroll: "trimSnaps",
     },
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onSelect = useCallback(() => {
@@ -35,9 +36,7 @@ const Portfolio = () => {
     if (!emblaApi) return;
     onSelect();
     emblaApi.on("select", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
-    };
+    return () => emblaApi.off("select", onSelect);
   }, [emblaApi, onSelect]);
 
   const projects: Project[] = [
@@ -88,11 +87,11 @@ const Portfolio = () => {
 
         <div className="relative">
           <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-4 px-4 sm:px-0">
+            <div className="flex gap-4 px-2 sm:px-0">
               {projects.map((project, index) => (
                 <div
                   key={index}
-                  className="flex-[0_0_80%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
+                  className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
                 >
                   <a
                     href={project.link || "#contact"}
@@ -137,8 +136,6 @@ const Portfolio = () => {
               ))}
             </div>
           </div>
-
-          {/* Removed dots */}
         </div>
 
         <div className="text-center mt-8 md:mt-12">
