@@ -133,13 +133,16 @@ interface PricingCardProps {
 
 const PricingCard = ({ plan }: PricingCardProps) => (
   <div
-    className={`relative p-6 md:p-8 border transition-all hover-lift h-full pt-12`} // Extra top padding
+    className={`relative p-6 md:p-8 border transition-all hover-lift h-full pt-14`} // extra padding for badge
   >
     {plan.popular && (
       <div
-        className={`absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+        className={`
+          absolute left-1/2 transform -translate-x-1/2
           px-3 py-1 text-xs font-medium flex items-center gap-1 whitespace-nowrap
-          bg-primary text-primary-foreground`}
+          bg-primary text-primary-foreground
+          top-0 translate-y-4 md:-translate-y-1/2
+        `}
       >
         <Star size={10} fill="currentColor" /> Most Popular
       </div>
