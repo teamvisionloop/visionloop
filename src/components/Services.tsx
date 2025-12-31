@@ -79,9 +79,7 @@ const Services = () => {
               {services.map((service, index) => (
                 <div 
                   key={index} 
-                  className={`flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 ${
-                    index === 0 ? "pl-0" : "pl-4"
-                  }`}
+                  className="flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
                 >
                   <div className="group p-6 md:p-8 border border-primary-foreground/20 hover:bg-primary-foreground/5 transition-colors h-full">
                     <service.icon className="w-8 h-8 md:w-10 md:h-10 mb-4 md:mb-6 opacity-80 group-hover:opacity-100 transition-opacity" />
@@ -94,18 +92,7 @@ const Services = () => {
           </div>
 
           {/* Dots */}
-          <div className="flex justify-center gap-2 mt-6 md:mt-8">
-            {services.map((_, index) => (
-              <button
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === selectedIndex ? "bg-primary-foreground" : "bg-primary-foreground/30"
-                }`}
-                onClick={() => emblaApi?.scrollTo(index)}
-                aria-label={`Go to service ${index + 1}`}
-              />
-            ))}
-          </div>
+
         </div>
       </div>
     </section>
