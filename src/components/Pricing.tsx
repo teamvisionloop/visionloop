@@ -141,8 +141,9 @@ const PricingCard = ({ plan }: PricingCardProps) => {
 
     const updateBadgePosition = () => {
       const cardTop = cardRef.current!.offsetTop;
-      // place badge slightly above card
-      badgeRef.current!.style.top = `${cardTop - badgeRef.current!.offsetHeight / 2}px`;
+      const cardHeight = cardRef.current!.offsetHeight;
+      // place badge exactly on top of the card border
+      badgeRef.current!.style.top = `-${badgeRef.current!.offsetHeight / 2}px`;
     };
 
     updateBadgePosition();
@@ -158,7 +159,7 @@ const PricingCard = ({ plan }: PricingCardProps) => {
       {plan.popular && (
         <div
           ref={badgeRef}
-          className="absolute left-1/2 transform -translate-x-1/2 px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap bg-primary text-primary-foreground rounded-md shadow-md z-50"
+          className="absolute left-1/2 transform -translate-x-1/2 px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap bg-primary text-primary-foreground rounded-md shadow-md z-[-1]"
         >
           <Star size={12} fill="currentColor" /> Most Popular
         </div>
