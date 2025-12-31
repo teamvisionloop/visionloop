@@ -1,5 +1,7 @@
 import { Check, Star } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 interface Plan {
   name: string;
@@ -50,6 +52,24 @@ const plans: Plan[] = [
 ];
 
 const Pricing = () => {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "start" },
+    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => emblaApi.off("select", onSelect);
+  }, [emblaApi, onSelect]);
+
   return (
     <section id="pricing" className="section-padding">
       <div className="max-w-7xl mx-auto">
@@ -65,11 +85,44 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Mobile Carousel */}
+        <div className="md:hidden relative overflow-hidden" ref={emblaRef}>
+          <div className="flex">
+            {plans.map((plan, index) => (
+              <div
+                key={index}
+                className="flex-[0_0_85%] min-w-0 pl-4 first:pl-0"
+              >
+                <PricingCard plan={plan} />
+              </div>
+            ))}
+          </div>
+
+          {/* Dots */}
+          <div className="flex justify-center gap-2 mt-6">
+            {plans.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === selectedIndex ? "bg-primary" : "bg-border"
+                }`}
+                onClick={() => emblaApi?.scrollTo(index)}
+                aria-label={`Go to plan ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, index) => (
             <PricingCard key={index} plan={plan} />
           ))}
         </div>
+
+        <p className="text-center text-muted-foreground text-xs md:text-sm mt-8 md:mt-12 px-4">
+          All prices are in Egyptian Pounds (EGP). Custom packages available upon request.
+        </p>
       </div>
     </section>
   );
@@ -88,20 +141,20 @@ const PricingCard = ({ plan }: PricingCardProps) => {
 
     const updateBadgePosition = () => {
       const cardTop = cardRef.current!.offsetTop;
-      // Force badge 16px above the card container
+      // place badge slightly above card
       badgeRef.current!.style.top = `${cardTop - badgeRef.current!.offsetHeight / 2}px`;
     };
 
-    // Initial position
     updateBadgePosition();
-    // Recalculate on window resize
     window.addEventListener("resize", updateBadgePosition);
-
     return () => window.removeEventListener("resize", updateBadgePosition);
   }, [plan]);
 
   return (
-    <div ref={cardRef} className="relative p-6 md:p-8 border rounded-md hover-lift h-full overflow-visible">
+    <div
+      ref={cardRef}
+      className="relative p-6 md:p-8 border rounded-md hover-lift h-full overflow-visible"
+    >
       {plan.popular && (
         <div
           ref={badgeRef}
