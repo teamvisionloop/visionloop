@@ -1,5 +1,5 @@
 import { Check, Star } from "lucide-react";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -86,13 +86,13 @@ const Pricing = () => {
         </div>
 
         {/* Mobile Carousel */}
-        <div className="md:hidden relative overflow-hidden" ref={emblaRef}>
+        <div className="md:hidden relative" ref={emblaRef}>
           <div className="flex">
             {plans.map((plan, index) => (
-              <div
-                key={index}
-                className="flex-[0_0_85%] min-w-0 pl-4 first:pl-0"
-              >
+              <div key={index} className="flex-[0_0_85%] min-w-0 pl-4 first:pl-0 relative">
+                {plan.popular && (
+                  <PopularBadge />
+                )}
                 <PricingCard plan={plan} />
               </div>
             ))}
@@ -116,7 +116,10 @@ const Pricing = () => {
         {/* Desktop Grid */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, index) => (
-            <PricingCard key={index} plan={plan} />
+            <div key={index} className="relative">
+              {plan.popular && <PopularBadge />}
+              <PricingCard plan={plan} />
+            </div>
           ))}
         </div>
 
@@ -128,72 +131,46 @@ const Pricing = () => {
   );
 };
 
+const PopularBadge = () => (
+  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap bg-primary text-primary-foreground rounded-md shadow-md z-10">
+    <Star size={12} fill="currentColor" /> Most Popular
+  </div>
+);
+
 interface PricingCardProps {
   plan: Plan;
 }
 
-const PricingCard = ({ plan }: PricingCardProps) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!plan.popular || !cardRef.current || !badgeRef.current) return;
-
-    const updateBadgePosition = () => {
-      const cardTop = cardRef.current!.offsetTop;
-      const cardHeight = cardRef.current!.offsetHeight;
-      // place badge exactly on top of the card border
-      badgeRef.current!.style.top = `-${badgeRef.current!.offsetHeight / 2}px`;
-    };
-
-    updateBadgePosition();
-    window.addEventListener("resize", updateBadgePosition);
-    return () => window.removeEventListener("resize", updateBadgePosition);
-  }, [plan]);
-
-  return (
-    <div
-      ref={cardRef}
-      className="relative p-6 md:p-8 border rounded-md hover-lift h-full overflow-visible"
-    >
-      {plan.popular && (
-        <div
-          ref={badgeRef}
-          className="absolute left-1/2 transform -translate-x-1/2 px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap bg-primary text-primary-foreground rounded-md shadow-md z-[-1]"
-        >
-          <Star size={12} fill="currentColor" /> Most Popular
-        </div>
-      )}
-
-      <div className="mt-6 mb-4 md:mb-6">
-        <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
-        <div className="flex items-baseline gap-1">
-          <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
-          <span className="text-muted-foreground text-xs md:text-sm">{plan.currency}</span>
-        </div>
+const PricingCard = ({ plan }: PricingCardProps) => (
+  <div className="p-6 md:p-8 border rounded-md hover-lift h-full">
+    <div className="mb-4 md:mb-6">
+      <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
+      <div className="flex items-baseline gap-1">
+        <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
+        <span className="text-muted-foreground text-xs md:text-sm">{plan.currency}</span>
       </div>
-
-      <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-        {plan.features.map((feature, idx) => (
-          <li key={idx} className="flex items-start gap-2 md:gap-3">
-            <Check size={16} className="mt-0.5 flex-shrink-0" />
-            <span className="text-xs md:text-sm">{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      <a
-        href="#contact"
-        className={`block w-full py-2.5 md:py-3 text-center text-xs md:text-sm font-medium transition-colors ${
-          plan.popular
-            ? "bg-primary text-primary-foreground hover:bg-primary/90"
-            : "border border-primary hover:bg-secondary"
-        }`}
-      >
-        Get Started
-      </a>
     </div>
-  );
-};
+
+    <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+      {plan.features.map((feature, idx) => (
+        <li key={idx} className="flex items-start gap-2 md:gap-3">
+          <Check size={16} className="mt-0.5 flex-shrink-0" />
+          <span className="text-xs md:text-sm">{feature}</span>
+        </li>
+      ))}
+    </ul>
+
+    <a
+      href="#contact"
+      className={`block w-full py-2.5 md:py-3 text-center text-xs md:text-sm font-medium transition-colors ${
+        plan.popular
+          ? "bg-primary text-primary-foreground hover:bg-primary/90"
+          : "border border-primary hover:bg-secondary"
+      }`}
+    >
+      Get Started
+    </a>
+  </div>
+);
 
 export default Pricing;
