@@ -51,6 +51,8 @@ const plans: Plan[] = [
   },
 ];
 
+const CARD_HEIGHT = "550px"; // Set all cards to Enterprise height
+
 const Pricing = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
@@ -82,26 +84,8 @@ const Pricing = () => {
           <div className="overflow-visible" ref={emblaRef}>
             <div className="flex gap-4 px-4">
               {plans.map((plan, idx) => (
-                <div key={idx} className="relative flex-[0_0_85%]">
-                  <div className="p-6 border rounded-md bg-white flex flex-col gap-4">
-                    <h3 className="text-lg font-bold">{plan.name}</h3>
-                    <div className="text-2xl font-bold">
-                      {plan.price} <span className="text-sm">{plan.currency}</span>
-                    </div>
-                    <ul className="space-y-2">
-                      {plan.features.map((f, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <Check size={16} /> {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <a
-                      href="#contact"
-                      className="mt-auto block py-2 text-center bg-primary text-primary-foreground rounded hover:bg-primary/90"
-                    >
-                      Get Started
-                    </a>
-                  </div>
+                <div key={idx} className="flex-[0_0_85%]" style={{ height: CARD_HEIGHT }}>
+                  <PricingCard plan={plan} />
                 </div>
               ))}
             </div>
@@ -124,24 +108,8 @@ const Pricing = () => {
         {/* Desktop Grid */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, idx) => (
-            <div key={idx} className="p-6 border rounded-md bg-white flex flex-col gap-4">
-              <h3 className="text-lg font-bold">{plan.name}</h3>
-              <div className="text-2xl font-bold">
-                {plan.price} <span className="text-sm">{plan.currency}</span>
-              </div>
-              <ul className="space-y-2">
-                {plan.features.map((f, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <Check size={16} /> {f}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#contact"
-                className="mt-auto block py-2 text-center bg-primary text-primary-foreground rounded hover:bg-primary/90"
-              >
-                Get Started
-              </a>
+            <div key={idx} style={{ height: CARD_HEIGHT }}>
+              <PricingCard plan={plan} />
             </div>
           ))}
         </div>
@@ -149,5 +117,32 @@ const Pricing = () => {
     </section>
   );
 };
+
+interface PricingCardProps {
+  plan: Plan;
+}
+
+const PricingCard = ({ plan }: PricingCardProps) => (
+  <div className="relative p-6 border rounded-md bg-white flex flex-col h-full">
+    <h3 className="text-lg font-bold">{plan.name}</h3>
+    <div className="text-2xl font-bold mt-2">
+      {plan.price} <span className="text-sm">{plan.currency}</span>
+    </div>
+    <ul className="space-y-2 mt-4 flex-1">
+      {plan.features.map((f, i) => (
+        <li key={i} className="flex items-start gap-2">
+          <Check size={16} className="mt-1 flex-shrink-0" />
+          <span className="text-sm">{f}</span>
+        </li>
+      ))}
+    </ul>
+    <a
+      href="#contact"
+      className="mt-auto block w-full py-2.5 text-center text-sm font-medium border border-primary rounded-md hover:bg-primary hover:text-white transition-colors"
+    >
+      Get Started
+    </a>
+  </div>
+);
 
 export default Pricing;
