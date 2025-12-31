@@ -92,31 +92,33 @@ const Pricing = () => {
               {plans.map((plan, index) => (
                 <div
                   key={index}
-                  className="relative flex-[0_0_85%] min-w-0 mx-2" // spacing between slides
+                  className="relative flex-[0_0_85%] min-w-0 mx-2"
                 >
-                  {plan.popular && (
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
-                      <Star size={12} fill="currentColor" /> Most Popular
-                    </div>
-                  )}
-                  <PricingCard plan={plan} />
+                  <PricingCard plan={plan} mobile />
                 </div>
               ))}
             </div>
           </div>
 
           {/* Dots */}
+          <div className="flex justify-center gap-2 mt-6">
+            {plans.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === selectedIndex ? "bg-primary" : "bg-border"
+                }`}
+                onClick={() => emblaApi?.scrollTo(index)}
+                aria-label={`Go to plan ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Desktop Grid */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, index) => (
             <div key={index} className="relative">
-              {plan.popular && (
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
-                  <Star size={12} fill="currentColor" /> Most Popular
-                </div>
-              )}
               <PricingCard plan={plan} />
             </div>
           ))}
@@ -130,35 +132,51 @@ const Pricing = () => {
   );
 };
 
-const PricingCard = ({ plan }: { plan: Plan }) => (
-  <div className="p-6 md:p-8 border rounded-md hover-lift w-full h-[500px] flex flex-col justify-between">
-    <div>
-      <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
-      <div className="flex items-baseline gap-1">
-        <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
-        <span className="text-muted-foreground text-xs md:text-sm">{plan.currency}</span>
+interface PricingCardProps {
+  plan: Plan;
+  mobile?: boolean;
+}
+
+const PricingCard = ({ plan, mobile }: PricingCardProps) => (
+  <div className="relative">
+    {plan.popular && (
+      <div
+        className={`absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10 ${
+          mobile ? "md:hidden" : ""
+        }`}
+      >
+        <Star size={12} fill="currentColor" /> Most Popular
       </div>
+    )}
+    <div className="p-6 md:p-8 border rounded-md hover-lift w-full h-[500px] flex flex-col justify-between">
+      <div>
+        <h3 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h3>
+        <div className="flex items-baseline gap-1">
+          <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
+          <span className="text-muted-foreground text-xs md:text-sm">{plan.currency}</span>
+        </div>
+      </div>
+
+      <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+        {plan.features.map((feature, idx) => (
+          <li key={idx} className="flex items-start gap-2 md:gap-3">
+            <Check size={16} className="mt-0.5 flex-shrink-0" />
+            <span className="text-xs md:text-sm">{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      <a
+        href="#contact"
+        className={`block w-full py-2.5 md:py-3 text-center text-xs md:text-sm font-medium transition-colors ${
+          plan.popular
+            ? "bg-primary text-primary-foreground hover:bg-primary/90"
+            : "border border-primary hover:bg-secondary"
+        }`}
+      >
+        Get Started
+      </a>
     </div>
-
-    <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-      {plan.features.map((feature, idx) => (
-        <li key={idx} className="flex items-start gap-2 md:gap-3">
-          <Check size={16} className="mt-0.5 flex-shrink-0" />
-          <span className="text-xs md:text-sm">{feature}</span>
-        </li>
-      ))}
-    </ul>
-
-    <a
-      href="#contact"
-      className={`block w-full py-2.5 md:py-3 text-center text-xs md:text-sm font-medium transition-colors ${
-        plan.popular
-          ? "bg-primary text-primary-foreground hover:bg-primary/90"
-          : "border border-primary hover:bg-secondary"
-      }`}
-    >
-      Get Started
-    </a>
   </div>
 );
 
