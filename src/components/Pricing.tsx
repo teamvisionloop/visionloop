@@ -2,7 +2,6 @@ import { Check, Star } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import useMeasure from "react-use-measure";
 
 interface Plan {
   name: string;
@@ -90,7 +89,14 @@ const Pricing = () => {
         <div className="md:hidden relative" ref={emblaRef}>
           <div className="flex">
             {plans.map((plan, index) => (
-              <PricingCardWrapper key={index} plan={plan} />
+              <div key={index} className="relative pl-4 first:pl-0">
+                {plan.popular && (
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
+                    <Star size={12} fill="currentColor" /> Most Popular
+                  </div>
+                )}
+                <PricingCard plan={plan} />
+              </div>
             ))}
           </div>
 
@@ -112,7 +118,14 @@ const Pricing = () => {
         {/* Desktop Grid */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, index) => (
-            <PricingCardWrapper key={index} plan={plan} />
+            <div key={index} className="relative">
+              {plan.popular && (
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap rounded-md shadow-md z-10">
+                  <Star size={12} fill="currentColor" /> Most Popular
+                </div>
+              )}
+              <PricingCard plan={plan} />
+            </div>
           ))}
         </div>
 
@@ -121,27 +134,6 @@ const Pricing = () => {
         </p>
       </div>
     </section>
-  );
-};
-
-// Wrapper to measure the card height dynamically
-const PricingCardWrapper = ({ plan }: { plan: Plan }) => {
-  const [ref, bounds] = useMeasure();
-
-  return (
-    <div className="relative pl-4 first:pl-0">
-      {plan.popular && (
-        <div
-          className="absolute left-1/2 transform -translate-x-1/2 px-3 py-1.5 text-xs md:text-sm font-medium flex items-center gap-1 whitespace-nowrap bg-primary text-primary-foreground rounded-md shadow-md z-10"
-          style={{ top: -bounds.height * 0.07 }} // badge always above the card
-        >
-          <Star size={12} fill="currentColor" /> Most Popular
-        </div>
-      )}
-      <div ref={ref}>
-        <PricingCard plan={plan} />
-      </div>
-    </div>
   );
 };
 
