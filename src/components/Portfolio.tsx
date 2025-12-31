@@ -1,0 +1,165 @@
+import { ArrowUpRight } from "lucide-react";
+import { useEffect, useCallback, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
+import fuzzy from "@/assets/portfolio/fuzzy.png";
+import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
+import obsidian from "@/assets/portfolio/obsidian.png";
+
+interface Project {
+  title: string;
+  category: string;
+  description: string;
+  image?: string;
+  link?: string;
+}
+
+const Portfolio = () => {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "start" },
+    [Autoplay({ delay: 4000, stopOnInteraction: false })]
+  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  const projects: Project[] = [
+    {
+      title: "Luxury Brands",
+      category: "Fashion",
+      description: "Premium streetwear e-commerce store featuring global luxury brands",
+      image: luxuryBrands,
+      link: "https://luxurybrandseg.com/",
+    },
+    {
+      title: "Fuzzy",
+      category: "Apparel",
+      description: "Cozy Egyptian cotton hoodies and comfort wear brand",
+      image: fuzzy,
+      link: "https://wearfuzzy.com/",
+    },
+    {
+      title: "Faya Studio",
+      category: "Streetwear",
+      description: "Winter streetwear collection with bold urban designs",
+      image: fayaStudio,
+      link: "https://fayastudioeg.com/",
+    },
+    {
+      title: "Obsidian Apparel",
+      category: "Lifestyle",
+      description: "Motivational lifestyle brand with powerful graphic tees",
+      image: obsidian,
+      link: "https://obsidianapparel.net/",
+    },
+  ];
+
+  return (
+    <section id="portfolio" className="section-padding">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12 md:mb-16">
+          <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Our Work
+          </span>
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4">
+            Featured Projects
+          </h2>
+          <p className="text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto px-4">
+            A selection of Shopify stores we've designed and developed for our clients
+          </p>
+        </div>
+
+        <div className="relative">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {projects.map((project, index) => (
+                <div
+                  key={index}
+                  className="flex-[0_0_100%] min-w-0 sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] pl-4 first:pl-0 sm:first:pl-4"
+                >
+                  <a
+                    href={project.link || "#contact"}
+                    target={project.link ? "_blank" : undefined}
+                    rel={project.link ? "noopener noreferrer" : undefined}
+                    className="group relative bg-secondary aspect-[4/3] overflow-hidden hover-lift cursor-pointer block"
+                  >
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-muted-foreground text-lg">+</span>
+                      </div>
+                    )}
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    <div className="absolute inset-0 flex flex-col justify-between p-4 md:p-6">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider bg-background/80 px-2 py-1 self-start">
+                        {project.category}
+                      </span>
+
+                      <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2">{project.title}</h3>
+                        <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-4">
+                          {project.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {project.link && (
+                      <div className="absolute top-4 md:top-6 right-4 md:right-6 w-8 h-8 md:w-10 md:h-10 bg-primary text-primary-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <ArrowUpRight size={16} className="md:w-[18px] md:h-[18px]" />
+                      </div>
+                    )}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dots */}
+          <div className="flex justify-center gap-2 mt-6 md:mt-8">
+            {projects.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === selectedIndex ? "bg-primary" : "bg-border"
+                }`}
+                onClick={() => emblaApi?.scrollTo(index)}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="text-center mt-8 md:mt-12">
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
+          >
+            Want to be featured? Let's talk <ArrowUpRight size={16} />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Portfolio;
