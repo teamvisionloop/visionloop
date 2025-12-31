@@ -1,4 +1,4 @@
-import { Check, Star } from "lucide-react";
+import { Check } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -83,32 +83,24 @@ const Pricing = () => {
             <div className="flex gap-4 px-4">
               {plans.map((plan, idx) => (
                 <div key={idx} className="relative flex-[0_0_85%]">
-                  {/* Outer wrapper to allow badge above card */}
-                  <div className="relative">
-                    {plan.popular && (
-                      <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-20 bg-primary text-primary-foreground px-3 py-1.5 rounded-md flex items-center gap-1 text-xs">
-                        <Star size={12} /> Most Popular
-                      </div>
-                    )}
-                    <div className="p-6 border rounded-md bg-white flex flex-col gap-4">
-                      <h3 className="text-lg font-bold">{plan.name}</h3>
-                      <div className="text-2xl font-bold">
-                        {plan.price} <span className="text-sm">{plan.currency}</span>
-                      </div>
-                      <ul className="space-y-2">
-                        {plan.features.map((f, i) => (
-                          <li key={i} className="flex items-center gap-2">
-                            <Check size={16} /> {f}
-                          </li>
-                        ))}
-                      </ul>
-                      <a
-                        href="#contact"
-                        className="mt-auto block py-2 text-center bg-primary text-primary-foreground rounded hover:bg-primary/90"
-                      >
-                        Get Started
-                      </a>
+                  <div className="p-6 border rounded-md bg-white flex flex-col gap-4">
+                    <h3 className="text-lg font-bold">{plan.name}</h3>
+                    <div className="text-2xl font-bold">
+                      {plan.price} <span className="text-sm">{plan.currency}</span>
                     </div>
+                    <ul className="space-y-2">
+                      {plan.features.map((f, i) => (
+                        <li key={i} className="flex items-center gap-2">
+                          <Check size={16} /> {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href="#contact"
+                      className="mt-auto block py-2 text-center bg-primary text-primary-foreground rounded hover:bg-primary/90"
+                    >
+                      Get Started
+                    </a>
                   </div>
                 </div>
               ))}
@@ -132,31 +124,24 @@ const Pricing = () => {
         {/* Desktop Grid */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, idx) => (
-            <div key={idx} className="relative">
-              {plan.popular && (
-                <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-20 bg-primary text-primary-foreground px-3 py-1.5 rounded-md flex items-center gap-1 text-xs">
-                  <Star size={12} /> Most Popular
-                </div>
-              )}
-              <div className="p-6 border rounded-md bg-white flex flex-col gap-4">
-                <h3 className="text-lg font-bold">{plan.name}</h3>
-                <div className="text-2xl font-bold">
-                  {plan.price} <span className="text-sm">{plan.currency}</span>
-                </div>
-                <ul className="space-y-2">
-                  {plan.features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <Check size={16} /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#contact"
-                  className="mt-auto block py-2 text-center bg-primary text-primary-foreground rounded hover:bg-primary/90"
-                >
-                  Get Started
-                </a>
+            <div key={idx} className="p-6 border rounded-md bg-white flex flex-col gap-4">
+              <h3 className="text-lg font-bold">{plan.name}</h3>
+              <div className="text-2xl font-bold">
+                {plan.price} <span className="text-sm">{plan.currency}</span>
               </div>
+              <ul className="space-y-2">
+                {plan.features.map((f, i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <Check size={16} /> {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#contact"
+                className="mt-auto block py-2 text-center bg-primary text-primary-foreground rounded hover:bg-primary/90"
+              >
+                Get Started
+              </a>
             </div>
           ))}
         </div>
