@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 
 const About = () => {
   const stats = [
-    { number: 35, suffix: "+", label: "Projects Delivered" },
+    { number: 35, suffix: "+", label: "Projects Completed" },
     { number: 100, suffix: "%", label: "Client Satisfaction" },
     { number: 2, suffix: "+", label: "Years Experience" },
   ];
@@ -12,17 +12,17 @@ const About = () => {
     {
       icon: Zap,
       title: "Fast Delivery",
-      description: "We deliver your store quickly without compromising on quality.",
+      description: "We complete projects quickly without compromising on quality.",
     },
     {
       icon: Shield,
       title: "Premium Quality",
-      description: "Every store we build is crafted with attention to detail.",
+      description: "Every project is crafted with careful attention to detail.",
     },
     {
       icon: Users,
       title: "Dedicated Support",
-      description: "We're with you every step of the way, from launch and beyond.",
+      description: "We guide you every step of the way, from start to finish.",
     },
   ];
 
@@ -30,7 +30,6 @@ const About = () => {
   const [animated, setAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Animate numbers and fade-up elements on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current || animated) return;
@@ -81,40 +80,35 @@ const About = () => {
               About Us
             </span>
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 mb-4 md:mb-6 flex items-center gap-2">
-              Your Shopify Partner
+              Your Digital Partner
               <Infinity className="w-7 h-7 md:w-10 md:h-10" />
             </h2>
 
             {/* Animated Paragraphs */}
             <div className="space-y-4">
               {[
-                "VisionLoop is a specialized Shopify development agency dedicated to helping businesses launch and scale their online stores. We combine technical expertise with creative design to build e-commerce experiences that not only look stunning but also drive real results.",
-                "From startups to established brands, we've helped businesses across various industries establish their presence in the digital marketplace.",
+                "We are a specialized development agency dedicated to helping businesses launch and scale their digital projects. We combine technical expertise with creative design to deliver experiences that not only look amazing but also drive real results.",
+                "From startups to established brands, we've helped companies across multiple industries establish a strong online presence.",
               ].map((text, idx) => (
                 <p
                   key={idx}
                   className={`text-muted-foreground text-base md:text-lg leading-relaxed break-words transition-all duration-1000 ease-out ${
-                    animated ? `opacity-100 translate-y-0` : `opacity-0 translate-y-12`
+                    animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
                   }`}
                   style={{ transitionDelay: `${idx * 150}ms` }}
                 >
-                  {text.split("<br />").map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
+                  {text}
                 </p>
               ))}
             </div>
           </div>
 
-          {/* Animated Feature Cards */}
+          {/* Animated Feature Cards (no borders) */}
           <div className="grid gap-4 md:gap-6">
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className={`bg-background p-4 md:p-6 border border-border hover-lift transition-all duration-1000 ease-out ${
+                className={`bg-background p-4 md:p-6 hover-lift transition-all duration-1000 ease-out ${
                   animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
                 }`}
                 style={{ transitionDelay: `${idx * 200}ms` }}
