@@ -6,6 +6,7 @@ import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
 import fuzzy from "@/assets/portfolio/fuzzy.png";
 import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
 import temple from "@/assets/portfolio/temple.png";
+
 interface Project {
   title: string;
   category: string;
@@ -63,7 +64,7 @@ const Portfolio = () => {
     {
       title: "Temple Of Scent",
       category: "Perfumery",
-      description: "Luxury fragrance brand offering an exquisite collection of artisan perfumes ",
+      description: "Luxury fragrance brand offering an exquisite collection of artisan perfumes",
       image: temple,
       link: "https://templeofscent.com/",
     },
@@ -72,6 +73,7 @@ const Portfolio = () => {
   return (
     <section id="portfolio" className="section-padding">
       <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Our Work
@@ -84,9 +86,10 @@ const Portfolio = () => {
           </p>
         </div>
 
+        {/* Carousel */}
         <div className="relative">
           <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-4 px-2 sm:px-0">
+            <div className="flex gap-4 px-4 md:px-6 lg:px-12">
               {projects.map((project, index) => (
                 <div
                   key={index}
@@ -137,6 +140,7 @@ const Portfolio = () => {
           </div>
         </div>
 
+        {/* CTA */}
         <div className="text-center mt-8 md:mt-12">
           <a
             href="#contact"
