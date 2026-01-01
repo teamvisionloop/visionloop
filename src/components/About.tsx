@@ -125,16 +125,18 @@ const About = () => {
             <div
               ref={carouselRef}
               onScroll={handleScroll}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-0 no-scrollbar"
+              className="flex gap-0 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-0 no-scrollbar"
             >
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-[90%] bg-background p-6 border border-border snap-center"
+                  className="flex-shrink-0 w-full bg-background p-6 border border-border snap-center"
                   style={{ scrollSnapAlign: "center" }}
                 >
-                  <feature.icon className="w-8 h-8 mb-4" />
-                  <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <feature.icon className="w-6 h-6" />
+                    <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
+                  </div>
                   <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
                 </div>
               ))}
@@ -156,8 +158,10 @@ const About = () => {
                 key={index}
                 className="bg-background p-6 border border-border"
               >
-                <feature.icon className="w-8 h-8 mb-4" />
-                <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <feature.icon className="w-6 h-6" />
+                  <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
+                </div>
                 <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
               </div>
             ))}
