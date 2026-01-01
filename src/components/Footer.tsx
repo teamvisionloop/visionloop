@@ -1,27 +1,25 @@
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-gray-200 py-16 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+    <footer className="bg-white border-t border-black/10 py-20 px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
 
         {/* LEFT SIDE */}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-10">
           <div>
-            <h2 className="text-4xl font-bold tracking-tight">
-              <span className="text-red-600">GET IN</span>
+            <h2 className="text-4xl font-bold leading-tight tracking-tight text-black">
+              GET IN
               <br />
-              <span className="text-black">TOUCH</span>
+              TOUCH
             </h2>
           </div>
 
           {/* Contact Info */}
-          <div className="flex flex-col gap-6 text-sm text-gray-700">
-
+          <div className="flex flex-col gap-6 text-sm text-black">
             {/* Email */}
             <div className="flex items-center gap-3">
-              {/* Mail SVG */}
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
@@ -35,10 +33,9 @@ const Footer = () => {
 
             {/* Phone */}
             <div className="flex items-center gap-3">
-              {/* Phone SVG */}
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
@@ -48,45 +45,83 @@ const Footer = () => {
               </svg>
               <span>01277440119</span>
             </div>
+
+            {/* VisionLoop Logo (Desktop Only) */}
+            <img
+              src="/lg.png"
+              alt="VisionLoop Logo"
+              className="hidden md:block mt-6 h-10 w-auto"
+            />
           </div>
         </div>
 
         {/* RIGHT SIDE – FORM */}
-        <form className="flex flex-col gap-6">
-
+        <form className="flex flex-col gap-8">
           {[
             { label: "Name", type: "text" },
             { label: "Email Address", type: "email" },
             { label: "Subject", type: "text" },
           ].map((field) => (
             <div key={field.label} className="flex flex-col">
-              <label className="text-sm text-gray-600 mb-1">
+              <label className="text-xs uppercase tracking-wider text-black mb-2">
                 {field.label}
               </label>
               <input
                 type={field.type}
-                className="border-b border-gray-300 focus:border-black outline-none py-2"
                 required
+                className="
+                  bg-transparent
+                  border-b
+                  border-black/40
+                  focus:border-black
+                  outline-none
+                  py-2
+                  text-sm
+                  transition
+                "
               />
             </div>
           ))}
 
           {/* Message */}
           <div className="flex flex-col">
-            <label className="text-sm text-gray-600 mb-1">
+            <label className="text-xs uppercase tracking-wider text-black mb-2">
               Message
             </label>
             <textarea
               rows={4}
-              className="border-b border-gray-300 focus:border-black outline-none py-2 resize-none"
               required
+              className="
+                bg-transparent
+                border-b
+                border-black/40
+                focus:border-black
+                outline-none
+                py-2
+                text-sm
+                resize-none
+                transition
+              "
             />
           </div>
 
           {/* Send Button */}
           <button
             type="submit"
-            className="self-end mt-4 px-8 py-2 border border-black text-sm tracking-widest hover:bg-black hover:text-white transition"
+            className="
+              self-end
+              mt-6
+              px-10
+              py-2
+              border
+              border-black
+              text-xs
+              tracking-widest
+              text-black
+              hover:bg-black
+              hover:text-white
+              transition
+            "
           >
             SEND
           </button>
