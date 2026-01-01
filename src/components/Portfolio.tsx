@@ -25,19 +25,8 @@ const Portfolio = () => {
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [animated, setAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    const onSelect = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    };
-    onSelect();
-    emblaApi.on("select", onSelect);
-    return () => emblaApi.off("select", onSelect);
-  }, [emblaApi]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,30 +72,30 @@ const Portfolio = () => {
   return (
     <section id="portfolio" className="section-padding" ref={sectionRef}>
       <div className="max-w-7xl mx-auto">
-        {/* Header with fade-up animation */}
-        <div className="text-center mb-12 md:mb-16">
+        {/* Header with stronger fade-up animation */}
+        <div className="text-center mb-12 md:mb-16 space-y-3">
           <span
-            className={`text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider transition-all duration-[1200ms] ease-out ${
-              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            className={`text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider transform transition-all duration-1000 ease-out ${
+              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             }`}
           >
             Our Work
           </span>
 
           <h2
-            className={`text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 transition-all duration-[1200ms] ease-out ${
-              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            className={`text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 transform transition-all duration-1000 ease-out ${
+              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             }`}
           >
             Featured Projects
           </h2>
 
           <p
-            className={`text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto px-4 transition-all duration-[1200ms] ease-out ${
-              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            className={`text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto px-4 transform transition-all duration-1000 ease-out ${
+              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             }`}
           >
-            A selection of Ecommerce stores we've designed and developed for our clients
+            A selection of Shopify stores we've designed and developed for our clients
           </p>
         </div>
 
