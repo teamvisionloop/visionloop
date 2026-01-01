@@ -42,8 +42,8 @@ const About = () => {
         stats.forEach((stat, index) => {
           let start = 0;
           const end = stat.number;
-          const duration = 1500; // 1.5s
-          const stepTime = 16; // ~60fps
+          const duration = 1500;
+          const stepTime = 16;
           const increment = end / (duration / stepTime);
 
           const interval = setInterval(() => {
@@ -66,23 +66,22 @@ const About = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [animated, stats]);
 
-  // Auto scroll carousel on mobile
+  // Auto scroll carousel
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
-    let scrollAmount = 0;
-    const itemWidth = carousel.firstChild.offsetWidth + 16; // gap included
+    let index = 0;
+
     const interval = setInterval(() => {
-      scrollAmount += itemWidth;
-      if (scrollAmount >= carousel.scrollWidth) {
-        scrollAmount = 0; // loop back
-      }
+      index++;
+      if (index >= features.length) index = 0; // loop back
+      const cardWidth = carousel.firstChild.offsetWidth + 16; // gap included
       carousel.scrollTo({
-        left: scrollAmount,
+        left: cardWidth * index,
         behavior: "smooth",
       });
-    }, 3000); // scroll every 3s
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -114,15 +113,15 @@ const About = () => {
             </p>
           </div>
 
-          {/* Features */}
+          {/* Features carousel */}
           <div
             ref={carouselRef}
-            className="grid lg:grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 overflow-x-auto lg:overflow-x-visible scroll-smooth snap-x snap-mandatory no-scrollbar"
+            className="flex lg:grid gap-4 md:gap-6 overflow-hidden lg:overflow-visible"
           >
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-background p-4 md:p-6 border border-border hover-lift min-w-[250px] snap-start"
+                className="flex-shrink-0 w-full sm:w-[300px] bg-background p-4 md:p-6 border border-border hover-lift mr-4"
               >
                 <feature.icon className="w-6 h-6 md:w-8 md:h-8 mb-3 md:mb-4" />
                 <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">{feature.title}</h3>
