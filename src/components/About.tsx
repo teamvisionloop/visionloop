@@ -1,5 +1,6 @@
 import { Infinity, Zap, Shield, Users } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const About = () => {
   const stats = [
@@ -91,31 +92,69 @@ const About = () => {
     setActiveIndex(index);
   };
 
+  const textAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <section id="about" className="section-padding bg-secondary overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
+
+          {/* Text Content */}
           <div>
-            <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            <motion.span
+              className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={textAnimation}
+              transition={{ duration: 0.6 }}
+            >
               About Us
-            </span>
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 mb-4 md:mb-6">
+            </motion.span>
+
+            <motion.h2
+              className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 mb-4 md:mb-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={textAnimation}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               Your Shopify
               <br />
               <span className="flex items-center gap-2">
                 Partner <Infinity className="inline w-7 h-7 md:w-10 md:h-10" />
               </span>
-            </h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4 md:mb-8">
+            </motion.h2>
+
+            <motion.p
+              className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4 md:mb-8"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={textAnimation}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               VisionLoop is a specialized Shopify development agency dedicated to 
               helping businesses launch and scale their online stores. We combine 
               technical expertise with creative design to build e-commerce experiences 
               that not only look stunning but also drive real results.
-            </p>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
+            </motion.p>
+
+            <motion.p
+              className="text-muted-foreground text-base md:text-lg leading-relaxed"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={textAnimation}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
               From startups to established brands, we've helped businesses across 
               various industries establish their presence in the digital marketplace.
-            </p>
+            </motion.p>
           </div>
 
           {/* Mobile carousel */}
@@ -126,22 +165,26 @@ const About = () => {
               className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-4 no-scrollbar"
             >
               {features.map((feature, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="flex-shrink-0 w-[calc(100%-32px)] bg-background p-6 border border-border rounded-lg snap-center"
+                  className="flex-shrink-0 w-[calc(100%-32px)] bg-background p-6 border border-border snap-center"
                   style={{ scrollSnapAlign: "center" }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }}
                 >
                   <feature.icon className="w-8 h-8 mb-4" />
                   <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
 
-            {/* Progress bar */}
-            <div className="absolute bottom-2 left-4 right-4 h-1 rounded-full overflow-hidden">
+            {/* Solid progress bar */}
+            <div className="absolute bottom-2 left-4 right-4 h-1 mt-2 overflow-hidden">
               <div
-                className="h-1 bg-black rounded-full transition-all duration-[3500ms] ease-linear"
+                className="h-1 bg-black transition-all duration-[3500ms] ease-linear"
                 style={{ width: `${((activeIndex + 1) / features.length) * 100}%` }}
               ></div>
             </div>
@@ -150,14 +193,18 @@ const About = () => {
           {/* Desktop stacked features */}
           <div className="hidden lg:grid gap-4">
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-background p-6 border border-border rounded-lg"
+                className="bg-background p-6 border border-border"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
               >
                 <feature.icon className="w-8 h-8 mb-4" />
                 <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -183,7 +230,7 @@ const About = () => {
         }
         .no-scrollbar::-webkit-scrollbar-thumb {
           background-color: black;
-          border-radius: 3px;
+          border-radius: 0;
         }
         .no-scrollbar::-webkit-scrollbar-track {
           background: transparent;
