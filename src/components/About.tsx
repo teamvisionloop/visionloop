@@ -75,7 +75,7 @@ const About = () => {
 
     const interval = setInterval(() => {
       index++;
-      if (index >= features.length) index = 0; // loop back
+      if (index >= features.length) index = 0;
       const cardWidth = carousel.firstChild.offsetWidth + 16; // gap included
       carousel.scrollTo({
         left: cardWidth * index,
@@ -116,12 +116,16 @@ const About = () => {
           {/* Features carousel */}
           <div
             ref={carouselRef}
-            className="flex lg:grid gap-4 overflow-x-auto scroll-snap-x snap-mandatory snap-center py-4 px-6"
+            className="flex lg:grid gap-4 overflow-x-auto scroll-snap-x snap-mandatory snap-center py-4 px-2"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "black transparent",
+            }}
           >
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-[80%] sm:w-[300px] bg-background p-6 border border-border hover-lift rounded-lg snap-center mr-4"
+                className="flex-shrink-0 w-full sm:w-full bg-background p-6 border border-border hover-lift rounded-lg snap-center mr-4"
               >
                 <feature.icon className="w-8 h-8 mb-4" />
                 <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
@@ -144,6 +148,20 @@ const About = () => {
           ))}
         </div>
       </div>
+
+      {/* Black scrollbar for Webkit */}
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          height: 8px;
+        }
+        div::-webkit-scrollbar-thumb {
+          background-color: black;
+          border-radius: 4px;
+        }
+        div::-webkit-scrollbar-track {
+          background: transparent;
+        }
+      `}</style>
     </section>
   );
 };
