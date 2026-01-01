@@ -66,7 +66,7 @@ const About = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [animated, stats]);
 
-  // Auto scroll carousel
+  // Auto-scroll carousel
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
@@ -116,15 +116,15 @@ const About = () => {
           {/* Features carousel */}
           <div
             ref={carouselRef}
-            className="flex lg:grid gap-4 md:gap-6 overflow-hidden lg:overflow-visible"
+            className="flex lg:grid gap-4 overflow-x-auto scroll-snap-x snap-mandatory snap-center py-4 px-6"
           >
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-full sm:w-[300px] bg-background p-4 md:p-6 border border-border hover-lift mr-4"
+                className="flex-shrink-0 w-[80%] sm:w-[300px] bg-background p-6 border border-border hover-lift rounded-lg snap-center mr-4"
               >
-                <feature.icon className="w-6 h-6 md:w-8 md:h-8 mb-3 md:mb-4" />
-                <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">{feature.title}</h3>
+                <feature.icon className="w-8 h-8 mb-4" />
+                <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
               </div>
             ))}
