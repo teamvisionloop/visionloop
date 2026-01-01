@@ -16,7 +16,7 @@ const Hero = () => {
           We Design & Build
           <br />
           <span className="text-muted-foreground">
-            High-Impact Digital Experiences
+            Build Your Vision
           </span>
         </h1>
         
