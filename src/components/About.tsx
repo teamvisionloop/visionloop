@@ -103,12 +103,12 @@ const About = () => {
             </div>
           </div>
 
-          {/* Animated Feature Cards (no borders) */}
+          {/* Animated Feature Cards */}
           <div className="grid gap-4 md:gap-6">
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className={`bg-background p-4 md:p-6 hover-lift transition-all duration-1000 ease-out ${
+                className={`bg-background p-4 md:p-6 hover-lift shadow-sm transition-all duration-1000 ease-out ${
                   animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
                 }`}
                 style={{ transitionDelay: `${idx * 200}ms` }}
