@@ -8,7 +8,7 @@ const Footer = () => {
 <img
   src="/lg.png"
   alt="Logo"
-  className="h-10 w-auto border-2 border-red-500"
+  className="h-10 w-auto "
 />
 
           <nav className="flex flex-wrap justify-center gap-4 md:gap-6">
