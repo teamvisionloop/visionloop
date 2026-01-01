@@ -28,7 +28,7 @@ const About = () => {
 
   const [counts, setCounts] = useState(stats.map(() => 0));
   const [animated, setAnimated] = useState(false);
-
+  const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
 
   // Number animation
@@ -70,21 +70,27 @@ const About = () => {
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
-
-    let index = 0;
+    const total = features.length;
 
     const interval = setInterval(() => {
-      index++;
-      if (index >= features.length) index = 0;
+      const nextIndex = (activeIndex + 1) % total;
       const cardWidth = carousel.firstChild.offsetWidth + 16; // gap included
-      carousel.scrollTo({
-        left: cardWidth * index,
-        behavior: "smooth",
-      });
-    }, 3000);
+      carousel.scrollTo({ left: cardWidth * nextIndex, behavior: "smooth" });
+      setActiveIndex(nextIndex);
+    }, 4000); // every 4s
 
     return () => clearInterval(interval);
-  }, []);
+  }, [activeIndex, features.length]);
+
+  // Update active index on user swipe
+  const handleScroll = () => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const scrollLeft = carousel.scrollLeft;
+    const cardWidth = carousel.firstChild.offsetWidth + 16;
+    const index = Math.round(scrollLeft / cardWidth);
+    setActiveIndex(index);
+  };
 
   return (
     <section id="about" className="section-padding bg-secondary">
@@ -113,25 +119,39 @@ const About = () => {
             </p>
           </div>
 
-          {/* Features carousel */}
-          <div
-            ref={carouselRef}
-            className="flex lg:grid gap-4 overflow-x-auto scroll-snap-x snap-mandatory snap-center py-4 px-2"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "black transparent",
-            }}
-          >
-            {features.map((feature, index) => (
+          {/* Carousel */}
+          <div className="relative w-full">
+            <div
+              ref={carouselRef}
+              onScroll={handleScroll}
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-2"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "black transparent",
+              }}
+            >
+              {features.map((feature, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 w-[90%] sm:w-[90%] bg-background p-6 border border-border rounded-lg snap-center"
+                >
+                  <feature.icon className="w-8 h-8 mb-4" />
+                  <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                  <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-2 right-2 h-1 bg-gray-300 rounded-full mt-2">
               <div
-                key={index}
-                className="flex-shrink-0 w-full sm:w-full bg-background p-6 border border-border hover-lift rounded-lg snap-center mr-4"
-              >
-                <feature.icon className="w-8 h-8 mb-4" />
-                <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
-              </div>
-            ))}
+                className="h-1 bg-black rounded-full"
+                style={{
+                  width: `${((activeIndex + 1) / features.length) * 100}%`,
+                  transition: "width 0.3s ease",
+                }}
+              ></div>
+            </div>
           </div>
         </div>
 
@@ -149,7 +169,7 @@ const About = () => {
         </div>
       </div>
 
-      {/* Black scrollbar for Webkit */}
+      {/* Custom scrollbar for Webkit */}
       <style jsx>{`
         div::-webkit-scrollbar {
           height: 8px;
