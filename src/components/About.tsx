@@ -66,15 +66,15 @@ const About = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [animated, stats]);
 
-  // Auto-scroll carousel
+  // Auto-scroll carousel for mobile
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
-    const total = features.length;
 
+    const total = features.length;
     const interval = setInterval(() => {
       const nextIndex = (activeIndex + 1) % total;
-      const cardWidth = carousel.firstChild.offsetWidth + 16; // gap included
+      const cardWidth = carousel.firstChild.offsetWidth + 16;
       carousel.scrollTo({ left: cardWidth * nextIndex, behavior: "smooth" });
       setActiveIndex(nextIndex);
     }, 4000);
@@ -82,7 +82,6 @@ const About = () => {
     return () => clearInterval(interval);
   }, [activeIndex, features.length]);
 
-  // Update active index on user swipe
   const handleScroll = () => {
     const carousel = carouselRef.current;
     if (!carousel) return;
@@ -119,8 +118,8 @@ const About = () => {
             </p>
           </div>
 
-          {/* Carousel */}
-          <div className="relative w-full">
+          {/* Features carousel only on mobile */}
+          <div className="relative w-full block lg:hidden">
             <div
               ref={carouselRef}
               onScroll={handleScroll}
@@ -129,7 +128,7 @@ const About = () => {
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-[90%] sm:w-[90%] bg-background p-6 border border-border rounded-lg snap-center"
+                  className="flex-shrink-0 w-[90%] bg-background p-6 border border-border rounded-lg snap-center"
                   style={{ scrollSnapAlign: "center" }}
                 >
                   <feature.icon className="w-8 h-8 mb-4" />
@@ -139,15 +138,27 @@ const About = () => {
               ))}
             </div>
 
-            {/* Progress bar (only moving part) */}
-            <div className="absolute bottom-0 left-2 right-2 h-1 mt-2 rounded-full overflow-hidden">
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-4 right-4 h-1 mt-2 overflow-hidden rounded-full">
               <div
-                className="h-1 bg-black rounded-full transition-all duration-1500 ease-linear"
-                style={{
-                  width: `${((activeIndex + 1) / features.length) * 100}%`,
-                }}
+                className="h-1 bg-black rounded-full transition-all duration-[3500ms] ease-linear"
+                style={{ width: `${((activeIndex + 1) / features.length) * 100}%` }}
               ></div>
             </div>
+          </div>
+
+          {/* Desktop stacked features */}
+          <div className="hidden lg:grid gap-4">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-background p-6 border border-border rounded-lg"
+              >
+                <feature.icon className="w-8 h-8 mb-4" />
+                <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -165,7 +176,7 @@ const About = () => {
         </div>
       </div>
 
-      {/* Black scrollbar for Webkit */}
+      {/* Custom scrollbar */}
       <style jsx>{`
         .no-scrollbar::-webkit-scrollbar {
           height: 6px;
