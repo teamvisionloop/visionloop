@@ -1,7 +1,20 @@
 import { Infinity, Zap, Shield, Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const About = () => {
+  const sectionRef = useRef(null);
+
+  /* ---------------- SCROLL ANIMATION ---------------- */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "center center"],
+  });
+
+  const textY = useTransform(scrollYProgress, [0, 1], [40, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  /* ---------------- STATS ---------------- */
   const stats = [
     { number: 35, suffix: "+", label: "Projects Delivered" },
     { number: 100, suffix: "%", label: "Client Satisfaction" },
@@ -29,18 +42,20 @@ const About = () => {
   const [counts, setCounts] = useState(stats.map(() => 0));
   const [animated, setAnimated] = useState(false);
 
+  /* ---------------- COUNT ANIMATION ---------------- */
   useEffect(() => {
     const handleScroll = () => {
-      const section = document.getElementById("about");
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+
       if (!animated && rect.top < window.innerHeight - 100) {
         setAnimated(true);
+
         stats.forEach((stat, index) => {
           let start = 0;
           const end = stat.number;
-          const duration = 1500; // 1.5s
-          const stepTime = 16; // ~60fps
+          const duration = 1500;
+          const stepTime = 16;
           const increment = end / (duration / stepTime);
 
           const interval = setInterval(() => {
@@ -49,6 +64,7 @@ const About = () => {
               start = end;
               clearInterval(interval);
             }
+
             setCounts((prev) => {
               const updated = [...prev];
               updated[index] = Math.floor(start);
@@ -64,13 +80,23 @@ const About = () => {
   }, [animated, stats]);
 
   return (
-    <section id="about" className="section-padding bg-secondary">
+    <section
+      ref={sectionRef}
+      id="about"
+      className="section-padding bg-secondary overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
-          <div>
+          
+          {/* TEXT COLUMN */}
+          <motion.div
+            style={{ y: textY, opacity: textOpacity }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
               About Us
             </span>
+
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 mb-4 md:mb-6">
               Your Shopify
               <br />
@@ -78,40 +104,54 @@ const About = () => {
                 Partner <Infinity className="inline w-7 h-7 md:w-10 md:h-10" />
               </span>
             </h2>
+
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4 md:mb-8">
-              VisionLoop is a specialized Shopify development agency dedicated to 
-              helping businesses launch and scale their online stores. We combine 
-              technical expertise with creative design to build e-commerce experiences 
-              that not only look stunning but also drive real results.
+              VisionLoop is a specialized Shopify development agency dedicated to
+              helping businesses launch and scale their online stores. We combine
+              technical expertise with creative design to build e-commerce
+              experiences that not only look stunning but also drive real results.
             </p>
+
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              From startups to established brands, we've helped businesses across 
+              From startups to established brands, we've helped businesses across
               various industries establish their presence in the digital marketplace.
             </p>
-          </div>
+          </motion.div>
 
+          {/* FEATURES */}
           <div className="grid gap-4 md:gap-6">
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={index}
                 className="bg-background p-4 md:p-6 border border-border hover-lift"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
               >
                 <feature.icon className="w-6 h-6 md:w-8 md:h-8 mb-3 md:mb-4" />
-                <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
-              </div>
+                <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-muted-foreground text-sm md:text-base">
+                  {feature.description}
+                </p>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 ">
+        {/* STATS */}
+        <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
                 {counts[index]}
                 {stat.suffix}
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
