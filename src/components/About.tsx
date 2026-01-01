@@ -74,7 +74,7 @@ const About = () => {
     const total = features.length;
     const interval = setInterval(() => {
       const nextIndex = (activeIndex + 1) % total;
-      const cardWidth = carousel.firstChild ? (carousel.firstChild as HTMLElement).offsetWidth : 0;
+      const cardWidth = carousel.firstChild ? (carousel.firstChild as HTMLElement).offsetWidth + 16 : 0;
       carousel.scrollTo({ left: cardWidth * nextIndex, behavior: "smooth" });
       setActiveIndex(nextIndex);
     }, 4000);
@@ -86,7 +86,7 @@ const About = () => {
     const carousel = carouselRef.current;
     if (!carousel || !carousel.firstChild) return;
     const scrollLeft = carousel.scrollLeft;
-    const cardWidth = (carousel.firstChild as HTMLElement).offsetWidth;
+    const cardWidth = (carousel.firstChild as HTMLElement).offsetWidth + 16;
     const index = Math.round(scrollLeft / cardWidth);
     setActiveIndex(index);
   };
@@ -108,14 +108,14 @@ const About = () => {
                 Partner <Infinity className="inline w-7 h-7 md:w-10 md:h-10" />
               </span>
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4 md:mb-8">
-              VisionLoop is a specialized Shopify development agency dedicated to 
-              helping businesses launch and scale their online stores. We combine 
-              technical expertise with creative design to build e-commerce experiences 
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4 md:mb-8 break-words">
+              VisionLoop is a specialized Shopify development agency dedicated to<br />
+              helping businesses launch and scale their online stores. We combine<br />
+              technical expertise with creative design to build e-commerce experiences<br />
               that not only look stunning but also drive real results.
             </p>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              From startups to established brands, we've helped businesses across 
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed break-words">
+              From startups to established brands, we've helped businesses across<br />
               various industries establish their presence in the digital marketplace.
             </p>
           </div>
@@ -125,7 +125,7 @@ const About = () => {
             <div
               ref={carouselRef}
               onScroll={handleScroll}
-              className="flex gap-0 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-0 no-scrollbar"
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-0 no-scrollbar"
             >
               {features.map((feature, index) => (
                 <div
@@ -135,9 +135,9 @@ const About = () => {
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <feature.icon className="w-6 h-6" />
-                    <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
+                    <h3 className="text-lg md:text-xl font-semibold break-words">{feature.title}</h3>
                   </div>
-                  <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
+                  <p className="text-muted-foreground text-sm md:text-base break-words">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -160,9 +160,9 @@ const About = () => {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <feature.icon className="w-6 h-6" />
-                  <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
+                  <h3 className="text-lg md:text-xl font-semibold break-words">{feature.title}</h3>
                 </div>
-                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
+                <p className="text-muted-foreground text-sm md:text-base break-words">{feature.description}</p>
               </div>
             ))}
           </div>
