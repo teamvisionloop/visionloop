@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay";
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
 import fuzzy from "@/assets/portfolio/fuzzy.png";
 import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
-import obsidian from "@/assets/portfolio/obsidian.png";
+import Temple from "@/assets/portfolio/temple.png";
 
 interface Project {
   title: string;
