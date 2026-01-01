@@ -74,7 +74,7 @@ const About = () => {
     const total = features.length;
     const interval = setInterval(() => {
       const nextIndex = (activeIndex + 1) % total;
-      const cardWidth = carousel.firstChild ? (carousel.firstChild as HTMLElement).offsetWidth + 16 : 0;
+      const cardWidth = carousel.firstChild ? (carousel.firstChild as HTMLElement).offsetWidth : 0;
       carousel.scrollTo({ left: cardWidth * nextIndex, behavior: "smooth" });
       setActiveIndex(nextIndex);
     }, 4000);
@@ -86,7 +86,7 @@ const About = () => {
     const carousel = carouselRef.current;
     if (!carousel || !carousel.firstChild) return;
     const scrollLeft = carousel.scrollLeft;
-    const cardWidth = (carousel.firstChild as HTMLElement).offsetWidth + 16;
+    const cardWidth = (carousel.firstChild as HTMLElement).offsetWidth;
     const index = Math.round(scrollLeft / cardWidth);
     setActiveIndex(index);
   };
@@ -125,12 +125,12 @@ const About = () => {
             <div
               ref={carouselRef}
               onScroll={handleScroll}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-4 no-scrollbar"
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-0 no-scrollbar"
             >
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-[calc(100%-32px)] bg-background p-6 border border-border snap-center"
+                  className="flex-shrink-0 w-[90%] bg-background p-6 border border-border snap-center"
                   style={{ scrollSnapAlign: "center" }}
                 >
                   <feature.icon className="w-8 h-8 mb-4" />
@@ -141,7 +141,7 @@ const About = () => {
             </div>
 
             {/* Solid progress bar */}
-            <div className="absolute bottom-2 left-4 right-4 h-1 mt-2 overflow-hidden">
+            <div className="absolute bottom-2 left-0 right-0 h-1">
               <div
                 className="h-1 bg-black transition-all duration-[3500ms] ease-linear"
                 style={{ width: `${((activeIndex + 1) / features.length) * 100}%` }}
