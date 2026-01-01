@@ -1,11 +1,13 @@
-import Logo from "./Logo";
-
 const Footer = () => {
   return (
     <footer className="py-8 md:py-12 px-4 md:px-6 lg:px-12 border-t border-border">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
-          <Logo className="text-lg md:text-xl" />
+         <img
+  src="/lg.png"
+  alt="VisionLoop Logo"
+  className="h-6 md:h-8 w-auto"
+/>
 
           <nav className="flex flex-wrap justify-center gap-4 md:gap-6">
             {["About", "Portfolio", "Services", "Pricing", "Contact"].map((link) => (
