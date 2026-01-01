@@ -115,12 +115,12 @@ const Services = () => {
                 key={index}
                 className="flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
               >
-                <div className="group p-6 md:p-8 h-full bg-secondary rounded-lg shadow-lg shadow-gray-500/20">
-                  <service.icon className="w-8 h-8 md:w-10 md:h-10 mb-4 md:mb-6 opacity-80 group-hover:opacity-100 transition-opacity" />
-                  <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">
+                <div className="group p-6 md:p-8 h-full bg-black border border-white rounded-lg shadow-lg shadow-gray-500/20">
+                  <service.icon className="w-8 h-8 md:w-10 md:h-10 mb-4 md:mb-6 opacity-80 group-hover:opacity-100 transition-opacity text-white" />
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-white">
                     {service.title}
                   </h3>
-                  <p className="opacity-70 text-sm md:text-base">{service.description}</p>
+                  <p className="opacity-70 text-sm md:text-base text-gray-300">{service.description}</p>
                 </div>
               </div>
             ))}
