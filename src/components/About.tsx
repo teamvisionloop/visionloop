@@ -30,7 +30,7 @@ const About = () => {
   const [animated, setAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Animate numbers and text when section scrolls into view
+  // Animate numbers and fade-up elements on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current || animated) return;
@@ -75,39 +75,49 @@ const About = () => {
     >
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
-          {/* Text Content */}
-          <div
-            className={`transition-all duration-700 ${
-              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-            }`}
-          >
+          {/* Static Title */}
+          <div>
             <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
               About Us
             </span>
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 mb-4 md:mb-6 flex items-center gap-2">
-              Your Partner
+              Your Shopify Partner
               <Infinity className="w-7 h-7 md:w-10 md:h-10" />
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4 md:mb-8 break-words">
-              VisionLoop is a specialized Shopify development agency dedicated to<br />
-              helping businesses launch and scale their online stores. We combine<br />
-              technical expertise with creative design to build e-commerce experiences<br />
-              that not only look stunning but also drive real results.
-            </p>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed break-words">
-              From startups to established brands, we've helped businesses across<br />
-              various industries establish their presence in the digital marketplace.
-            </p>
+
+            {/* Animated Paragraphs */}
+            <div className="space-y-4">
+              {[
+                "VisionLoop is a specialized Shopify development agency dedicated to helping businesses launch and scale their online stores. We combine technical expertise with creative design to build e-commerce experiences that not only look stunning but also drive real results.",
+                "From startups to established brands, we've helped businesses across various industries establish their presence in the digital marketplace.",
+              ].map((text, idx) => (
+                <p
+                  key={idx}
+                  className={`text-muted-foreground text-base md:text-lg leading-relaxed break-words transition-all duration-1000 ease-out ${
+                    animated ? `opacity-100 translate-y-0` : `opacity-0 translate-y-12`
+                  }`}
+                  style={{ transitionDelay: `${idx * 150}ms` }}
+                >
+                  {text.split("<br />").map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+                </p>
+              ))}
+            </div>
           </div>
 
-          {/* Features */}
-          <div className={`grid gap-4 md:gap-6 transition-all duration-700 ${
-            animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}>
-            {features.map((feature, index) => (
+          {/* Animated Feature Cards */}
+          <div className="grid gap-4 md:gap-6">
+            {features.map((feature, idx) => (
               <div
-                key={index}
-                className="bg-background p-4 md:p-6 border border-border hover-lift"
+                key={idx}
+                className={`bg-background p-4 md:p-6 border border-border hover-lift transition-all duration-1000 ease-out ${
+                  animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+                }`}
+                style={{ transitionDelay: `${idx * 200}ms` }}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <feature.icon className="w-6 h-6 md:w-8 md:h-8" />
@@ -119,16 +129,17 @@ const About = () => {
           </div>
         </div>
 
-        {/* Stats section */}
+        {/* Animated Stats */}
         <div className="grid grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-16 pt-8 md:pt-16">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center">
+          {stats.map((stat, idx) => (
+            <div key={idx} className="text-center">
               <div
-                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2 transition-all duration-700 ${
-                  animated ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2 transition-all duration-1000 ease-out ${
+                  animated ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
                 }`}
+                style={{ transitionDelay: `${idx * 200}ms` }}
               >
-                {counts[index]}
+                {counts[idx]}
                 {stat.suffix}
               </div>
               <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
