@@ -61,11 +61,11 @@ const Portfolio = () => {
       link: "https://fayastudioeg.com/",
     },
     {
-      title: "Obsidian Apparel",
-      category: "Lifestyle",
-      description: "Motivational lifestyle brand with powerful graphic tees",
-      image: obsidian,
-      link: "https://obsidianapparel.net/",
+      title: "Temple Of Scent",
+      category: "Perfumery",
+      description: "Luxury fragrance brand offering an exquisite collection of artisan perfumes ",
+      image: Temple,
+      link: "https://templeofscent.com/",
     },
   ];
 
