@@ -14,7 +14,14 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <nav
+      className="
+        fixed top-0 left-0 right-0 z-50
+        bg-background/60
+        backdrop-blur-xl
+        supports-[backdrop-filter]:bg-background/50
+      "
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-20">
           <a href="#" className="flex items-center">
@@ -52,7 +59,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-6 border-t border-border animate-fade-in">
+          <div className="md:hidden py-6 animate-fade-in">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 <a
