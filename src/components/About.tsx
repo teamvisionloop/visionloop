@@ -108,7 +108,7 @@ const About = () => {
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className="bg-background p-4 md:p-6 shadow-lg shadow-gray-700/30 hover-lift"
+                className="bg-background p-4 md:p-6 shadow-lg shadow-gray-500/30 hover-lift"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <feature.icon className="w-6 h-6 md:w-8 md:h-8" />
