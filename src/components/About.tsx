@@ -103,25 +103,24 @@ const About = () => {
             </div>
           </div>
 
-          {/* Animated Feature Cards with blurred shadow */}
-          <div className="grid gap-4 md:gap-6">
-            {features.map((feature, idx) => (
-              <div
-                key={idx}
-                className={`bg-background p-4 md:p-6 hover-lift shadow-lg shadow-gray-400/30 transition-all duration-[1800ms] ease-out ${
-                  animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-                }`}
-                style={{ transitionDelay: `${idx * 250}ms` }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <feature.icon className="w-6 h-6 md:w-8 md:h-8" />
-                  <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
-                </div>
-                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+{/* Animated Feature Cards with dark gray blurred shadow */}
+<div className="grid gap-4 md:gap-6">
+  {features.map((feature, idx) => (
+    <div
+      key={idx}
+      className={`bg-background p-4 md:p-6 hover-lift shadow-lg shadow-gray-700/30 transition-all duration-[1800ms] ease-out ${
+        animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+      }`}
+      style={{ transitionDelay: `${idx * 250}ms` }}
+    >
+      <div className="flex items-center gap-2 mb-2">
+        <feature.icon className="w-6 h-6 md:w-8 md:h-8" />
+        <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
+      </div>
+      <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
+    </div>
+  ))}
+</div>
 
         {/* Animated Stats */}
         <div className="grid grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-16 pt-8 md:pt-16">
