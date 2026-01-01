@@ -1,5 +1,5 @@
 import { Infinity, Zap, Shield, Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const About = () => {
   const stats = [
@@ -29,6 +29,9 @@ const About = () => {
   const [counts, setCounts] = useState(stats.map(() => 0));
   const [animated, setAnimated] = useState(false);
 
+  const carouselRef = useRef(null);
+
+  // Number animation
   useEffect(() => {
     const handleScroll = () => {
       const section = document.getElementById("about");
@@ -63,6 +66,27 @@ const About = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [animated, stats]);
 
+  // Auto scroll carousel on mobile
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    let scrollAmount = 0;
+    const itemWidth = carousel.firstChild.offsetWidth + 16; // gap included
+    const interval = setInterval(() => {
+      scrollAmount += itemWidth;
+      if (scrollAmount >= carousel.scrollWidth) {
+        scrollAmount = 0; // loop back
+      }
+      carousel.scrollTo({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    }, 3000); // scroll every 3s
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section id="about" className="section-padding bg-secondary">
       <div className="max-w-7xl mx-auto">
@@ -90,11 +114,15 @@ const About = () => {
             </p>
           </div>
 
-          <div className="grid gap-4 md:gap-6">
+          {/* Features */}
+          <div
+            ref={carouselRef}
+            className="grid lg:grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 overflow-x-auto lg:overflow-x-visible scroll-smooth snap-x snap-mandatory no-scrollbar"
+          >
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-background p-4 md:p-6 border border-border hover-lift"
+                className="bg-background p-4 md:p-6 border border-border hover-lift min-w-[250px] snap-start"
               >
                 <feature.icon className="w-6 h-6 md:w-8 md:h-8 mb-3 md:mb-4" />
                 <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">{feature.title}</h3>
@@ -104,7 +132,8 @@ const About = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20 ">
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
@@ -120,4 +149,4 @@ const About = () => {
   );
 };
 
-export default About; 
+export default About;
