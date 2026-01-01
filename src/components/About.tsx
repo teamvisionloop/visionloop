@@ -29,6 +29,7 @@ const About = () => {
   const [counts, setCounts] = useState(stats.map(() => 0));
   const [animated, setAnimated] = useState(false);
 
+  // Animate numbers when section scrolls into view
   useEffect(() => {
     const handleScroll = () => {
       const section = document.getElementById("about");
@@ -67,14 +68,14 @@ const About = () => {
     <section id="about" className="section-padding bg-secondary">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
+          {/* Text Content */}
           <div>
             <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
               About Us
             </span>
-            {/* Title with icon inline */}
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 mb-4 md:mb-6 flex items-center gap-2">
-              Your Shopify Partner
-              <Infinity className="inline w-7 h-7 md:w-10 md:h-10" />
+              Your Partner
+              <Infinity className="w-7 h-7 md:w-10 md:h-10" />
             </h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4 md:mb-8">
               VisionLoop is a specialized Shopify development agency dedicated to 
@@ -88,20 +89,26 @@ const About = () => {
             </p>
           </div>
 
+          {/* Features */}
           <div className="grid gap-4 md:gap-6">
             {features.map((feature, index) => (
               <div
                 key={index}
                 className="bg-background p-4 md:p-6 border border-border hover-lift"
               >
-                <feature.icon className="w-6 h-6 md:w-8 md:h-8 mb-3 md:mb-4" />
-                <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">{feature.title}</h3>
+                {/* Icon and Title in same line */}
+                <div className="flex items-center gap-2 mb-2">
+                  <feature.icon className="w-6 h-6 md:w-8 md:h-8" />
+                  <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
+                </div>
+                {/* Description below */}
                 <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 pt-12 md:pt-20">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
