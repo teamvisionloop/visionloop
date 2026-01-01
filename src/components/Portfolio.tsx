@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay";
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
 import fuzzy from "@/assets/portfolio/fuzzy.png";
 import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
-import Temple from "@/assets/portfolio/temple.png";
+import temple from "@/assets/portfolio/temple.png";
 
 interface Project {
   title: string;
@@ -64,7 +64,7 @@ const Portfolio = () => {
       title: "Temple Of Scent",
       category: "Perfumery",
       description: "Luxury fragrance brand offering an exquisite collection of artisan perfumes ",
-      image: Temple,
+      image: temple,
       link: "https://templeofscent.com/",
     },
   ];
