@@ -6,7 +6,6 @@ const Hero = () => {
     <section className="min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-20 md:py-32 pt-28 md:pt-32">
       <div className="text-center max-w-5xl mx-auto">
         <div className="mb-6 md:mb-8 animate-fade-up opacity-0">
-          <Logo className="text-3xl md:text-4xl lg:text-5xl justify-center" />
         </div>
         
         <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6 animate-fade-up opacity-0 stagger-1">
