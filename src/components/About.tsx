@@ -92,10 +92,10 @@ const About = () => {
               ].map((text, idx) => (
                 <p
                   key={idx}
-                  className={`text-muted-foreground text-base md:text-lg leading-relaxed break-words transition-all duration-[1500ms] ease-out ${
+                  className={`text-muted-foreground text-base md:text-lg leading-relaxed break-words transition-all duration-1000 ease-out ${
                     animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
                   }`}
-                  style={{ transitionDelay: `${idx * 200}ms` }}
+                  style={{ transitionDelay: `${idx * 150}ms` }}
                 >
                   {text}
                 </p>
@@ -103,12 +103,15 @@ const About = () => {
             </div>
           </div>
 
-          {/* Feature Cards (No Animation) */}
+          {/* Animated Feature Cards (no borders) */}
           <div className="grid gap-4 md:gap-6">
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className="bg-background p-4 md:p-6 shadow-lg shadow-gray-500/30 hover-lift"
+                className={`bg-background p-4 md:p-6 hover-lift transition-all duration-1000 ease-out ${
+                  animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+                }`}
+                style={{ transitionDelay: `${idx * 200}ms` }}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <feature.icon className="w-6 h-6 md:w-8 md:h-8" />
@@ -125,7 +128,7 @@ const About = () => {
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
               <div
-                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2 transition-all duration-[1500ms] ease-out ${
+                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2 transition-all duration-1000 ease-out ${
                   animated ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
                 }`}
                 style={{ transitionDelay: `${idx * 200}ms` }}
