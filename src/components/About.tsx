@@ -92,7 +92,7 @@ const About = () => {
   };
 
   return (
-    <section id="about" className="section-padding bg-secondary">
+    <section id="about" className="section-padding bg-secondary overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
           <div>
@@ -118,17 +118,17 @@ const About = () => {
             </p>
           </div>
 
-          {/* Features carousel only on mobile */}
+          {/* Mobile carousel */}
           <div className="relative w-full block lg:hidden">
             <div
               ref={carouselRef}
               onScroll={handleScroll}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-2 no-scrollbar"
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 px-4 no-scrollbar"
             >
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-[90%] bg-background p-6 border border-border rounded-lg snap-center"
+                  className="flex-shrink-0 w-[calc(100%-32px)] bg-background p-6 border border-border rounded-lg snap-center"
                   style={{ scrollSnapAlign: "center" }}
                 >
                   <feature.icon className="w-8 h-8 mb-4" />
@@ -139,7 +139,7 @@ const About = () => {
             </div>
 
             {/* Progress bar */}
-            <div className="absolute bottom-0 left-4 right-4 h-1 mt-2 overflow-hidden rounded-full">
+            <div className="absolute bottom-2 left-4 right-4 h-1 rounded-full overflow-hidden">
               <div
                 className="h-1 bg-black rounded-full transition-all duration-[3500ms] ease-linear"
                 style={{ width: `${((activeIndex + 1) / features.length) * 100}%` }}
