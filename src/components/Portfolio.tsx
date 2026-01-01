@@ -1,12 +1,11 @@
 import { ArrowUpRight } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
 import fuzzy from "@/assets/portfolio/fuzzy.png";
 import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
 import temple from "@/assets/portfolio/temple.png";
-
 interface Project {
   title: string;
   category: string;
@@ -25,18 +24,19 @@ const Portfolio = () => {
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
 
-  const [animated, setAnimated] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current || animated) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 100) setAnimated(true);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [animated]);
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => emblaApi.off("select", onSelect);
+  }, [emblaApi, onSelect]);
 
   const projects: Project[] = [
     {
@@ -70,36 +70,20 @@ const Portfolio = () => {
   ];
 
   return (
-    <section id="portfolio" className="section-padding" ref={sectionRef}>
+    <section id="portfolio" className="section-padding">
       <div className="max-w-7xl mx-auto">
-        {/* Header with stronger fade-up animation */}
-        <div className="text-center mb-12 md:mb-16 space-y-3">
-          <span
-            className={`text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider transform transition-all duration-1000 ease-out ${
-              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-            }`}
-          >
+        <div className="text-center mb-12 md:mb-16">
+          <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Our Work
           </span>
-
-          <h2
-            className={`text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4 transform transition-all duration-1000 ease-out ${
-              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-            }`}
-          >
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4">
             Featured Projects
           </h2>
-
-          <p
-            className={`text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto px-4 transform transition-all duration-1000 ease-out ${
-              animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-            }`}
-          >
+          <p className="text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto px-4">
             A selection of Shopify stores we've designed and developed for our clients
           </p>
         </div>
 
-        {/* Carousel */}
         <div className="relative">
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-4 px-2 sm:px-0">
@@ -133,10 +117,8 @@ const Portfolio = () => {
                         {project.category}
                       </span>
 
-                      <div>
-                        <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2">
-                          {project.title}
-                        </h3>
+                      <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2">{project.title}</h3>
                         <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-4">
                           {project.description}
                         </p>
