@@ -108,7 +108,7 @@ const About = () => {
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className={`bg-background p-4 md:p-6 hover-lift shadow-lg shadow-black/20 transition-all duration-[1800ms] ease-out ${
+                className={`bg-background p-4 md:p-6 hover-lift shadow-lg shadow-gray-400/30 transition-all duration-[1800ms] ease-out ${
                   animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
                 }`}
                 style={{ transitionDelay: `${idx * 250}ms` }}
