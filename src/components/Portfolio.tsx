@@ -101,26 +101,24 @@ const Portfolio = () => {
                     rel={project.link ? "noopener noreferrer" : undefined}
                     className="group relative bg-secondary aspect-[4/3] overflow-hidden hover-lift cursor-pointer block"
                   >
-                    {project.image ? (
+                    {project.image && (
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        className="absolute inset-0 w-full h-full object-cover object-top"
                       />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-muted-foreground text-lg">+</span>
-                      </div>
                     )}
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {/* Gradient always visible */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-100" />
 
+                    {/* Content always visible */}
                     <div className="absolute inset-0 flex flex-col justify-between p-4 md:p-6">
                       <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider bg-background/80 px-2 py-1 self-start">
                         {project.category}
                       </span>
 
-                      <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <div className="transform translate-y-0 opacity-100">
                         <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2">{project.title}</h3>
                         <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-4">
                           {project.description}
@@ -128,8 +126,9 @@ const Portfolio = () => {
                       </div>
                     </div>
 
+                    {/* Arrow always visible */}
                     {project.link && (
-                      <div className="absolute top-4 md:top-6 right-4 md:right-6 w-8 h-8 md:w-10 md:h-10 bg-primary text-primary-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute top-4 md:top-6 right-4 md:right-6 w-8 h-8 md:w-10 md:h-10 bg-primary text-primary-foreground flex items-center justify-center opacity-100">
                         <ArrowUpRight size={16} className="md:w-[18px] md:h-[18px]" />
                       </div>
                     )}
@@ -144,7 +143,7 @@ const Portfolio = () => {
         <div className="text-center mt-8 md:mt-12">
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
+            className="inline-flex items-center gap-2 text-sm font-medium"
           >
             Want to be featured? Let's talk <ArrowUpRight size={16} />
           </a>
