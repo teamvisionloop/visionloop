@@ -82,7 +82,7 @@ const Portfolio = () => {
             Featured Projects
           </h2>
           <p className="text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto px-4">
-            A selection of Shopify stores we've designed and developed for our clients
+            A selection of Ecommerce stores we've designed and developed for our clients
           </p>
         </div>
 
