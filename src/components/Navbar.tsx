@@ -42,7 +42,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
    <a href="#" className="flex items-center">
   <img
-    src="/lg.png"
+    src="public/lg.png"
     alt="Logo"
     className="h-8 md:h-10 w-auto"
   />
