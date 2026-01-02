@@ -1,178 +1,153 @@
-import { useEffect, useCallback, useState } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
+import { useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 
-/* =======================
-   Thumbnails (.webp)
-======================= */
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.webp";
 import fuzzy from "@/assets/portfolio/fuzzy.webp";
 import fayaStudio from "@/assets/portfolio/faya-studio-clean.webp";
+import lehabScents from "@/assets/portfolio/lehab-scents.webp";
 import temple from "@/assets/portfolio/temple.webp";
-import fayaEgThumb from "@/assets/portfolio/faya-eg-thumb.webp";
-import lehabThumb from "@/assets/portfolio/lehab-scents-thumb.webp";
-
-/* =======================
-   Full Screenshots (.webp)
-======================= */
-import luxuryFull from "@/assets/portfolio/luxury-brands-full.webp";
-import fuzzyFull from "@/assets/portfolio/fuzzy-full.webp";
-import fayaFull from "@/assets/portfolio/faya-studio-full.webp";
-import templeFull from "@/assets/portfolio/temple-full.webp";
-import fayaEgFull from "@/assets/portfolio/faya-eg-full.webp";
-import lehabFull from "@/assets/portfolio/lehab-scents-full.webp";
 
 interface Project {
   title: string;
   category: string;
   description: string;
   image: string;
-  fullImage: string;
+  link?: string;
 }
 
-const Portfolio = () => {
-  const [emblaRef] = useEmblaCarousel(
-    { loop: true, align: "start", containScroll: "trimSnaps" },
-    [Autoplay({ delay: 4000, stopOnInteraction: false })]
-  );
+const projects: Project[] = [
+  {
+    title: "Luxury Brands",
+    category: "Fashion",
+    description: "Premium streetwear e-commerce store featuring global luxury brands",
+    image: luxuryBrands,
+    link: "https://luxurybrandseg.com/",
+  },
+  {
+    title: "Fuzzy",
+    category: "Apparel",
+    description: "Cozy Egyptian cotton hoodies and comfort wear brand",
+    image: fuzzy,
+    link: "https://wearfuzzy.com/",
+  },
+  {
+    title: "Faya Studio EG",
+    category: "Streetwear",
+    description: "Winter streetwear collection with bold urban designs",
+    image: fayaStudio,
+  },
+  {
+    title: "Lehab Scents",
+    category: "Perfumery",
+    description: "Luxury fragrance brand with artisanal scents",
+    image: lehabScents,
+  },
+  {
+    title: "Temple Of Scent",
+    category: "Perfumery",
+    description: "Luxury fragrance brand offering an exquisite collection of artisan perfumes",
+    image: temple,
+    link: "https://templeofscent.com/",
+  },
+];
 
-  const [activeImage, setActiveImage] = useState<string | null>(null);
-  const [activeTitle, setActiveTitle] = useState("");
-  const [zoom, setZoom] = useState(1);
+export default function Portfolio() {
+  const [lightbox, setLightbox] = useState<{ image: string; zoom: number } | null>(null);
 
-  const closeModal = () => {
-    setActiveImage(null);
-    setZoom(1);
-  };
-
-  const projects: Project[] = [
-    {
-      title: "Luxury Brands",
-      category: "Fashion",
-      description: "Premium streetwear e-commerce store featuring global luxury brands",
-      image: luxuryBrands,
-      fullImage: luxuryFull,
-    },
-    {
-      title: "Fuzzy",
-      category: "Apparel",
-      description: "Cozy Egyptian cotton hoodies and comfort wear brand",
-      image: fuzzy,
-      fullImage: fuzzyFull,
-    },
-    {
-      title: "Faya Studio",
-      category: "Streetwear",
-      description: "Winter streetwear collection with bold urban designs",
-      image: fayaStudio,
-      fullImage: fayaFull,
-    },
-    {
-      title: "Temple Of Scent",
-      category: "Perfumery",
-      description: "Luxury fragrance brand",
-      image: temple,
-      fullImage: templeFull,
-    },
-    {
-      title: "Faya EG",
-      category: "Fashion",
-      description: "Modern Egyptian fashion brand",
-      image: fayaEgThumb,
-      fullImage: fayaEgFull,
-    },
-    {
-      title: "Lehab Scents",
-      category: "Fragrance",
-      description: "Luxury Arabic perfume house",
-      image: lehabThumb,
-      fullImage: lehabFull,
-    },
-  ];
+  const openLightbox = (image: string) => setLightbox({ image, zoom: 1 });
+  const closeLightbox = () => setLightbox(null);
+  const zoomIn = () => lightbox && setLightbox({ ...lightbox, zoom: lightbox.zoom + 0.2 });
+  const zoomOut = () => lightbox && setLightbox({ ...lightbox, zoom: Math.max(lightbox.zoom - 0.2, 0.2) });
 
   return (
     <section id="portfolio" className="section-padding">
       <div className="max-w-7xl mx-auto">
-        {/* Carousel */}
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-4 px-4 md:px-6 lg:px-12">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
-              >
-                <div
-                  onClick={() => {
-                    setActiveImage(project.fullImage);
-                    setActiveTitle(project.title);
-                    setZoom(1);
-                  }}
-                  className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
-                >
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Section Header */}
+        <div className="text-center mb-12 md:mb-16 px-4">
+          <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Our Work
+          </span>
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4">
+            Featured Projects
+          </h2>
+          <p className="text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto">
+            A selection of Ecommerce stores we've designed and developed for our clients
+          </p>
         </div>
 
-        {/* Fullscreen Modal */}
-        {activeImage && (
+        {/* Thumbnails Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-6 lg:px-12">
+          {projects.map((project, idx) => (
+            <div
+              key={idx}
+              className="relative cursor-pointer group overflow-hidden rounded-lg"
+              onClick={() => openLightbox(project.image)}
+            >
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-[220px] sm:h-64 lg:h-72 object-cover object-top transition-transform duration-500 group-hover:scale-105"
+              />
+              {/* Light overlay */}
+              <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-colors" />
+              {/* Category label */}
+              <span className="absolute top-2 left-2 bg-background/80 text-xs md:text-sm px-2 py-1 rounded font-medium text-muted-foreground">
+                {project.category}
+              </span>
+              {/* Title on hover */}
+              <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <h3 className="font-bold text-lg md:text-xl">{project.title}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Lightbox */}
+        {lightbox && (
           <div
-            className="fixed inset-0 z-50 bg-black/80"
-            onClick={closeModal}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+            onClick={closeLightbox}
           >
             <div
-              className="relative w-full h-full flex items-center justify-center"
-              onClick={(e) => e.stopPropagation()}
+              className="relative"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking image container
             >
-              {/* SVG Controls */}
-              <div className="absolute top-6 right-6 flex gap-3 z-10">
-                {/* Zoom In */}
+              {/* X Button */}
+              <button
+                onClick={closeLightbox}
+                className="absolute top-3 right-3 p-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* Zoom Buttons */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
                 <button
-                  onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
-                  className="bg-white/90 p-2 rounded"
+                  onClick={zoomOut}
+                  className="p-2 bg-white/20 rounded"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 5v14M5 12h14" stroke="black" strokeWidth="2" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                   </svg>
                 </button>
-
-                {/* Zoom Out */}
                 <button
-                  onClick={() => setZoom((z) => Math.max(z - 0.25, 1))}
-                  className="bg-white/90 p-2 rounded"
+                  onClick={zoomIn}
+                  className="p-2 bg-white/20 rounded"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 12h14" stroke="black" strokeWidth="2" />
-                  </svg>
-                </button>
-
-                {/* Close */}
-                <button
-                  onClick={closeModal}
-                  className="bg-white/90 p-2 rounded"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M6 6l12 12M18 6l-12 12"
-                      stroke="black"
-                      strokeWidth="2"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                 </button>
               </div>
 
               {/* Image */}
               <img
-                src={activeImage}
-                alt={activeTitle}
-                className="max-w-full max-h-full object-contain transition-transform duration-200"
-                style={{ transform: `scale(${zoom})` }}
+                src={lightbox.image}
+                alt="Full"
+                style={{ transform: `scale(${lightbox.zoom})` }}
+                className="max-h-[90vh] max-w-[90vw] object-contain transition-transform duration-300"
               />
             </div>
           </div>
@@ -180,6 +155,4 @@ const Portfolio = () => {
       </div>
     </section>
   );
-};
-
-export default Portfolio;
+}
