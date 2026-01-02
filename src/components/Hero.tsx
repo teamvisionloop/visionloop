@@ -1,4 +1,4 @@
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Infinity } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const Hero = () => {
@@ -10,17 +10,16 @@ const Hero = () => {
 
   const [counts, setCounts] = useState(stats.map(() => 0));
 
+  // Animate counts immediately on page load
   useEffect(() => {
-    const duration = 1500; // 1.5 seconds
+    const duration = 1500; // 1.5s
     const startTime = performance.now();
 
-    const animate = (time: number) => {
-      const progress = Math.min((time - startTime) / duration, 1);
-
+    const animate = (currentTime: number) => {
+      const progress = Math.min((currentTime - startTime) / duration, 1);
       setCounts(
         stats.map((stat) => Math.floor(progress * stat.number))
       );
-
       if (progress < 1) requestAnimationFrame(animate);
     };
 
@@ -37,19 +36,19 @@ const Hero = () => {
       "
     >
       <div className="text-center max-w-5xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6 animate-fade-up opacity-0 stagger-1">
+        {/* Heading */}
+        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6 flex items-center justify-center gap-2">
           We Design & Build
-          <br />
-          <span className="text-muted-foreground">Your Vision</span>
+          <Infinity className="w-7 h-7 md:w-10 md:h-10" />
         </h1>
 
-        <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12 animate-fade-up opacity-0 stagger-2 px-4">
+        <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12">
           A premium development studio focused on performance, clarity, and
           conversion — turning ideas into powerful online experiences.
         </p>
 
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center animate-fade-up opacity-0 stagger-3 px-4">
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4 mb-8">
           <a
             href="#portfolio"
             className="bg-primary text-primary-foreground px-6 md:px-8 py-3 md:py-4 text-sm font-medium hover:bg-primary/90 hover:scale-105 transition-all"
@@ -64,17 +63,15 @@ const Hero = () => {
           </a>
         </div>
 
-        {/* Stats under buttons */}
-        <div className="mt-6 md:mt-10 flex flex-col sm:flex-row justify-center gap-6 md:gap-12 animate-fade-up opacity-0 stagger-4 px-4">
+        {/* Stats (smaller font) */}
+        <div className="grid grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-16 pt-8 md:pt-16">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
-              <div className="text-xl sm:text-2xl md:text-3xl font-semibold mb-1 md:mb-2">
+              <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2">
                 {counts[idx]}
                 {stat.suffix}
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground">
-                {stat.label}
-              </div>
+              <div className="text-xs text-muted-foreground">{stat.label}</div>
             </div>
           ))}
         </div>
