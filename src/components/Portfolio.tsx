@@ -31,7 +31,7 @@ interface Project {
 const Portfolio = () => {
   const [emblaRef] = useEmblaCarousel(
     { loop: true, align: "start" },
-    [Autoplay({ delay: 4000 })]
+    [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -135,21 +135,17 @@ const Portfolio = () => {
                   }}
                   className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
                 >
-                  {/* Image */}
                   <img
                     src={project.image}
                     alt={project.title}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
 
-                  {/* Black overlay (always visible) */}
+                  {/* Small black overlay */}
                   <div className="absolute inset-0 bg-black/20" />
 
-                  {/* Brand badge */}
-                  <div
-                    className="absolute bottom-3 left-3 bg-gray-500 text-white
-                               text-xs px-3 py-1 tracking-wide"
-                  >
+                  {/* Grey badge (TOP) */}
+                  <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1 tracking-wide">
                     {project.title}
                   </div>
                 </div>
@@ -161,26 +157,63 @@ const Portfolio = () => {
         {/* Fullscreen Viewer */}
         {activeImage && (
           <div
-            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+            className="fixed inset-0 z-50 bg-black/90"
             onClick={() => setActiveImage(null)}
           >
-            <img
-              src={activeImage}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleTap();
-              }}
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-              onPointerCancel={onPointerUp}
-              className="max-w-full max-h-full select-none"
-              style={{
-                cursor: zoom > 1 ? "move" : "default",
-                transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
-                transition: isDragging ? "none" : "transform 0.25s ease",
-              }}
-            />
+            {/* Controls */}
+            <div className="absolute top-6 right-6 z-10 flex gap-3">
+              {/* Zoom In */}
+              <button
+                onClick={() => setZoom((z) => Math.min(z + 1, 6))}
+                className="p-2"
+              >
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M5 12h14" stroke="gray" strokeWidth="2" />
+                </svg>
+              </button>
+
+              {/* Zoom Out */}
+              <button
+                onClick={() => setZoom((z) => Math.max(z - 1, 1))}
+                className="p-2"
+              >
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14" stroke="gray" strokeWidth="2" />
+                </svg>
+              </button>
+
+              {/* Close */}
+              <button onClick={() => setActiveImage(null)} className="p-2">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M6 6l12 12M18 6l-12 12"
+                    stroke="gray"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Image */}
+            <div className="w-full h-full flex items-center justify-center">
+              <img
+                src={activeImage}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTap();
+                }}
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerCancel={onPointerUp}
+                className="max-w-full max-h-full select-none"
+                style={{
+                  cursor: zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default",
+                  transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+                  transition: isDragging ? "none" : "transform 0.25s ease",
+                }}
+              />
+            </div>
           </div>
         )}
       </div>
