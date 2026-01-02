@@ -13,28 +13,44 @@ const Hero = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
 useEffect(() => {
-  const startTime = performance.now();
-  const duration = 1500; // 1.5 seconds
-  const initialCounts = stats.map(() => 0);
+  const section = sectionRef.current;
+  if (!section) return;
 
-  const animate = (currentTime: number) => {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
+  let animated = false;
 
-    const newCounts = stats.map((stat) =>
-      Math.floor(progress * stat.number)
-    );
+  const handleScroll = () => {
+    if (animated) return;
 
-    setCounts(newCounts);
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 100) {
+      animated = true; // prevent multiple triggers
 
-    if (progress < 1) {
+      const startTime = performance.now();
+      const duration = 1500;
+
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const newCounts = stats.map((stat) => {
+          // Start at 1 instead of 0
+          return Math.floor(1 + progress * (stat.number - 1));
+        });
+
+        setCounts(newCounts);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+
       requestAnimationFrame(animate);
     }
   };
 
-  requestAnimationFrame(animate);
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
 }, [stats]);
-
   return (
     <section
       ref={sectionRef}
