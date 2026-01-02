@@ -48,6 +48,7 @@ const Portfolio = () => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const startDrag = (x: number, y: number) => {
+    if (zoom === 1) return; // only allow pan when zoomed
     isDragging.current = true;
     lastPos.current = { x, y };
   };
@@ -68,7 +69,7 @@ const Portfolio = () => {
   const openModal = (image: string, title: string) => {
     setActiveImage(image);
     setActiveTitle(title);
-    setZoom(1);
+    setZoom(1); // fully zoomed out initially
     setOffset({ x: 0, y: 0 });
   };
 
@@ -135,7 +136,7 @@ const Portfolio = () => {
             <button onClick={(e)=>{e.stopPropagation(); setZoom(z=>Math.min(z+0.5,8));}} className="p-2 hover:text-gray-300 transition transform hover:scale-110">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2"/></svg>
             </button>
-            <button onClick={(e)=>{e.stopPropagation(); setZoom(z=>Math.max(z-0.5,1));}} className="p-2 hover:text-gray-300 transition transform hover:scale-110">
+            <button onClick={(e)=>{e.stopPropagation(); setZoom(z=>Math.max(z-0.5,1)); setOffset({x:0,y:0});}} className="p-2 hover:text-gray-300 transition transform hover:scale-110">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="white" strokeWidth="2"/></svg>
             </button>
             <button onClick={(e)=>{e.stopPropagation(); closeModal();}} className="p-2 hover:text-gray-300 transition transform hover:scale-110">
