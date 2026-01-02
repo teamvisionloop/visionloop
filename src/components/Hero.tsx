@@ -1,5 +1,5 @@
-import { ArrowDown, Infinity, Users } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { ArrowDown } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Hero = () => {
   const stats = [
@@ -9,47 +9,33 @@ const Hero = () => {
   ];
 
   const [counts, setCounts] = useState(stats.map(() => 0));
-  const [animated, setAnimated] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Animate counts immediately on page load
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current || animated) return;
+    stats.forEach((stat, index) => {
+      let start = 0;
+      const end = stat.number;
+      const duration = 1500;
+      const stepTime = 16;
+      const increment = end / (duration / stepTime);
 
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 100) {
-        setAnimated(true);
-
-        stats.forEach((stat, index) => {
-          let start = 0;
-          const end = stat.number;
-          const duration = 1500;
-          const stepTime = 16;
-          const increment = end / (duration / stepTime);
-
-          const interval = setInterval(() => {
-            start += increment;
-            if (start >= end) {
-              start = end;
-              clearInterval(interval);
-            }
-            setCounts((prev) => {
-              const updated = [...prev];
-              updated[index] = Math.floor(start);
-              return updated;
-            });
-          }, stepTime);
+      const interval = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          start = end;
+          clearInterval(interval);
+        }
+        setCounts((prev) => {
+          const updated = [...prev];
+          updated[index] = Math.floor(start);
+          return updated;
         });
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [animated, stats]);
+      }, stepTime);
+    });
+  }, [stats]);
 
   return (
     <section
-      ref={sectionRef}
       className="
         min-h-[75vh] sm:min-h-[85vh] md:min-h-screen
         flex flex-col justify-center items-center
@@ -86,10 +72,10 @@ const Hero = () => {
         </div>
 
         {/* Stats under buttons */}
-        <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-6 md:gap-12 animate-fade-up opacity-0 stagger-4 px-4">
+        <div className="mt-6 md:mt-10 flex flex-col sm:flex-row justify-center gap-6 md:gap-12 animate-fade-up opacity-0 stagger-4 px-4">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
+              <div className="text-xl sm:text-2xl md:text-3xl font-semibold mb-1 md:mb-2">
                 {counts[idx]}
                 {stat.suffix}
               </div>
