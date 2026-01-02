@@ -18,7 +18,6 @@ const Hero = () => {
   ];
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
-  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]; // enough for seamless scroll
 
   // Animate counters
   useEffect(() => {
@@ -26,7 +25,6 @@ const Hero = () => {
       if (!el) return;
       const end = stats[idx].number;
 
-      // longer duration: 6s
       const duration = window.innerWidth < 640 ? 8000 : 6000; // slower on mobile
       let start = 0;
 
@@ -46,10 +44,20 @@ const Hero = () => {
     const container = carouselRef.current;
     if (!container) return;
 
-    const children = Array.from(container.children) as HTMLElement[];
-    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0); // 32px gap
+    // duplicate logos enough to fill screen
+    const repeated = [...logos, ...logos, ...logos, ...logos];
+    container.innerHTML = ""; // clear initial logos
+    repeated.forEach((logo) => {
+      const img = document.createElement("img");
+      img.src = logo;
+      img.className = "h-8 md:h-10 object-contain flex-shrink-0";
+      container.appendChild(img);
+    });
 
-    let scrollX = totalWidth; // start from the right for left→right scroll
+    const children = Array.from(container.children) as HTMLElement[];
+    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0); // gap 32px
+
+    let scrollX = totalWidth; // start from right to left → left-to-right effect
     const speed = window.innerWidth < 640 ? 0.3 : 1; // slower on mobile
 
     const step = () => {
@@ -60,7 +68,7 @@ const Hero = () => {
     };
 
     requestAnimationFrame(step);
-  }, []);
+  }, [logos]);
 
   return (
     <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
@@ -117,17 +125,7 @@ const Hero = () => {
             ref={carouselRef}
             className="flex gap-8 w-max"
             style={{ scrollBehavior: "auto", overflowX: "hidden" }}
-          >
-            {repeatedLogos.map((logo, idx) => (
-              <img
-                key={idx}
-                src={logo}
-                alt={`Brand ${idx + 1}`}
-                className="h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos"
-                style={{ animationDelay: `${idx * 0.05}s` }}
-              />
-            ))}
-          </div>
+          ></div>
         </div>
       </div>
 
@@ -141,17 +139,9 @@ const Hero = () => {
       </a>
 
       <style jsx>{`
-        @keyframes fade-up-logos {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
         @keyframes fade-up-section {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-up-logos {
-          opacity: 0;
-          animation: fade-up-logos 0.8s ease-out forwards;
         }
         .animate-fade-up-section {
           opacity: 0;
