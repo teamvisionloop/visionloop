@@ -10,17 +10,21 @@ const Hero = () => {
 
   const [counts, setCounts] = useState(stats.map(() => 0));
 
-  // Animate counts immediately on page load
   useEffect(() => {
-    const duration = 1500; // 1.5s
+    const duration = 1500; // 1.5 seconds
     const startTime = performance.now();
 
     const animate = (currentTime: number) => {
-      const progress = Math.min((currentTime - startTime) / duration, 1);
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
       setCounts(
-        stats.map((stat) => Math.floor(progress * stat.number))
+        stats.map((stat) => Math.round(stat.number * progress))
       );
-      if (progress < 1) requestAnimationFrame(animate);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
     };
 
     requestAnimationFrame(animate);
@@ -63,17 +67,15 @@ const Hero = () => {
           </a>
         </div>
 
-        {/* Stats (like About Us) */}
+        {/* Stats (smaller font, smooth counting) */}
         <div className="grid grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-16 pt-8 md:pt-16">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
+              <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2">
                 {counts[idx]}
                 {stat.suffix}
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground">
-                {stat.label}
-              </div>
+              <div className="text-xs text-muted-foreground">{stat.label}</div>
             </div>
           ))}
         </div>
