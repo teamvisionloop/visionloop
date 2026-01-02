@@ -9,11 +9,10 @@ import brand6 from "@/assets/portfolio/brand6.webp";
 import brand7 from "@/assets/portfolio/brand7.webp";
 
 const Hero = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
 
-  // Only Projects Completed & Years Experience
+  // Only two stats
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
     { number: 2, suffix: "+", label: "Years Experience" },
@@ -21,12 +20,12 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters on page load
+  // Animate counters immediately
   useEffect(() => {
     statsRefs.current.forEach((el, index) => {
       if (!el) return;
       const end = stats[index].number;
-      const duration = 1500; // animation duration in ms
+      const duration = 1500;
       let start = 0;
 
       const step = () => {
@@ -36,16 +35,13 @@ const Hero = () => {
         if (start < end) requestAnimationFrame(step);
       };
       step();
+      el.style.opacity = "1"; // Make visible immediately
     });
   }, [stats]);
 
-  // Prepare logos for seamless infinite carousel
+  // Prepare carousel logos for seamless loop
   useEffect(() => {
-    const containerWidth = window.innerWidth;
-    const logoWidth = 80; // approximate width per logo
-    const gap = 32; // gap between logos
-    const totalWidth = logos.length * (logoWidth + gap);
-    const repeatCount = Math.ceil((containerWidth * 2) / totalWidth);
+    const repeatCount = 10; // repeat enough times to avoid empty space
     const repeated: string[] = [];
     for (let i = 0; i < repeatCount; i++) {
       repeated.push(...logos);
@@ -54,11 +50,8 @@ const Hero = () => {
   }, [logos]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32"
-    >
-      {/* Whole section fade-up */}
+    <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
+      {/* Section fade-up */}
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
@@ -87,14 +80,13 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* Stats in one line */}
+          {/* Stats */}
           <div className="mt-8 md:mt-12 flex flex-row flex-wrap justify-center gap-6 px-4">
             {stats.map((stat, idx) => (
               <div key={idx} className="text-center min-w-[100px]">
                 <div
                   ref={(el) => (statsRefs.current[idx] = el)}
                   className="text-base sm:text-lg md:text-2xl font-bold mb-1 md:mb-2 opacity-0"
-                  style={{ transition: "opacity 0.5s ease-out" }}
                 >
                   0{stat.suffix}
                 </div>
@@ -144,6 +136,7 @@ const Hero = () => {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
         }
+
         .animate-slide-loop {
           display: inline-flex;
           width: max-content;
