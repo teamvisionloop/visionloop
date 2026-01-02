@@ -13,21 +13,20 @@ const Hero = () => {
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
 
-  // All three stats
+  // Only Projects Completed & Years Experience
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
-    { number: 100, suffix: "%", label: "Client Satisfaction" },
     { number: 2, suffix: "+", label: "Years Experience" },
   ];
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters immediately on page load
+  // Animate counters on page load
   useEffect(() => {
     statsRefs.current.forEach((el, index) => {
       if (!el) return;
       const end = stats[index].number;
-      const duration = 1500;
+      const duration = 1500; // animation duration in ms
       let start = 0;
 
       const step = () => {
@@ -47,7 +46,7 @@ const Hero = () => {
     const gap = 32; // gap between logos
     const totalWidth = logos.length * (logoWidth + gap);
     const repeatCount = Math.ceil((containerWidth * 2) / totalWidth);
-    const repeated = [];
+    const repeated: string[] = [];
     for (let i = 0; i < repeatCount; i++) {
       repeated.push(...logos);
     }
@@ -59,6 +58,7 @@ const Hero = () => {
       ref={sectionRef}
       className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32"
     >
+      {/* Whole section fade-up */}
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
