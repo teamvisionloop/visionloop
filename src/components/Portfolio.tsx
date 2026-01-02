@@ -2,17 +2,27 @@ import { ArrowUpRight } from "lucide-react";
 import { useEffect, useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+
+// Thumbnails
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
 import fuzzy from "@/assets/portfolio/fuzzy.png";
 import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
 import temple from "@/assets/portfolio/temple.png";
 
+// Full screenshots
+import luxuryFull from "@/assets/portfolio/luxury-brands-full.png";
+import fuzzyFull from "@/assets/portfolio/fuzzy-full.png";
+import fayaFull from "@/assets/portfolio/faya-studio-full.png";
+import templeFull from "@/assets/portfolio/temple-full.png";
+import fayaEgFull from "@/assets/portfolio/faya-eg-full.png";
+import lehabFull from "@/assets/portfolio/lehab-scents-full.png";
+
 interface Project {
   title: string;
   category: string;
   description: string;
-  image?: string;
-  link?: string;
+  image: string;
+  fullImage: string;
 }
 
 const Portfolio = () => {
@@ -26,6 +36,8 @@ const Portfolio = () => {
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [activeTitle, setActiveTitle] = useState("");
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -45,44 +57,58 @@ const Portfolio = () => {
       category: "Fashion",
       description: "Premium streetwear e-commerce store featuring global luxury brands",
       image: luxuryBrands,
-      link: "https://luxurybrandseg.com/",
+      fullImage: luxuryFull,
     },
     {
       title: "Fuzzy",
       category: "Apparel",
       description: "Cozy Egyptian cotton hoodies and comfort wear brand",
       image: fuzzy,
-      link: "https://wearfuzzy.com/",
+      fullImage: fuzzyFull,
     },
     {
       title: "Faya Studio",
       category: "Streetwear",
       description: "Winter streetwear collection with bold urban designs",
       image: fayaStudio,
-      link: "https://fayastudioeg.com/",
+      fullImage: fayaFull,
     },
     {
       title: "Temple Of Scent",
       category: "Perfumery",
-      description: "Luxury fragrance brand offering an exquisite collection of artisan perfumes",
+      description: "Luxury fragrance brand offering artisan perfumes",
       image: temple,
-      link: "https://templeofscent.com/",
+      fullImage: templeFull,
+    },
+    {
+      title: "Faya EG",
+      category: "Fashion",
+      description: "Modern Egyptian fashion brand",
+      image: fayaStudio,
+      fullImage: fayaEgFull,
+    },
+    {
+      title: "Lehab Scents",
+      category: "Fragrance",
+      description: "Luxury Arabic perfume house",
+      image: temple,
+      fullImage: lehabFull,
     },
   ];
 
   return (
     <section id="portfolio" className="section-padding">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+        {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Our Work
           </span>
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-4">
             Featured Projects
           </h2>
-          <p className="text-muted-foreground text-base md:text-lg mt-3 md:mt-4 max-w-2xl mx-auto px-4">
-            A selection of Ecommerce stores we've designed and developed for our clients
+          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+            A selection of Ecommerce stores we've designed and developed
           </p>
         </div>
 
@@ -95,23 +121,18 @@ const Portfolio = () => {
                   key={index}
                   className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
                 >
-                  <a
-                    href={project.link || "#contact"}
-                    target={project.link ? "_blank" : undefined}
-                    rel={project.link ? "noopener noreferrer" : undefined}
-                    className="group relative bg-secondary aspect-[4/3] overflow-hidden hover-lift cursor-pointer block"
+                  <div
+                    onClick={() => {
+                      setActiveImage(project.fullImage);
+                      setActiveTitle(project.title);
+                    }}
+                    className="group relative bg-secondary aspect-[4/3] overflow-hidden hover-lift cursor-pointer"
                   >
-                    {project.image ? (
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-muted-foreground text-lg">+</span>
-                      </div>
-                    )}
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -121,34 +142,50 @@ const Portfolio = () => {
                       </span>
 
                       <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2">{project.title}</h3>
-                        <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-4">
+                        <h3 className="text-lg md:text-xl font-bold mb-2">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
                           {project.description}
                         </p>
                       </div>
                     </div>
 
-                    {project.link && (
-                      <div className="absolute top-4 md:top-6 right-4 md:right-6 w-8 h-8 md:w-10 md:h-10 bg-primary text-primary-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <ArrowUpRight size={16} className="md:w-[18px] md:h-[18px]" />
-                      </div>
-                    )}
-                  </a>
+                    <div className="absolute top-4 right-4 w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <ArrowUpRight size={18} />
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-8 md:mt-12">
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
+        {/* Fullscreen Image Modal */}
+        {activeImage && (
+          <div
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            onClick={() => setActiveImage(null)}
           >
-            Want to be featured? Let's talk <ArrowUpRight size={16} />
-          </a>
-        </div>
+            <div
+              className="relative max-w-7xl w-full max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setActiveImage(null)}
+                className="absolute -top-10 right-0 text-white text-sm opacity-80 hover:opacity-100"
+              >
+                Close ✕
+              </button>
+
+              <img
+                src={activeImage}
+                alt={activeTitle}
+                className="w-full h-full object-contain rounded-lg"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
