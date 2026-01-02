@@ -12,26 +12,30 @@ const Hero = () => {
   const [animated, setAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+ useEffect(() => {
   stats.forEach((stat, index) => {
     let start = 0;
     const end = stat.number;
     const duration = 1500; // total animation time in ms
-    const stepTime = 16; // roughly 60fps
-    const increment = end / (duration / stepTime);
+    const startTime = performance.now();
 
-    const interval = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        start = end;
-        clearInterval(interval);
-      }
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const value = Math.floor(progress * end);
+
       setCounts((prev) => {
         const updated = [...prev];
-        updated[index] = Math.floor(start);
+        updated[index] = value;
         return updated;
       });
-    }, stepTime);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
   });
 }, [stats]);
 
