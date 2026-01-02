@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -39,26 +39,24 @@ const Portfolio = () => {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState("");
   const [zoom, setZoom] = useState(1);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = (image: string, title: string) => {
     setActiveImage(image);
     setActiveTitle(title);
     setZoom(1);
-    setModalVisible(true);
   };
 
   const closeModal = () => {
     setActiveImage(null);
     setZoom(1);
-    setModalVisible(false);
   };
 
   const projects: Project[] = [
     {
       title: "Luxury Brands",
       category: "Fashion",
-      description: "Premium streetwear e-commerce store featuring global luxury brands",
+      description:
+        "Premium streetwear e-commerce store featuring global luxury brands",
       image: luxuryBrands,
       fullImage: luxuryFull,
     },
@@ -112,12 +110,9 @@ const Portfolio = () => {
             opacity: 0;
             animation: fadeUp 0.6s ease-out forwards;
           }
-          .stagger-1 {
-            animation-delay: 0.2s;
-          }
-          .stagger-2 {
-            animation-delay: 0.4s;
-          }
+          .stagger-1 { animation-delay: 0.2s; }
+          .stagger-2 { animation-delay: 0.4s; }
+
           @keyframes zoomIn {
             0% { transform: scale(0.95); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -128,6 +123,7 @@ const Portfolio = () => {
         `}
       </style>
 
+      {/* Header */}
       <div className="max-w-7xl mx-auto text-center mb-8">
         <h2 className="text-3xl font-bold animate-fade-up stagger-1">
           Our Featured Projects
@@ -167,17 +163,22 @@ const Portfolio = () => {
           onClick={closeModal}
         >
           <div
-            className="relative"
+            className="relative w-full h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Controls on Right */}
-            <div className="absolute top-6 right-6 flex flex-col gap-3 z-20">
+            {/* Buttons fixed to right end, horizontal */}
+            <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-3 z-20">
               {/* Zoom In */}
               <button
                 onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
                 className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
                   <path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2" />
                 </svg>
               </button>
@@ -187,7 +188,12 @@ const Portfolio = () => {
                 onClick={() => setZoom((z) => Math.max(z - 0.25, 1))}
                 className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
                   <path d="M5 12h14" stroke="white" strokeWidth="2" />
                 </svg>
               </button>
@@ -197,7 +203,12 @@ const Portfolio = () => {
                 onClick={closeModal}
                 className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
                   <path
                     d="M6 6l12 12M18 6l-12 12"
                     stroke="white"
