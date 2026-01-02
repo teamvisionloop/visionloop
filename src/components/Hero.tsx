@@ -19,35 +19,35 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters
+  // Animate counters smoothly
   useEffect(() => {
     statsRefs.current.forEach((el, idx) => {
       if (!el) return;
       const end = stats[idx].number;
-
       const duration = window.innerWidth < 640 ? 8000 : 6000; // slower on mobile
       let start = 0;
-
       const step = () => {
-        start += Math.ceil(end / (duration / 60));
+        start += end / (duration / 60);
         if (start >= end) start = end;
-        el.innerText = `${start}${stats[idx].suffix}`;
+        el.innerText = `${Math.floor(start)}${stats[idx].suffix}`;
         if (start < end) requestAnimationFrame(step);
       };
       step();
       el.style.opacity = "1";
     });
-  }, [stats]);
+  }, []);
 
   // Infinite carousel left → right
   useEffect(() => {
     const container = carouselRef.current;
     if (!container) return;
 
-    // duplicate logos enough to fill screen
-    const repeated = [...logos, ...logos, ...logos, ...logos];
-    container.innerHTML = ""; // clear initial logos
-    repeated.forEach((logo) => {
+    // Clear any existing content
+    container.innerHTML = "";
+
+    // duplicate logos multiple times to ensure seamless scroll
+    const repeatedLogos = [...logos, ...logos, ...logos, ...logos];
+    repeatedLogos.forEach((logo) => {
       const img = document.createElement("img");
       img.src = logo;
       img.className = "h-8 md:h-10 object-contain flex-shrink-0";
@@ -55,20 +55,19 @@ const Hero = () => {
     });
 
     const children = Array.from(container.children) as HTMLElement[];
-    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0); // gap 32px
+    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0); // 32px gap
 
-    let scrollX = totalWidth; // start from right to left → left-to-right effect
+    let scrollX = totalWidth; // start from right side for left→right scroll
     const speed = window.innerWidth < 640 ? 0.3 : 1; // slower on mobile
 
     const step = () => {
       scrollX -= speed;
-      if (scrollX <= 0) scrollX = totalWidth / 2; // reset seamlessly
+      if (scrollX <= 0) scrollX = totalWidth / 2; // seamless reset
       container.scrollLeft = scrollX;
       requestAnimationFrame(step);
     };
-
     requestAnimationFrame(step);
-  }, [logos]);
+  }, []);
 
   return (
     <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
