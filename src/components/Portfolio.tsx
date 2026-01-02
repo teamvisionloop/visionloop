@@ -130,7 +130,7 @@ const Portfolio = () => {
       {/* Header */}
       <div className="max-w-7xl mx-auto text-center mb-8">
         <h2
-          className={`text-3xl font-bold transition-opacity duration-600 ${
+          className={`text-3xl font-bold transition-all duration-600 ${
             visibleIndexes.includes(0) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
           }`}
           ref={(el) => (projectRefs.current[0] = el!)}
@@ -139,7 +139,7 @@ const Portfolio = () => {
           Our Featured Projects
         </h2>
         <p
-          className={`mt-2 text-gray-400 transition-opacity duration-600 ${
+          className={`mt-2 text-gray-400 transition-all duration-600 ${
             visibleIndexes.includes(1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
           }`}
           ref={(el) => (projectRefs.current[1] = el!)}
@@ -155,7 +155,7 @@ const Portfolio = () => {
           {projects.map((project, index) => (
             <div
               key={index}
-              className={`flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] transition-transform duration-500 ${
+              className={`flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] transition-all duration-500 ${
                 visibleIndexes.includes(index + 2) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
               }`}
               ref={(el) => (projectRefs.current[index + 2] = el!)}
@@ -188,7 +188,7 @@ const Portfolio = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setZoom((z) => Math.min(z + 0.25, 5));
+                setZoom((z) => Math.min(z + 0.5, 8)); // bigger zoom increment
               }}
               className="p-2 hover:text-gray-300 transition transform hover:scale-110"
             >
@@ -201,7 +201,7 @@ const Portfolio = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setZoom((z) => Math.max(z - 0.25, 1));
+                setZoom((z) => Math.max(z - 0.5, 1));
               }}
               className="p-2 hover:text-gray-300 transition transform hover:scale-110"
             >
@@ -224,15 +224,15 @@ const Portfolio = () => {
             </button>
           </div>
 
-          {/* Centered Image */}
+          {/* Scrollable image container */}
           <div
-            className="relative flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-[95vw] max-h-[95vh] overflow-auto"
+            onClick={(e) => e.stopPropagation()} // prevent closing modal
           >
             <img
               src={activeImage}
               alt={activeTitle}
-              className="max-w-[95vw] max-h-[95vh] object-contain transition-transform duration-300"
+              className="object-contain transition-transform duration-300"
               style={{ transform: `scale(${zoom})` }}
             />
           </div>
