@@ -123,7 +123,7 @@ const Portfolio = () => {
         {/* Fullscreen Modal */}
         {activeImage && (
           <div
-            className="fixed inset-0 z-50 bg-black/80"
+            className="fixed inset-0 z-50 bg-gray/80"
             onClick={closeModal}
           >
             <div
@@ -138,17 +138,17 @@ const Portfolio = () => {
                   className="p-2 rounded"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 5v14M5 12h14" stroke="black" strokeWidth="2" />
+                    <path d="M12 5v14M5 12h14" stroke="gray" strokeWidth="2" />
                   </svg>
                 </button>
 
                 {/* Zoom Out */}
                 <button
-                  onClick={() => setZoom((z) => Math.max(z - 0.45, 1))}
+                  onClick={() => setZoom((z) => Math.max(z - 0.45, 2))}
                   className=" p-2 rounded"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 12h14" stroke="black" strokeWidth="2" />
+                    <path d="M5 12h14" stroke="gray" strokeWidth="2" />
                   </svg>
                 </button>
 
@@ -160,7 +160,7 @@ const Portfolio = () => {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path
                       d="M6 6l12 12M18 6l-12 12"
-                      stroke="black"
+                      stroke="gray"
                       strokeWidth="2"
                     />
                   </svg>
@@ -171,7 +171,7 @@ const Portfolio = () => {
               <img
                 src={activeImage}
                 alt={activeTitle}
-                className="max-w-full max-h-full object-contain transition-transform duration-200"
+                className="max-w-full max-h-full object-contain transition-transform duration-250"
                 style={{ transform: `scale(${zoom})` }}
               />
             </div>
