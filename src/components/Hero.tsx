@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import brand1 from "@/assets/portfolio/brand1.webp";
 import brand2 from "@/assets/portfolio/brand2.webp";
 import brand3 from "@/assets/portfolio/brand3.webp";
@@ -16,49 +16,35 @@ const Hero = () => {
   ];
 
   const [counts, setCounts] = useState(stats.map(() => 0));
-  const [animated, setAnimated] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Animate counters immediately on page load
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current || animated) return;
+    stats.forEach((stat, index) => {
+      let start = 0;
+      const end = stat.number;
+      const duration = 1500;
+      const stepTime = 16;
+      const increment = end / (duration / stepTime);
 
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 100) {
-        setAnimated(true);
-
-        stats.forEach((stat, index) => {
-          let start = 0;
-          const end = stat.number;
-          const duration = 1500;
-          const stepTime = 16;
-          const increment = end / (duration / stepTime);
-
-          const interval = setInterval(() => {
-            start += increment;
-            if (start >= end) {
-              start = end;
-              clearInterval(interval);
-            }
-            setCounts((prev) => {
-              const updated = [...prev];
-              updated[index] = Math.floor(start);
-              return updated;
-            });
-          }, stepTime);
+      const interval = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          start = end;
+          clearInterval(interval);
+        }
+        setCounts((prev) => {
+          const updated = [...prev];
+          updated[index] = Math.floor(start);
+          return updated;
         });
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [animated, stats]);
+      }, stepTime);
+    });
+  }, [stats]);
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
   return (
     <section
-      ref={sectionRef}
       className="
         min-h-[75vh] sm:min-h-[85vh] md:min-h-screen
         flex flex-col justify-center items-center
@@ -93,15 +79,15 @@ const Hero = () => {
           </a>
         </div>
 
-        {/* Stats */}
-        <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-6 md:gap-12 animate-fade-up opacity-0 stagger-4 px-4">
+        {/* Stats with smaller font */}
+        <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-4 md:gap-8 animate-fade-up opacity-0 stagger-4 px-4">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
-              <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 md:mb-2">
+              <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2">
                 {counts[idx]}
                 {stat.suffix}
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground">
+              <div className="text-xs sm:text-sm text-muted-foreground">
                 {stat.label}
               </div>
             </div>
@@ -112,14 +98,13 @@ const Hero = () => {
       {/* Full-width infinite logos carousel */}
       <div className="mt-6 w-full overflow-hidden">
         <div className="flex gap-8 w-full animate-slide-loop">
-          {/* Duplicate logos inside container for seamless infinite scroll */}
           {[...logos, ...logos].map((logo, idx) => (
             <img
               key={idx}
               src={logo}
               alt={`Brand ${idx + 1}`}
-              className={`h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos`}
-              style={{ animationDelay: `${idx * 0.1}s` }} // staggered fade-up
+              className="h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos"
+              style={{ animationDelay: `${idx * 0.1}s` }}
             />
           ))}
         </div>
@@ -137,7 +122,7 @@ const Hero = () => {
       <style jsx>{`
         @keyframes slide-loop {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); } /* Half the width because we duplicated logos */
+          100% { transform: translateX(-50%); }
         }
         @keyframes fade-up-logos {
           0% { opacity: 0; transform: translateY(20px); }
