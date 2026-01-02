@@ -39,10 +39,19 @@ const Portfolio = () => {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState("");
   const [zoom, setZoom] = useState(1);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = (image: string, title: string) => {
+    setActiveImage(image);
+    setActiveTitle(title);
+    setZoom(1);
+    setModalVisible(true);
+  };
 
   const closeModal = () => {
     setActiveImage(null);
     setZoom(1);
+    setModalVisible(false);
   };
 
   const projects: Project[] = [
@@ -99,19 +108,31 @@ const Portfolio = () => {
             0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
           }
-          .fadeUp {
+          .animate-fade-up {
             opacity: 0;
             animation: fadeUp 0.6s ease-out forwards;
+          }
+          .stagger-1 {
+            animation-delay: 0.2s;
+          }
+          .stagger-2 {
+            animation-delay: 0.4s;
+          }
+          @keyframes zoomIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          .zoom-in {
+            animation: zoomIn 0.3s ease-out forwards;
           }
         `}
       </style>
 
       <div className="max-w-7xl mx-auto text-center mb-8">
-        {/* Header */}
-        <h2 className="text-3xl font-bold fadeUp" style={{ animationDelay: "0.2s" }}>
+        <h2 className="text-3xl font-bold animate-fade-up stagger-1">
           Our Featured Projects
         </h2>
-        <p className="mt-2 text-gray-400 fadeUp" style={{ animationDelay: "0.4s" }}>
+        <p className="mt-2 text-gray-400 animate-fade-up stagger-2">
           Explore some of the latest projects we've worked on
         </p>
       </div>
@@ -125,11 +146,7 @@ const Portfolio = () => {
               className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
             >
               <div
-                onClick={() => {
-                  setActiveImage(project.fullImage);
-                  setActiveTitle(project.title);
-                  setZoom(1);
-                }}
+                onClick={() => openModal(project.fullImage, project.title)}
                 className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
               >
                 <img
@@ -147,18 +164,18 @@ const Portfolio = () => {
       {activeImage && (
         <div
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
-          onClick={closeModal} // closes modal if clicked outside
+          onClick={closeModal}
         >
           <div
             className="relative"
-            onClick={(e) => e.stopPropagation()} // prevents closing when clicking image/buttons
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Controls */}
-            <div className="absolute top-6 right-6 flex gap-3 z-20">
+            {/* Controls on Right */}
+            <div className="absolute top-6 right-6 flex flex-col gap-3 z-20">
               {/* Zoom In */}
               <button
                 onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
-                className="p-2 rounded bg-transparent hover:bg-white/20 transition"
+                className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2" />
@@ -168,7 +185,7 @@ const Portfolio = () => {
               {/* Zoom Out */}
               <button
                 onClick={() => setZoom((z) => Math.max(z - 0.25, 1))}
-                className="p-2 rounded bg-transparent hover:bg-white/20 transition"
+                className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M5 12h14" stroke="white" strokeWidth="2" />
@@ -178,7 +195,7 @@ const Portfolio = () => {
               {/* Close */}
               <button
                 onClick={closeModal}
-                className="p-2 rounded bg-transparent hover:bg-white/20 transition"
+                className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path
@@ -194,7 +211,7 @@ const Portfolio = () => {
             <img
               src={activeImage}
               alt={activeTitle}
-              className="max-w-[90vw] max-h-[90vh] object-contain transition-transform duration-200"
+              className="max-w-[90vw] max-h-[90vh] object-contain zoom-in transition-transform duration-200"
               style={{ transform: `scale(${zoom})` }}
             />
           </div>
