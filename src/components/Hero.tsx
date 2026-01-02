@@ -12,19 +12,24 @@ const Hero = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
+  const [slideDuration, setSlideDuration] = useState("20s"); // default desktop speed
 
-  // Only two stats
+  // Stats
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
-    { number: 2, suffix: "+", label: "Years Expeirence" },
+    { number: 2, suffix: "+", label: "Years Experience" },
   ];
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters immediately on page load
+  // Animate counters and make them visible
   useEffect(() => {
     statsRefs.current.forEach((el, index) => {
       if (!el) return;
+
+      // Make number visible
+      el.style.opacity = "1";
+
       const end = stats[index].number;
       const duration = 1500;
       let start = 0;
@@ -39,18 +44,23 @@ const Hero = () => {
     });
   }, [stats]);
 
-  // Prepare logos for seamless infinite carousel
+  // Prepare logos for infinite carousel
   useEffect(() => {
     const containerWidth = window.innerWidth;
-    const logoWidth = 80; // approximate width per logo
-    const gap = 32; // gap between logos
+    const logoWidth = 80;
+    const gap = 32;
     const totalWidth = logos.length * (logoWidth + gap);
     const repeatCount = Math.ceil((containerWidth * 2) / totalWidth);
-    const repeated = [];
+    const repeated: string[] = [];
     for (let i = 0; i < repeatCount; i++) {
       repeated.push(...logos);
     }
     setCarouselLogos(repeated);
+
+    // Adjust carousel speed for mobile
+    if (containerWidth < 768) {
+      setSlideDuration("10s"); // faster on small screens
+    }
   }, [logos]);
 
   return (
@@ -86,7 +96,7 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* Stats in one line */}
+          {/* Stats */}
           <div className="mt-8 md:mt-12 flex flex-row flex-wrap justify-center gap-6 px-4">
             {stats.map((stat, idx) => (
               <div key={idx} className="text-center min-w-[100px]">
@@ -107,7 +117,10 @@ const Hero = () => {
 
         {/* Logos carousel */}
         <div className="mt-6 w-full overflow-hidden relative">
-          <div className="flex gap-8 w-max animate-slide-loop">
+          <div
+            className="flex gap-8 w-max animate-slide-loop"
+            style={{ animationDuration: slideDuration }}
+          >
             {carouselLogos.map((logo, idx) => (
               <img
                 key={idx}
