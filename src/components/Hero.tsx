@@ -108,22 +108,19 @@ const Hero = () => {
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Full-width logos banner with fade-up */}
-        <div className="mt-6 w-full overflow-hidden">
-          <div
-            className="flex gap-8 w-full animate-slide-loop opacity-0 animate-fade-up"
-            style={{ animationDelay: "0.8s", animationFillMode: "forwards" }}
-          >
-            {logos.map((logo, idx) => (
-              <img
-                key={idx}
-                src={logo}
-                alt={`Brand ${idx + 1}`}
-                className="h-8 md:h-10 object-contain flex-shrink-0"
-              />
-            ))}
-          </div>
+      {/* Full-width logos carousel */}
+      <div className="mt-6 w-full overflow-hidden">
+        <div className="flex gap-8 w-full animate-slide-loop opacity-0 animate-fade-up-logos">
+          {logos.map((logo, idx) => (
+            <img
+              key={idx}
+              src={logo}
+              alt={`Brand ${idx + 1}`}
+              className="h-8 md:h-10 object-contain flex-shrink-0"
+            />
+          ))}
         </div>
       </div>
 
@@ -141,7 +138,7 @@ const Hero = () => {
           0% { transform: translateX(100%); }
           100% { transform: translateX(-100%); }
         }
-        @keyframes fade-up {
+        @keyframes fade-up-logos {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
         }
@@ -149,8 +146,8 @@ const Hero = () => {
           display: inline-flex;
           animation: slide-loop 20s linear infinite;
         }
-        .animate-fade-up {
-          animation: fade-up 0.8s ease-out forwards;
+        .animate-fade-up-logos {
+          animation: fade-up-logos 0.8s ease-out forwards;
         }
       `}</style>
     </section>
