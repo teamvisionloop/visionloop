@@ -21,29 +21,31 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters correctly
-useEffect(() => {
-  statsRefs.current.forEach((el, index) => {
-    if (!el) return;
+  // Animate counters using plain JS
+  useEffect(() => {
+    const counters = statsRefs.current.filter(Boolean) as HTMLDivElement[];
 
-    el.style.opacity = "1"; // make visible
-    const end = stats[index].number;
-    const duration = 1500; // 1.5s
-    const startTime = performance.now();
+    counters.forEach((counter) => {
+      const end = Number(counter.dataset.target);
+      const suffix = counter.innerText.replace(/\d+/g, ""); // preserve + symbol
+      let start = 0;
+      const duration = 1500; // 1.5s
+      const stepTime = 16; // ~60fps
+      const increment = end / (duration / stepTime);
 
-    const step = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1); // 0 → 1
-      const value = Math.ceil(progress * end); // ensures even small numbers count
-      el.innerText = `${value}${stats[index].suffix}`;
-      if (progress < 1) requestAnimationFrame(step);
-    };
+      const updateCounter = () => {
+        start += increment;
+        if (start >= end) start = end;
+        counter.innerText = `${Math.ceil(start)}${suffix}`;
+        if (start < end) requestAnimationFrame(updateCounter);
+      };
 
-    requestAnimationFrame(step);
-  });
-}, [stats]);
+      counter.style.opacity = "1"; // make visible
+      requestAnimationFrame(updateCounter);
+    });
+  }, []);
 
-  // Prepare logos and adjust speed for mobile
+  // Prepare logos for infinite carousel & adjust speed on mobile
   useEffect(() => {
     const containerWidth = window.innerWidth;
     const logoWidth = 80;
@@ -54,8 +56,8 @@ useEffect(() => {
     for (let i = 0; i < repeatCount; i++) repeated.push(...logos);
     setCarouselLogos(repeated);
 
-    // faster on phones
-    if (containerWidth < 768) setSlideDuration("5s"); // much faster
+    // Faster on phones
+    if (containerWidth < 768) setSlideDuration("5s");
     else setSlideDuration("20s");
   }, [logos]);
 
@@ -99,7 +101,7 @@ useEffect(() => {
                 <div
                   ref={(el) => (statsRefs.current[idx] = el)}
                   className="text-base sm:text-lg md:text-2xl font-bold mb-1 md:mb-2 opacity-0"
-                  style={{ transition: "opacity 0.5s ease-out" }}
+                  data-target={stat.number}
                 >
                   0{stat.suffix}
                 </div>
