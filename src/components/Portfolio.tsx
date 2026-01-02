@@ -56,8 +56,8 @@ const Portfolio = () => {
             Our Featured Projects
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl">
-            A selection of fashion and fragrance brands we’ve designed and built,
-            focusing on clean visuals, strong identity, and performance.
+            A curated selection of fashion and fragrance brands designed with
+            precision, clarity, and strong visual identity.
           </p>
         </div>
 
@@ -85,8 +85,8 @@ const Portfolio = () => {
                   {/* Small black overlay */}
                   <div className="absolute inset-0 bg-black/20" />
 
-                  {/* Light grey badge (TOP) */}
-                  <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1 tracking-wide">
+                  {/* Light grey badge */}
+                  <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1">
                     {project.title}
                   </div>
                 </div>
@@ -98,12 +98,13 @@ const Portfolio = () => {
         {/* Fullscreen Viewer */}
         {activeImage && (
           <div
-            className="fixed inset-0 z-50 bg-black"
+            className="fixed inset-0 z-50 bg-black/70"
             onClick={() => setActiveImage(null)}
           >
             {/* Controls */}
             <div className="absolute top-6 right-6 z-10 flex gap-3">
               <button
+                className="text-gray-300 text-xl"
                 onClick={(e) => {
                   e.stopPropagation();
                   setZoom((z) => Math.min(z + 1, 6));
@@ -113,6 +114,7 @@ const Portfolio = () => {
               </button>
 
               <button
+                className="text-gray-300 text-xl"
                 onClick={(e) => {
                   e.stopPropagation();
                   setZoom((z) => Math.max(z - 1, 1));
@@ -122,6 +124,7 @@ const Portfolio = () => {
               </button>
 
               <button
+                className="text-gray-300 text-xl"
                 onClick={(e) => {
                   e.stopPropagation();
                   setActiveImage(null);
@@ -131,22 +134,28 @@ const Portfolio = () => {
               </button>
             </div>
 
-            {/* Scrollable container */}
+            {/* Scrollable container (both directions) */}
             <div
               className="w-full h-full overflow-auto p-12"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
-                src={activeImage}
-                alt=""
-                className="block mx-auto"
+              <div
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  transform: `scale(${zoom})`,
-                  transformOrigin: "center center",
+                  width: "fit-content",
+                  height: "fit-content",
+                  margin: "auto",
                 }}
-              />
+              >
+                <img
+                  src={activeImage}
+                  alt=""
+                  style={{
+                    transform: `scale(${zoom})`,
+                    transformOrigin: "center center",
+                    display: "block",
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}
