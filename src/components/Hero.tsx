@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import brand1 from "@/assets/portfolio/brand1.webp";
 import brand2 from "@/assets/portfolio/brand2.webp";
 import brand3 from "@/assets/portfolio/brand3.webp";
@@ -11,60 +11,56 @@ import brand7 from "@/assets/portfolio/brand7.webp";
 const Hero = () => {
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [carouselWidth, setCarouselWidth] = useState(0);
 
-  // Counters
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
     { number: 2, suffix: "+", label: "Years Experience" },
   ];
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
+  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]; // ensure enough logos
 
-  // Animate counters slower
+  // Slower counters
   useEffect(() => {
     statsRefs.current.forEach((el, idx) => {
       if (!el) return;
       const end = stats[idx].number;
-      const duration = 2500; // slower animation
+      const duration = 4000; // slower animation (4s)
       let start = 0;
+
       const step = () => {
-        start += Math.ceil(end / (duration / 60));
+        start += Math.ceil(end / (duration / 60)); // slower step
         if (start >= end) start = end;
         el.innerText = `${start}${stats[idx].suffix}`;
         if (start < end) requestAnimationFrame(step);
       };
       step();
-      el.style.opacity = "1"; // ensure visible
+      el.style.opacity = "1";
     });
   }, [stats]);
 
-  // Duplicate logos to fill space seamlessly
-  const repeatedLogos = [...logos, ...logos, ...logos];
-
-  // Carousel for PC & mobile
+  // Infinite JS carousel (PC + Mobile)
   useEffect(() => {
     const container = carouselRef.current;
     if (!container) return;
 
-    // Total scroll width
-    const totalScrollWidth = container.scrollWidth / 2;
-
     let scrollX = 0;
+    const speed = 1; // pixels per frame
 
     const step = () => {
-      scrollX += 1; // speed
-      if (scrollX >= totalScrollWidth) scrollX = 0;
+      scrollX += speed;
+      if (scrollX >= container.scrollWidth / 2) scrollX = 0;
       container.scrollLeft = scrollX;
       requestAnimationFrame(step);
     };
 
-    requestAnimationFrame(step);
+    const animationId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationId);
   }, []);
 
   return (
     <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
-      {/* Whole section fade-up */}
+      {/* Section fade-up */}
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
