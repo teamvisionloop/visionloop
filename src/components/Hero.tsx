@@ -12,45 +12,41 @@ const Hero = () => {
   const [animated, setAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-useEffect(() => {
-  const section = sectionRef.current;
-  if (!section) return;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current || animated) return;
 
-  let animated = false;
+      const rect = sectionRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100) {
+        setAnimated(true);
 
-  const handleScroll = () => {
-    if (animated) return;
+        stats.forEach((stat, index) => {
+          let start = 0;
+          const end = stat.number;
+          const duration = 1500;
+          const stepTime = 16;
+          const increment = end / (duration / stepTime);
 
-    const rect = section.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 100) {
-      animated = true; // prevent multiple triggers
-
-      const startTime = performance.now();
-      const duration = 1500;
-
-      const animate = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        const newCounts = stats.map((stat) => {
-          // Start at 1 instead of 0
-          return Math.floor(1 + progress * (stat.number - 1));
+          const interval = setInterval(() => {
+            start += increment;
+            if (start >= end) {
+              start = end;
+              clearInterval(interval);
+            }
+            setCounts((prev) => {
+              const updated = [...prev];
+              updated[index] = Math.floor(start);
+              return updated;
+            });
+          }, stepTime);
         });
+      }
+    };
 
-        setCounts(newCounts);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [animated, stats]);
 
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
-      };
-
-      requestAnimationFrame(animate);
-    }
-  };
-
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [stats]);
   return (
     <section
       ref={sectionRef}
@@ -117,4 +113,4 @@ useEffect(() => {
   );
 };
 
-export default Hero; 
+export default Hero;
