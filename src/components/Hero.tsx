@@ -4,6 +4,9 @@ import brand1 from "@/assets/portfolio/brand1.webp";
 import brand2 from "@/assets/portfolio/brand2.webp";
 import brand3 from "@/assets/portfolio/brand3.webp";
 import brand4 from "@/assets/portfolio/brand4.webp";
+import brand5 from "@/assets/portfolio/brand5.webp";
+import brand6 from "@/assets/portfolio/brand6.webp";
+import brand7 from "@/assets/portfolio/brand7.webp";
 
 const Hero = () => {
   const stats = [
@@ -51,7 +54,7 @@ const Hero = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [animated, stats]);
 
-  const logos = [brand1, brand2, brand3, brand4];
+  const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
   return (
     <section
@@ -104,28 +107,28 @@ const Hero = () => {
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Smaller logos banner under counters */}
-        <div className="mt-6 w-full overflow-hidden">
-          <div className="flex gap-8 whitespace-nowrap animate-slide-diagonal">
-            {logos.map((logo, idx) => (
-              <img
-                key={idx}
-                src={logo}
-                alt={`Brand ${idx + 1}`}
-                className="h-8 md:h-10 object-contain"
-              />
-            ))}
-            {/* Duplicate logos for seamless loop */}
-            {logos.map((logo, idx) => (
-              <img
-                key={`dup-${idx}`}
-                src={logo}
-                alt={`Brand duplicate ${idx + 1}`}
-                className="h-8 md:h-10 object-contain"
-              />
-            ))}
-          </div>
+      {/* Full-width logos banner under counters */}
+      <div className="mt-6 w-full overflow-hidden">
+        <div className="flex gap-8 whitespace-nowrap animate-slide-diagonal w-full px-4">
+          {logos.map((logo, idx) => (
+            <img
+              key={idx}
+              src={logo}
+              alt={`Brand ${idx + 1}`}
+              className="h-8 md:h-10 object-contain"
+            />
+          ))}
+          {/* Duplicate logos for seamless loop */}
+          {logos.map((logo, idx) => (
+            <img
+              key={`dup-${idx}`}
+              src={logo}
+              alt={`Brand duplicate ${idx + 1}`}
+              className="h-8 md:h-10 object-contain"
+            />
+          ))}
         </div>
       </div>
 
