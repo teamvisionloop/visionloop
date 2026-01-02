@@ -20,6 +20,7 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
+  // Animate counters with fade-up
   useEffect(() => {
     let animated = false;
 
@@ -29,13 +30,18 @@ const Hero = () => {
         const end = stats[index].number;
         const duration = 1500;
         let start = 0;
+
+        el.style.opacity = "0"; // initial opacity
+
         const step = () => {
           start += Math.ceil(end / (duration / 16));
           if (start >= end) start = end;
           el.innerText = `${start}${stats[index].suffix}`;
-          if (start < end) {
-            requestAnimationFrame(step);
-          }
+
+          el.style.opacity = "1"; // fade up
+          el.style.transition = "opacity 0.5s ease-out";
+
+          if (start < end) requestAnimationFrame(step);
         };
         step();
       });
@@ -51,8 +57,7 @@ const Hero = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Trigger if already in view
-
+    handleScroll(); // trigger if in view
     return () => window.removeEventListener("scroll", handleScroll);
   }, [stats]);
 
@@ -66,64 +71,68 @@ const Hero = () => {
         py-16 md:py-32 pt-24 md:pt-32
       "
     >
-      <div className="text-center max-w-5xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6 animate-fade-up opacity-0 stagger-1">
-          We Design & Build
-          <br />
-          <span className="text-muted-foreground">Your Vision</span>
-        </h1>
+      {/* Whole section fade-up */}
+      <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
+        <div className="text-center max-w-5xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
+            We Design & Build
+            <br />
+            <span className="text-muted-foreground">Your Vision</span>
+          </h1>
 
-        <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12 animate-fade-up opacity-0 stagger-2 px-4">
-          A premium development studio focused on performance, clarity, and
-          conversion — turning ideas into powerful online experiences.
-        </p>
+          <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12 px-4">
+            A premium development studio focused on performance, clarity, and
+            conversion — turning ideas into powerful online experiences.
+          </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center animate-fade-up opacity-0 stagger-3 px-4">
-          <a
-            href="#portfolio"
-            className="bg-primary text-primary-foreground px-6 md:px-8 py-3 md:py-4 text-sm font-medium hover:bg-primary/90 hover:scale-105 transition-all"
-          >
-            View Projects
-          </a>
-          <a
-            href="#pricing"
-            className="border border-primary text-foreground px-6 md:px-8 py-3 md:py-4 text-sm font-medium hover:bg-secondary hover:scale-105 transition-all"
-          >
-            Pricing Plans
-          </a>
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
+            <a
+              href="#portfolio"
+              className="bg-primary text-primary-foreground px-6 md:px-8 py-3 md:py-4 text-sm font-medium hover:bg-primary/90 hover:scale-105 transition-all"
+            >
+              View Projects
+            </a>
+            <a
+              href="#pricing"
+              className="border border-primary text-foreground px-6 md:px-8 py-3 md:py-4 text-sm font-medium hover:bg-secondary hover:scale-105 transition-all"
+            >
+              Pricing Plans
+            </a>
+          </div>
+
+          {/* Stats */}
+          <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-4 md:gap-8 px-4">
+            {stats.map((stat, idx) => (
+              <div key={idx} className="text-center">
+                <div
+                  ref={(el) => (statsRefs.current[idx] = el)}
+                  className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2 opacity-0"
+                  style={{ transition: "opacity 0.5s ease-out" }}
+                >
+                  0{stat.suffix}
+                </div>
+                <div className="text-xs sm:text-sm text-muted-foreground">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Stats */}
-        <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-4 md:gap-8 px-4">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="text-center">
-              <div
-                ref={(el) => (statsRefs.current[idx] = el)}
-                className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2"
-              >
-                0{stat.suffix}
-              </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Logos carousel */}
-      <div className="mt-6 w-full overflow-hidden relative">
-        <div className="flex gap-8 w-full animate-slide-loop">
-          {/* Duplicate logos for seamless infinite scroll */}
-          {[...logos, ...logos].map((logo, idx) => (
-            <img
-              key={idx}
-              src={logo}
-              alt={`Brand ${idx + 1}`}
-              className="h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos"
-              style={{ animationDelay: `${idx * 0.1}s` }}
-            />
-          ))}
+        {/* Logos carousel */}
+        <div className="mt-6 w-full overflow-hidden relative">
+          <div className="flex gap-8 w-full animate-slide-loop">
+            {/* Duplicate logos only once for infinite seamless scroll */}
+            {[...logos, ...logos].map((logo, idx) => (
+              <img
+                key={idx}
+                src={logo}
+                alt={`Brand ${idx + 1}`}
+                className="h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos"
+                style={{ animationDelay: `${idx * 0.1}s` }}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -139,9 +148,13 @@ const Hero = () => {
       <style jsx>{`
         @keyframes slide-loop {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); } /* Half-width because logos are duplicated */
+          100% { transform: translateX(-50%); } /* seamless with single duplication */
         }
         @keyframes fade-up-logos {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-up-section {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
         }
@@ -153,6 +166,10 @@ const Hero = () => {
         .animate-fade-up-logos {
           opacity: 0;
           animation: fade-up-logos 0.8s ease-out forwards;
+        }
+        .animate-fade-up-section {
+          opacity: 0;
+          animation: fade-up-section 1s ease-out forwards;
         }
       `}</style>
     </section>
