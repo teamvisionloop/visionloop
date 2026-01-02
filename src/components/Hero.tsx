@@ -18,18 +18,17 @@ const Hero = () => {
   ];
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
-  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]; // ensure enough logos
 
-  // Slower counters
+  // Animate counters slower
   useEffect(() => {
     statsRefs.current.forEach((el, idx) => {
       if (!el) return;
       const end = stats[idx].number;
-      const duration = 4000; // slower animation (4s)
+      const duration = 4000; // slower
       let start = 0;
 
       const step = () => {
-        start += Math.ceil(end / (duration / 60)); // slower step
+        start += Math.ceil(end / (duration / 60));
         if (start >= end) start = end;
         el.innerText = `${start}${stats[idx].suffix}`;
         if (start < end) requestAnimationFrame(step);
@@ -39,24 +38,30 @@ const Hero = () => {
     });
   }, [stats]);
 
-  // Infinite JS carousel (PC + Mobile)
+  // Infinite carousel with JS
   useEffect(() => {
     const container = carouselRef.current;
     if (!container) return;
+
+    // duplicate logos for seamless scroll
+    const children = Array.from(container.children) as HTMLElement[];
+    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0);
 
     let scrollX = 0;
     const speed = 1; // pixels per frame
 
     const step = () => {
       scrollX += speed;
-      if (scrollX >= container.scrollWidth / 2) scrollX = 0;
+      if (scrollX >= totalWidth / 2) scrollX = 0; // reset for seamless scroll
       container.scrollLeft = scrollX;
       requestAnimationFrame(step);
     };
 
-    const animationId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationId);
+    requestAnimationFrame(step);
   }, []);
+
+  // duplicate logos multiple times for seamless loop
+  const repeatedLogos = [...logos, ...logos, ...logos, ...logos];
 
   return (
     <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
