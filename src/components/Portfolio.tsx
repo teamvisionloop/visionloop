@@ -45,8 +45,6 @@ const Portfolio = () => {
   const isDragging = useRef(false);
   const lastPos = useRef({ x: 0, y: 0 });
 
-  const imageRef = useRef<HTMLImageElement>(null);
-
   const startDrag = (x: number, y: number) => {
     if (zoom === 1) return; // only pan when zoomed
     isDragging.current = true;
@@ -69,7 +67,7 @@ const Portfolio = () => {
   const openModal = (image: string, title: string) => {
     setActiveImage(image);
     setActiveTitle(title);
-    setZoom(1); // default fully zoomed out
+    setZoom(1); // fully zoomed out
     setOffset({ x: 0, y: 0 });
   };
 
@@ -161,8 +159,8 @@ const Portfolio = () => {
               ref={imageRef}
               src={activeImage}
               alt={activeTitle}
-              className="object-none transition-transform duration-300"
-              style={{ transform: `scale(${zoom}) translate(${offset.x/zoom}px, ${offset.y/zoom}px)` }}
+              className="object-contain"
+              style={{ width: "100%", height: "auto", transform: `scale(${zoom}) translate(${offset.x/zoom}px, ${offset.y/zoom}px)` }}
             />
           </div>
         </div>
