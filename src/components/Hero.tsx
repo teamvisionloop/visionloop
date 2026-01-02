@@ -44,15 +44,14 @@ const Hero = () => {
     const handleScroll = () => {
       if (!sectionRef.current || animated) return;
       const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 10) { // scroll 1cm (~10px) to trigger
+      if (rect.top < window.innerHeight - 10) {
         animated = true;
         animateCounters();
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Trigger immediately if already in view
-    handleScroll();
+    handleScroll(); // Trigger if already in view
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [stats]);
@@ -113,8 +112,9 @@ const Hero = () => {
       </div>
 
       {/* Logos carousel */}
-      <div className="mt-6 w-full overflow-hidden">
+      <div className="mt-6 w-full overflow-hidden relative">
         <div className="flex gap-8 w-full animate-slide-loop">
+          {/* Duplicate logos for seamless infinite scroll */}
           {[...logos, ...logos].map((logo, idx) => (
             <img
               key={idx}
@@ -139,7 +139,7 @@ const Hero = () => {
       <style jsx>{`
         @keyframes slide-loop {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-50%); } /* Half-width because logos are duplicated */
         }
         @keyframes fade-up-logos {
           0% { opacity: 0; transform: translateY(20px); }
