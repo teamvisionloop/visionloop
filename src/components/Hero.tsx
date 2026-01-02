@@ -17,28 +17,25 @@ const Hero = () => {
 
   const [counts, setCounts] = useState(stats.map(() => 0));
 
-  // Animate counters immediately on page load
+  // Animate counters immediately on page load using requestAnimationFrame for smoothness
   useEffect(() => {
-    stats.forEach((stat, index) => {
-      let start = 0;
-      const end = stat.number;
-      const duration = 1500;
-      const stepTime = 16;
-      const increment = end / (duration / stepTime);
+    const duration = 1500; // 1.5 seconds
+    const startTime = performance.now();
 
-      const interval = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          start = end;
-          clearInterval(interval);
-        }
-        setCounts((prev) => {
-          const updated = [...prev];
-          updated[index] = Math.floor(start);
-          return updated;
-        });
-      }, stepTime);
-    });
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      setCounts(
+        stats.map((stat) => Math.floor(stat.number * progress))
+      );
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
   }, [stats]);
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
