@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -33,13 +33,6 @@ const Portfolio = () => {
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-
-  const pointers = useRef(new Map<number, PointerEvent>());
-  const lastTap = useRef(0);
-  const startDistance = useRef(0);
-  const startZoom = useRef(1);
 
   const projects: Project[] = [
     { title: "Luxury Brands", image: luxuryBrands, fullImage: luxuryFull },
@@ -49,75 +42,6 @@ const Portfolio = () => {
     { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull },
     { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull },
   ];
-
-  const resetView = () => {
-    setZoom(1);
-    setPosition({ x: 0, y: 0 });
-  };
-
-  /* =======================
-     Pointer / Drag / Pinch
-  ======================= */
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    e.stopPropagation();
-    pointers.current.set(e.pointerId, e);
-    setIsDragging(true);
-
-    if (pointers.current.size === 2) {
-      const [a, b] = [...pointers.current.values()];
-      startDistance.current = Math.hypot(
-        a.clientX - b.clientX,
-        a.clientY - b.clientY
-      );
-      startZoom.current = zoom;
-    }
-  };
-
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!pointers.current.has(e.pointerId)) return;
-    pointers.current.set(e.pointerId, e);
-
-    // ✅ Drag freely up / down / left / right
-    if (pointers.current.size === 1 && zoom > 1) {
-      setPosition((p) => ({
-        x: p.x + e.movementX,
-        y: p.y + e.movementY,
-      }));
-    }
-
-    // ✅ Pinch zoom
-    if (pointers.current.size === 2) {
-      const [a, b] = [...pointers.current.values()];
-      const distance = Math.hypot(
-        a.clientX - b.clientX,
-        a.clientY - b.clientY
-      );
-      const scale = Math.min(
-        Math.max(startZoom.current * (distance / startDistance.current), 1),
-        6
-      );
-      setZoom(scale);
-    }
-  };
-
-  const onPointerUp = (e: React.PointerEvent) => {
-    pointers.current.delete(e.pointerId);
-    setIsDragging(false);
-  };
-
-  /* =======================
-     Double Click / Tap Zoom
-  ======================= */
-
-  const handleTap = () => {
-    const now = Date.now();
-    if (now - lastTap.current < 300) {
-      setZoom((z) => (z === 1 ? 3 : 1));
-      setPosition({ x: 0, y: 0 });
-    }
-    lastTap.current = now;
-  };
 
   return (
     <section id="portfolio" className="section-padding">
@@ -131,7 +55,7 @@ const Portfolio = () => {
                 <div
                   onClick={() => {
                     setActiveImage(project.fullImage);
-                    resetView();
+                    setZoom(1);
                   }}
                   className="relative aspect-[4/3] overflow-hidden cursor-pointer"
                 >
@@ -186,28 +110,18 @@ const Portfolio = () => {
               </button>
             </div>
 
-            {/* Image */}
-            <div className="w-full h-full flex items-center justify-center">
+            {/* Scrollable Image Container */}
+            <div
+              className="w-full h-full overflow-auto flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
               <img
                 src={activeImage}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleTap();
-                }}
-                onPointerDown={onPointerDown}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
+                alt=""
                 className="select-none"
                 style={{
-                  cursor:
-                    zoom > 1
-                      ? isDragging
-                        ? "grabbing"
-                        : "grab"
-                      : "default",
-                  transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
-                  transition: isDragging ? "none" : "transform 0.25s ease",
+                  transform: `scale(${zoom})`,
+                  transformOrigin: "top left",
                 }}
               />
             </div>
