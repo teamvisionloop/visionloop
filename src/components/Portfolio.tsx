@@ -123,7 +123,7 @@ const Portfolio = () => {
         {/* Fullscreen Modal */}
         {activeImage && (
           <div
-            className="fixed inset-0 z-50 bg-gray/80"
+            className="fixed inset-0 z-50 bg-black/80"
             onClick={closeModal}
           >
             <div
@@ -134,7 +134,7 @@ const Portfolio = () => {
               <div className="absolute top-6 right-6 flex gap-3 z-10">
                 {/* Zoom In */}
                 <button
-                  onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
+                  onClick={() => setZoom((z) => Math.min(z + 0.5, 5))}
                   className="p-2 rounded"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
