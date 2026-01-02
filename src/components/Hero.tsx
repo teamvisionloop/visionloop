@@ -13,36 +13,27 @@ const Hero = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current || animated) return;
+  stats.forEach((stat, index) => {
+    let start = 0;
+    const end = stat.number;
+    const duration = 1500; // total animation time in ms
+    const stepTime = 16; // roughly 60fps
+    const increment = end / (duration / stepTime);
 
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 100) {
-        setAnimated(true);
-
-        stats.forEach((stat, index) => {
-          let start = 0;
-          const end = stat.number;
-          const duration = 1500;
-          const stepTime = 16;
-          const increment = end / (duration / stepTime);
-
-          const interval = setInterval(() => {
-            start += increment;
-            if (start >= end) {
-              start = end;
-              clearInterval(interval);
-            }
-            setCounts((prev) => {
-              const updated = [...prev];
-              updated[index] = Math.floor(start);
-              return updated;
-            });
-          }, stepTime);
-        });
+    const interval = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        start = end;
+        clearInterval(interval);
       }
-    };
-  }, [animated, stats]);
+      setCounts((prev) => {
+        const updated = [...prev];
+        updated[index] = Math.floor(start);
+        return updated;
+      });
+    }, stepTime);
+  });
+}, [stats]);
 
   return (
     <section
