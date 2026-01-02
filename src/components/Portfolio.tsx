@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -99,7 +99,7 @@ const Portfolio = () => {
 
   return (
     <section id="portfolio" className="section-padding relative">
-      {/* Inline Animation Styles */}
+      {/* Inline animation styles */}
       <style>
         {`
           @keyframes fadeUp {
@@ -159,70 +159,60 @@ const Portfolio = () => {
       {/* Fullscreen Modal */}
       {activeImage && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
-          onClick={closeModal}
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={closeModal} // closes modal when clicking outside
         >
+          {/* Buttons fixed top-right */}
+          <div className="absolute top-4 right-4 flex gap-3 z-50">
+            {/* Zoom In */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoom((z) => Math.min(z + 0.25, 3));
+              }}
+              className="p-2 rounded bg-black/70 hover:bg-black/90 transition transform hover:scale-110"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2" />
+              </svg>
+            </button>
+
+            {/* Zoom Out */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoom((z) => Math.max(z - 0.25, 1));
+              }}
+              className="p-2 rounded bg-black/70 hover:bg-black/90 transition transform hover:scale-110"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14" stroke="white" strokeWidth="2" />
+              </svg>
+            </button>
+
+            {/* Close */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                closeModal();
+              }}
+              className="p-2 rounded bg-black/70 hover:bg-black/90 transition transform hover:scale-110"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M6 6l12 12M18 6l-12 12" stroke="white" strokeWidth="2" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Centered Image */}
           <div
-            className="relative w-full h-full flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
+            className="relative flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()} // prevent close when clicking image
           >
-            {/* Buttons fixed to right end, horizontal */}
-            <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex gap-3 z-20">
-              {/* Zoom In */}
-              <button
-                onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
-                className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2" />
-                </svg>
-              </button>
-
-              {/* Zoom Out */}
-              <button
-                onClick={() => setZoom((z) => Math.max(z - 0.25, 1))}
-                className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path d="M5 12h14" stroke="white" strokeWidth="2" />
-                </svg>
-              </button>
-
-              {/* Close */}
-              <button
-                onClick={closeModal}
-                className="p-2 rounded bg-black/70 hover:bg-black/90 transition"
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M6 6l12 12M18 6l-12 12"
-                    stroke="white"
-                    strokeWidth="2"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {/* Image */}
             <img
               src={activeImage}
               alt={activeTitle}
-              className="max-w-[90vw] max-h-[90vh] object-contain zoom-in transition-transform duration-200"
+              className="max-w-[90vw] max-h-[90vh] object-contain zoom-in transition-transform duration-300"
               style={{ transform: `scale(${zoom})` }}
             />
           </div>
