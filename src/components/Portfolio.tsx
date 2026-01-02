@@ -53,7 +53,6 @@ const Portfolio = () => {
     } else {
       document.body.style.overflow = "";
     }
-
     return () => {
       document.body.style.overflow = "";
     };
@@ -108,70 +107,71 @@ const Portfolio = () => {
           </div>
         </div>
 
-{/* Fullscreen Modal */}
-{activeImage && (
-  <div
-    className="fixed inset-0 z-50 bg-black/70"
-    onClick={() => setActiveImage(null)}
-  >
-    {/* Controls */}
-    <div className="absolute top-6 right-6 z-10 flex gap-3">
-      <button
-        className="text-gray-300 text-xl"
-        onClick={(e) => {
-          e.stopPropagation();
-          setZoom((z) => Math.min(z + 1, 6));
-        }}
-      >
-        +
-      </button>
+        {/* Fullscreen Modal */}
+        {activeImage && (
+          <div
+            className="fixed inset-0 z-50 bg-black/70"
+            onClick={() => setActiveImage(null)}
+          >
+            {/* Controls */}
+            <div className="absolute top-6 right-6 z-10 flex gap-3">
+              <button
+                className="text-gray-300 text-xl"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setZoom((z) => Math.min(z + 1, 6));
+                }}
+              >
+                +
+              </button>
 
-      <button
-        className="text-gray-300 text-xl"
-        onClick={(e) => {
-          e.stopPropagation();
-          setZoom((z) => Math.max(z - 1, 1));
-        }}
-      >
-        −
-      </button>
+              <button
+                className="text-gray-300 text-xl"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setZoom((z) => Math.max(z - 1, 1));
+                }}
+              >
+                −
+              </button>
 
-      <button
-        className="text-gray-300 text-xl"
-        onClick={(e) => {
-          e.stopPropagation();
-          setActiveImage(null);
-        }}
-      >
-        ✕
-      </button>
-    </div>
+              <button
+                className="text-gray-300 text-xl"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImage(null);
+                }}
+              >
+                ✕
+              </button>
+            </div>
 
-    {/* Scrollable container (both directions) */}
-    <div
-      className="w-full h-full overflow-auto p-12"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div
-        style={{
-          display: "inline-block",
-        }}
-      >
-        <img
-          src={activeImage}
-          alt=""
-          style={{
-            display: "inline-block",
-            transform: `scale(${zoom})`,
-            transformOrigin: "center center",
-            maxWidth: "none",   // Important: allows horizontal scroll
-            maxHeight: "none",  // Important: allows vertical scroll
-          }}
-        />
-      </div>
-    </div>
-  </div>
-)}
+            {/* Scrollable container */}
+            <div
+              className="w-full h-full overflow-auto p-12"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  margin: "auto",
+                }}
+              >
+                <img
+                  src={activeImage}
+                  alt=""
+                  style={{
+                    display: "inline-block",
+                    transform: `scale(${zoom})`,
+                    transformOrigin: "top center", // ⚡ top of image visible
+                    maxWidth: "100%",             // fits width initially
+                    maxHeight: "none",            // allows vertical scroll
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
