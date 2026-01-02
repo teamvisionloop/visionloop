@@ -1,9 +1,9 @@
-import { useEffect, useCallback, useState } from "react";
+import { useState, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
 /* =======================
-   Thumbnails (.webp)
+   Thumbnails
 ======================= */
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.webp";
 import fuzzy from "@/assets/portfolio/fuzzy.webp";
@@ -13,7 +13,7 @@ import fayaEgThumb from "@/assets/portfolio/faya-eg-thumb.webp";
 import lehabThumb from "@/assets/portfolio/lehab-scents-thumb.webp";
 
 /* =======================
-   Full Screenshots (.webp)
+   Full Images
 ======================= */
 import luxuryFull from "@/assets/portfolio/luxury-brands-full.webp";
 import fuzzyFull from "@/assets/portfolio/fuzzy-full.webp";
@@ -32,149 +32,145 @@ interface Project {
 
 const Portfolio = () => {
   const [emblaRef] = useEmblaCarousel(
-    { loop: true, align: "start", containScroll: "trimSnaps" },
-    [Autoplay({ delay: 4000, stopOnInteraction: false })]
+    { loop: true, align: "start" },
+    [Autoplay({ delay: 4000 })]
   );
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
-  const [activeTitle, setActiveTitle] = useState("");
   const [zoom, setZoom] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
 
-  const closeModal = () => {
-    setActiveImage(null);
-    setZoom(1);
-  };
+  const lastTap = useRef(0);
+  const pointers = useRef(new Map<number, PointerEvent>());
+  const startDistance = useRef(0);
+  const startZoom = useRef(1);
 
   const projects: Project[] = [
-    {
-      title: "Luxury Brands",
-      category: "Fashion",
-      description: "Premium streetwear e-commerce store featuring global luxury brands",
-      image: luxuryBrands,
-      fullImage: luxuryFull,
-    },
-    {
-      title: "Fuzzy",
-      category: "Apparel",
-      description: "Cozy Egyptian cotton hoodies and comfort wear brand",
-      image: fuzzy,
-      fullImage: fuzzyFull,
-    },
-    {
-      title: "Faya Studio",
-      category: "Streetwear",
-      description: "Winter streetwear collection with bold urban designs",
-      image: fayaStudio,
-      fullImage: fayaFull,
-    },
-    {
-      title: "Temple Of Scent",
-      category: "Perfumery",
-      description: "Luxury fragrance brand",
-      image: temple,
-      fullImage: templeFull,
-    },
-    {
-      title: "Faya EG",
-      category: "Fashion",
-      description: "Modern Egyptian fashion brand",
-      image: fayaEgThumb,
-      fullImage: fayaEgFull,
-    },
-    {
-      title: "Lehab Scents",
-      category: "Fragrance",
-      description: "Luxury Arabic perfume house",
-      image: lehabThumb,
-      fullImage: lehabFull,
-    },
+    { title: "Luxury Brands", category: "Fashion", description: "", image: luxuryBrands, fullImage: luxuryFull },
+    { title: "Fuzzy", category: "Apparel", description: "", image: fuzzy, fullImage: fuzzyFull },
+    { title: "Faya Studio", category: "Streetwear", description: "", image: fayaStudio, fullImage: fayaFull },
+    { title: "Temple Of Scent", category: "Perfume", description: "", image: temple, fullImage: templeFull },
+    { title: "Faya EG", category: "Fashion", description: "", image: fayaEgThumb, fullImage: fayaEgFull },
+    { title: "Lehab Scents", category: "Fragrance", description: "", image: lehabThumb, fullImage: lehabFull },
   ];
+
+  const resetView = () => {
+    setZoom(1);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  /* =======================
+     Pointer / Gesture Logic
+  ======================= */
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    pointers.current.set(e.pointerId, e);
+    setIsPanning(true);
+
+    if (pointers.current.size === 2) {
+      const [a, b] = [...pointers.current.values()];
+      startDistance.current = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      startZoom.current = zoom;
+    }
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, e);
+
+    if (pointers.current.size === 1 && zoom > 1) {
+      setPosition((p) => ({
+        x: p.x + e.movementX,
+        y: p.y + e.movementY,
+      }));
+    }
+
+    if (pointers.current.size === 2) {
+      const [a, b] = [...pointers.current.values()];
+      const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      const scale = Math.min(Math.max(startZoom.current * (distance / startDistance.current), 1), 6);
+      setZoom(scale);
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    pointers.current.delete(e.pointerId);
+    setIsPanning(false);
+  };
+
+  /* =======================
+     Double-Tap / Double-Click
+  ======================= */
+  const onDoubleTap = () => {
+    setZoom((z) => (z === 1 ? 3 : 1));
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const handleTap = () => {
+    const now = Date.now();
+    if (now - lastTap.current < 300) onDoubleTap();
+    lastTap.current = now;
+  };
 
   return (
     <section id="portfolio" className="section-padding">
       <div className="max-w-7xl mx-auto">
+
         {/* Carousel */}
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-4 px-4 md:px-6 lg:px-12">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
-              >
+        <div ref={emblaRef} className="overflow-hidden">
+          <div className="flex gap-4 px-4">
+            {projects.map((project, i) => (
+              <div key={i} className="flex-[0_0_90%] md:flex-[0_0_33%]">
                 <div
                   onClick={() => {
                     setActiveImage(project.fullImage);
-                    setActiveTitle(project.title);
-                    setZoom(1);
+                    resetView();
                   }}
-                  className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
+                  className="group relative aspect-[4/3] overflow-hidden rounded-xl cursor-pointer"
                 >
                   <img
                     src={project.image}
                     alt={project.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
+
+                  {/* Animated Brand Overlay */}
+                  <div className="absolute bottom-3 left-3 bg-black/70 px-3 py-1 rounded-full
+                                  text-xs text-white tracking-wide
+                                  opacity-0 translate-y-2
+                                  group-hover:opacity-100 group-hover:translate-y-0
+                                  transition-all duration-300">
+                    {project.title}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Fullscreen Modal */}
+        {/* Fullscreen Viewer */}
         {activeImage && (
           <div
-            className="fixed inset-0 z-50 bg-black/80"
-            onClick={closeModal}
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+            onClick={() => setActiveImage(null)}
           >
-            <div
-              className="relative w-full h-full flex items-center justify-center"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* SVG Controls */}
-              <div className="absolute top-6 right-6 flex gap-3 z-10">
-                {/* Zoom In */}
-                <button
-                  onClick={() => setZoom((z) => Math.min(z + 1, 7))}
-                  className="p-2 rounded"
-                >
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 5v14M5 12h14" stroke="gray" strokeWidth="2" />
-                  </svg>
-                </button>
-
-                {/* Zoom Out */}
-                <button
-                  onClick={() => setZoom((z) => Math.max(z - 4, 2))}
-                  className=" p-2 rounded"
-                >
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 12h14" stroke="gray" strokeWidth="2" />
-                  </svg>
-                </button>
-
-                {/* Close */}
-                <button
-                  onClick={closeModal}
-                  className=" p-2 rounded"
-                >
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M6 6l12 12M18 6l-12 12"
-                      stroke="gray"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Image */}
-              <img
-                src={activeImage}
-                alt={activeTitle}
-                className="max-w-full max-h-full object-contain transition-transform duration-250"
-                style={{ transform: `scale(${zoom})` }}
-              />
-            </div>
+            <img
+              src={activeImage}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleTap();
+              }}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+              className="max-w-full max-h-full cursor-grab active:cursor-grabbing"
+              style={{
+                transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+                transition: isPanning ? "none" : "transform 0.25s ease",
+              }}
+            />
           </div>
         )}
       </div>
