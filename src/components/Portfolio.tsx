@@ -134,20 +134,20 @@ const Portfolio = () => {
               <div className="absolute top-6 right-6 flex gap-3 z-10">
                 {/* Zoom In */}
                 <button
-                  onClick={() => setZoom((z) => Math.min(z + 0.5, 5))}
+                  onClick={() => setZoom((z) => Math.min(z + 1, 7))}
                   className="p-2 rounded"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
                     <path d="M12 5v14M5 12h14" stroke="gray" strokeWidth="2" />
                   </svg>
                 </button>
 
                 {/* Zoom Out */}
                 <button
-                  onClick={() => setZoom((z) => Math.max(z - 0.45, 2))}
+                  onClick={() => setZoom((z) => Math.max(z - 0.5, 4))}
                   className=" p-2 rounded"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
                     <path d="M5 12h14" stroke="gray" strokeWidth="2" />
                   </svg>
                 </button>
@@ -157,7 +157,7 @@ const Portfolio = () => {
                   onClick={closeModal}
                   className=" p-2 rounded"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
                     <path
                       d="M6 6l12 12M18 6l-12 12"
                       stroke="gray"
