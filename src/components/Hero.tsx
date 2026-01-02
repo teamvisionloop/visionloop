@@ -13,6 +13,7 @@ const Hero = () => {
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
 
+  // All three stats
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
     { number: 100, suffix: "%", label: "Client Satisfaction" },
@@ -21,42 +22,29 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters with fade-up
+  // Animate counters immediately on page load
   useEffect(() => {
-    let animated = false;
+    statsRefs.current.forEach((el, index) => {
+      if (!el) return;
+      const end = stats[index].number;
+      const duration = 1500;
+      let start = 0;
 
-    const animateCounters = () => {
-      statsRefs.current.forEach((el, index) => {
-        if (!el) return;
-        const end = stats[index].number;
-        const duration = 1500;
-        let start = 0;
-
-        el.style.opacity = "0";
-
-        const step = () => {
-          start += Math.ceil(end / (duration / 16));
-          if (start >= end) start = end;
-          el.innerText = `${start}${stats[index].suffix}`;
-
-          el.style.opacity = "1";
-          el.style.transition = "opacity 0.5s ease-out";
-
-          if (start < end) requestAnimationFrame(step);
-        };
-        step();
-      });
-    };
-
-    // Trigger on page load
-    animateCounters();
+      const step = () => {
+        start += Math.ceil(end / (duration / 16));
+        if (start >= end) start = end;
+        el.innerText = `${start}${stats[index].suffix}`;
+        if (start < end) requestAnimationFrame(step);
+      };
+      step();
+    });
   }, [stats]);
 
   // Prepare logos for seamless infinite carousel
   useEffect(() => {
     const containerWidth = window.innerWidth;
-    const logoWidth = 80;
-    const gap = 32;
+    const logoWidth = 80; // approximate width per logo
+    const gap = 32; // gap between logos
     const totalWidth = logos.length * (logoWidth + gap);
     const repeatCount = Math.ceil((containerWidth * 2) / totalWidth);
     const repeated = [];
@@ -69,12 +57,7 @@ const Hero = () => {
   return (
     <section
       ref={sectionRef}
-      className="
-        min-h-[75vh] sm:min-h-[85vh] md:min-h-screen
-        flex flex-col justify-center items-center
-        relative px-4 md:px-6 lg:px-24
-        py-16 md:py-32 pt-24 md:pt-32
-      "
+      className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32"
     >
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
@@ -104,10 +87,10 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* Stats: force one row on mobile */}
-          <div className="mt-8 md:mt-12 flex flex-row flex-wrap justify-center gap-4 md:gap-8 px-4">
+          {/* Stats in one line */}
+          <div className="mt-8 md:mt-12 flex flex-row flex-wrap justify-center gap-6 px-4">
             {stats.map((stat, idx) => (
-              <div key={idx} className="text-center min-w-[80px]">
+              <div key={idx} className="text-center min-w-[100px]">
                 <div
                   ref={(el) => (statsRefs.current[idx] = el)}
                   className="text-base sm:text-lg md:text-2xl font-bold mb-1 md:mb-2 opacity-0"
