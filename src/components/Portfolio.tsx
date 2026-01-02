@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -39,6 +39,9 @@ const Portfolio = () => {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState("");
   const [zoom, setZoom] = useState(1);
+
+  const projectRefs = useRef<HTMLDivElement[]>([]); // for scroll animation
+  const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
 
   const openModal = (image: string, title: string) => {
     setActiveImage(image);
@@ -97,38 +100,51 @@ const Portfolio = () => {
     },
   ];
 
+  // Intersection Observer for scroll animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = Number(entry.target.getAttribute("data-index"));
+          if (entry.isIntersecting) {
+            setVisibleIndexes((prev) => [...new Set([...prev, index])]);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    projectRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      projectRefs.current.forEach((el) => {
+        if (el) observer.unobserve(el);
+      });
+    };
+  }, []);
+
   return (
     <section id="portfolio" className="section-padding relative">
-      {/* Inline animation styles */}
-      <style>
-        {`
-          @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-          }
-          .animate-fade-up {
-            opacity: 0;
-            animation: fadeUp 0.6s ease-out forwards;
-          }
-          .stagger-1 { animation-delay: 0.2s; }
-          .stagger-2 { animation-delay: 0.4s; }
-
-          @keyframes zoomIn {
-            0% { transform: scale(0.95); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-          }
-          .zoom-in {
-            animation: zoomIn 0.3s ease-out forwards;
-          }
-        `}
-      </style>
-
       {/* Header */}
       <div className="max-w-7xl mx-auto text-center mb-8">
-        <h2 className="text-3xl font-bold animate-fade-up stagger-1">
+        <h2
+          className={`text-3xl font-bold transition-opacity duration-600 ${
+            visibleIndexes.includes(0) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+          }`}
+          ref={(el) => (projectRefs.current[0] = el!)}
+          data-index={0}
+        >
           Our Featured Projects
         </h2>
-        <p className="mt-2 text-gray-400 animate-fade-up stagger-2">
+        <p
+          className={`mt-2 text-gray-400 transition-opacity duration-600 ${
+            visibleIndexes.includes(1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+          }`}
+          ref={(el) => (projectRefs.current[1] = el!)}
+          data-index={1}
+        >
           Explore some of the latest projects we've worked on
         </p>
       </div>
@@ -139,7 +155,11 @@ const Portfolio = () => {
           {projects.map((project, index) => (
             <div
               key={index}
-              className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
+              className={`flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] transition-transform duration-500 ${
+                visibleIndexes.includes(index + 2) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+              }`}
+              ref={(el) => (projectRefs.current[index + 2] = el!)}
+              data-index={index + 2}
             >
               <div
                 onClick={() => openModal(project.fullImage, project.title)}
@@ -160,17 +180,17 @@ const Portfolio = () => {
       {activeImage && (
         <div
           className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
-          onClick={closeModal} // closes modal when clicking outside
+          onClick={closeModal}
         >
-          {/* Buttons fixed top-right */}
-          <div className="absolute top-4 right-4 flex gap-3 z-50">
+          {/* Buttons fixed top-right with no background */}
+          <div className="absolute top-4 right-4 flex gap-3 z-50 text-white">
             {/* Zoom In */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setZoom((z) => Math.min(z + 0.25, 3));
+                setZoom((z) => Math.min(z + 0.25, 5));
               }}
-              className="p-2 rounded bg-black/70 hover:bg-black/90 transition transform hover:scale-110"
+              className="p-2 hover:text-gray-300 transition transform hover:scale-110"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2" />
@@ -183,7 +203,7 @@ const Portfolio = () => {
                 e.stopPropagation();
                 setZoom((z) => Math.max(z - 0.25, 1));
               }}
-              className="p-2 rounded bg-black/70 hover:bg-black/90 transition transform hover:scale-110"
+              className="p-2 hover:text-gray-300 transition transform hover:scale-110"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12h14" stroke="white" strokeWidth="2" />
@@ -196,7 +216,7 @@ const Portfolio = () => {
                 e.stopPropagation();
                 closeModal();
               }}
-              className="p-2 rounded bg-black/70 hover:bg-black/90 transition transform hover:scale-110"
+              className="p-2 hover:text-gray-300 transition transform hover:scale-110"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M6 6l12 12M18 6l-12 12" stroke="white" strokeWidth="2" />
@@ -207,12 +227,12 @@ const Portfolio = () => {
           {/* Centered Image */}
           <div
             className="relative flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()} // prevent close when clicking image
+            onClick={(e) => e.stopPropagation()}
           >
             <img
               src={activeImage}
               alt={activeTitle}
-              className="max-w-[90vw] max-h-[90vh] object-contain zoom-in transition-transform duration-300"
+              className="max-w-[95vw] max-h-[95vh] object-contain transition-transform duration-300"
               style={{ transform: `scale(${zoom})` }}
             />
           </div>
