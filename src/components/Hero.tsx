@@ -27,16 +27,18 @@ useEffect(() => {
     if (!el) return;
 
     el.style.opacity = "1"; // make visible
-
     const end = stats[index].number;
     const duration = 1500; // 1.5s
-    let start = 0;
-    const step = () => {
-      start += end / (duration / 16); // 16ms per frame approx
-      if (start >= end) start = end; // cap at target
-      el.innerText = `${Math.floor(start)}${stats[index].suffix}`;
-      if (start < end) requestAnimationFrame(step);
+    const startTime = performance.now();
+
+    const step = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1); // 0 → 1
+      const value = Math.ceil(progress * end); // ensures even small numbers count
+      el.innerText = `${value}${stats[index].suffix}`;
+      if (progress < 1) requestAnimationFrame(step);
     };
+
     requestAnimationFrame(step);
   });
 }, [stats]);
