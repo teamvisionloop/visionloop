@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import brand1 from "@/assets/portfolio/brand1.webp";
 import brand2 from "@/assets/portfolio/brand2.webp";
 import brand3 from "@/assets/portfolio/brand3.webp";
@@ -9,39 +9,57 @@ import brand6 from "@/assets/portfolio/brand6.webp";
 import brand7 from "@/assets/portfolio/brand7.webp";
 
 const Hero = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
     { number: 100, suffix: "%", label: "Client Satisfaction" },
     { number: 2, suffix: "+", label: "Years Experience" },
   ];
 
-  const [counts, setCounts] = useState(stats.map(() => 0));
+  const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters immediately on page load using requestAnimationFrame for smoothness
   useEffect(() => {
-    const duration = 1500; // 1.5 seconds
-    const startTime = performance.now();
+    let animated = false;
 
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+    const animateCounters = () => {
+      statsRefs.current.forEach((el, index) => {
+        if (!el) return;
+        const end = stats[index].number;
+        const duration = 1500;
+        let start = 0;
+        const step = () => {
+          start += Math.ceil(end / (duration / 16));
+          if (start >= end) start = end;
+          el.innerText = `${start}${stats[index].suffix}`;
+          if (start < end) {
+            requestAnimationFrame(step);
+          }
+        };
+        step();
+      });
+    };
 
-      setCounts(
-        stats.map((stat) => Math.floor(stat.number * progress))
-      );
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
+    const handleScroll = () => {
+      if (!sectionRef.current || animated) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 10) { // scroll 1cm (~10px) to trigger
+        animated = true;
+        animateCounters();
       }
     };
 
-    requestAnimationFrame(animate);
-  }, [stats]);
+    window.addEventListener("scroll", handleScroll);
+    // Trigger immediately if already in view
+    handleScroll();
 
-  const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [stats]);
 
   return (
     <section
+      ref={sectionRef}
       className="
         min-h-[75vh] sm:min-h-[85vh] md:min-h-screen
         flex flex-col justify-center items-center
@@ -76,13 +94,15 @@ const Hero = () => {
           </a>
         </div>
 
-        {/* Stats with smaller font */}
-        <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-4 md:gap-8 animate-fade-up opacity-0 stagger-4 px-4">
+        {/* Stats */}
+        <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-4 md:gap-8 px-4">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
-              <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2">
-                {counts[idx]}
-                {stat.suffix}
+              <div
+                ref={(el) => (statsRefs.current[idx] = el)}
+                className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2"
+              >
+                0{stat.suffix}
               </div>
               <div className="text-xs sm:text-sm text-muted-foreground">
                 {stat.label}
@@ -92,7 +112,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Full-width infinite logos carousel */}
+      {/* Logos carousel */}
       <div className="mt-6 w-full overflow-hidden">
         <div className="flex gap-8 w-full animate-slide-loop">
           {[...logos, ...logos].map((logo, idx) => (
