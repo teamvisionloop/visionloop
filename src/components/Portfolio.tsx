@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -40,131 +40,144 @@ const Portfolio = () => {
   const [activeTitle, setActiveTitle] = useState("");
   const [zoom, setZoom] = useState(1);
 
-  // Pan support
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const isDragging = useRef(false);
-  const lastPos = useRef({ x: 0, y: 0 });
-
-  const startDrag = (x: number, y: number) => {
-    if (zoom === 1) return; // only pan when zoomed
-    isDragging.current = true;
-    lastPos.current = { x, y };
-  };
-
-  const onDrag = (x: number, y: number) => {
-    if (!isDragging.current) return;
-    setOffset((prev) => ({
-      x: prev.x + (x - lastPos.current.x),
-      y: prev.y + (y - lastPos.current.y),
-    }));
-    lastPos.current = { x, y };
-  };
-
-  const endDrag = () => {
-    isDragging.current = false;
-  };
-
-  const openModal = (image: string, title: string) => {
-    setActiveImage(image);
-    setActiveTitle(title);
-    setZoom(1); // fully zoomed out
-    setOffset({ x: 0, y: 0 });
-  };
-
   const closeModal = () => {
     setActiveImage(null);
     setZoom(1);
-    setOffset({ x: 0, y: 0 });
   };
 
   const projects: Project[] = [
-    { title: "Luxury Brands", category: "Fashion", description: "Premium streetwear e-commerce store featuring global luxury brands", image: luxuryBrands, fullImage: luxuryFull },
-    { title: "Fuzzy", category: "Apparel", description: "Cozy Egyptian cotton hoodies and comfort wear brand", image: fuzzy, fullImage: fuzzyFull },
-    { title: "Faya Studio", category: "Streetwear", description: "Winter streetwear collection with bold urban designs", image: fayaStudio, fullImage: fayaFull },
-    { title: "Temple Of Scent", category: "Perfumery", description: "Luxury fragrance brand", image: temple, fullImage: templeFull },
-    { title: "Faya EG", category: "Fashion", description: "Modern Egyptian fashion brand", image: fayaEgThumb, fullImage: fayaEgFull },
-    { title: "Lehab Scents", category: "Fragrance", description: "Luxury Arabic perfume house", image: lehabThumb, fullImage: lehabFull },
+    {
+      title: "Luxury Brands",
+      category: "Fashion",
+      description: "Premium streetwear e-commerce store featuring global luxury brands",
+      image: luxuryBrands,
+      fullImage: luxuryFull,
+    },
+    {
+      title: "Fuzzy",
+      category: "Apparel",
+      description: "Cozy Egyptian cotton hoodies and comfort wear brand",
+      image: fuzzy,
+      fullImage: fuzzyFull,
+    },
+    {
+      title: "Faya Studio",
+      category: "Streetwear",
+      description: "Winter streetwear collection with bold urban designs",
+      image: fayaStudio,
+      fullImage: fayaFull,
+    },
+    {
+      title: "Temple Of Scent",
+      category: "Perfumery",
+      description: "Luxury fragrance brand",
+      image: temple,
+      fullImage: templeFull,
+    },
+    {
+      title: "Faya EG",
+      category: "Fashion",
+      description: "Modern Egyptian fashion brand",
+      image: fayaEgThumb,
+      fullImage: fayaEgFull,
+    },
+    {
+      title: "Lehab Scents",
+      category: "Fragrance",
+      description: "Luxury Arabic perfume house",
+      image: lehabThumb,
+      fullImage: lehabFull,
+    },
   ];
 
-  // Scroll animation
-  const projectRefs = useRef<HTMLDivElement[]>([]);
-  const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const index = Number(entry.target.getAttribute("data-index"));
-          if (entry.isIntersecting) {
-            setVisibleIndexes((prev) => [...new Set([...prev, index])]);
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    projectRefs.current.forEach((el) => { if(el) observer.observe(el); });
-    return () => projectRefs.current.forEach((el) => { if(el) observer.unobserve(el); });
-  }, []);
-
   return (
-    <section id="portfolio" className="section-padding relative">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto text-center mb-8">
-        <h2 className={`text-3xl font-bold transition-all duration-600 ${visibleIndexes.includes(0) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`} ref={(el) => projectRefs.current[0] = el!} data-index={0}>Our Featured Projects</h2>
-        <p className={`mt-2 text-gray-400 transition-all duration-600 ${visibleIndexes.includes(1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`} ref={(el) => projectRefs.current[1] = el!} data-index={1}>Explore some of the latest projects we've worked on</p>
-      </div>
-
-      {/* Carousel */}
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4 px-4 md:px-6 lg:px-12">
-          {projects.map((project, index) => (
-            <div key={index} className={`flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] transition-all duration-500 ${visibleIndexes.includes(index+2) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`} ref={(el) => projectRefs.current[index+2] = el!} data-index={index+2}>
-              <div onClick={() => openModal(project.fullImage, project.title)} className="group relative aspect-[4/3] overflow-hidden cursor-pointer">
-                <img src={project.image} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+    <section id="portfolio" className="section-padding">
+      <div className="max-w-7xl mx-auto">
+        {/* Carousel */}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-4 px-4 md:px-6 lg:px-12">
+            {projects.map((project, index) => (
+              <div
+                key={index}
+                className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
+              >
+                <div
+                  onClick={() => {
+                    setActiveImage(project.fullImage);
+                    setActiveTitle(project.title);
+                    setZoom(1);
+                  }}
+                  className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Modal */}
-      {activeImage && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={closeModal}>
-          {/* Buttons */}
-          <div className="absolute top-4 right-4 flex gap-3 z-50 text-gray-400">
-            <button onClick={(e)=>{e.stopPropagation(); setZoom(z=>Math.min(z+0.5,8));}} className="p-2 hover:text-gray-200 transition transform hover:scale-110">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2"/></svg>
-            </button>
-            <button onClick={(e)=>{e.stopPropagation(); setZoom(z=>Math.max(z-0.5,1)); setOffset({x:0,y:0});}} className="p-2 hover:text-gray-200 transition transform hover:scale-110">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="currentColor" strokeWidth="2"/></svg>
-            </button>
-            <button onClick={(e)=>{e.stopPropagation(); closeModal();}} className="p-2 hover:text-gray-200 transition transform hover:scale-110">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" strokeWidth="2"/></svg>
-            </button>
+            ))}
           </div>
+        </div>
 
-          {/* Pan & Zoom container */}
+        {/* Fullscreen Modal */}
+        {activeImage && (
           <div
-            className="relative overflow-auto cursor-grab"
-            style={{ maxWidth: "95vw", maxHeight: "95vh" }}
-            onMouseDown={(e) => startDrag(e.clientX, e.clientY)}
-            onMouseMove={(e) => onDrag(e.clientX, e.clientY)}
-            onMouseUp={endDrag}
-            onMouseLeave={endDrag}
-            onTouchStart={(e) => startDrag(e.touches[0].clientX, e.touches[0].clientY)}
-            onTouchMove={(e) => onDrag(e.touches[0].clientX, e.touches[0].clientY)}
-            onTouchEnd={endDrag}
-            onClick={(e)=>e.stopPropagation()}
+            className="fixed inset-0 z-50 bg-black/80"
+            onClick={closeModal}
           >
-            <img
-              ref={imageRef}
-              src={activeImage}
-              alt={activeTitle}
-              className="object-contain"
-              style={{ width: "100%", height: "auto", transform: `scale(${zoom}) translate(${offset.x/zoom}px, ${offset.y/zoom}px)` }}
-            />
+            <div
+              className="relative w-full h-full flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* SVG Controls */}
+              <div className="absolute top-6 right-6 flex gap-3 z-10">
+                {/* Zoom In */}
+                <button
+                  onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
+                  className="bg-white/90 p-2 rounded"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 5v14M5 12h14" stroke="black" strokeWidth="2" />
+                  </svg>
+                </button>
+
+                {/* Zoom Out */}
+                <button
+                  onClick={() => setZoom((z) => Math.max(z - 0.25, 1))}
+                  className="bg-white/90 p-2 rounded"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14" stroke="black" strokeWidth="2" />
+                  </svg>
+                </button>
+
+                {/* Close */}
+                <button
+                  onClick={closeModal}
+                  className="bg-white/90 p-2 rounded"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M6 6l12 12M18 6l-12 12"
+                      stroke="black"
+                      strokeWidth="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Image */}
+              <img
+                src={activeImage}
+                alt={activeTitle}
+                className="max-w-full max-h-full object-contain transition-transform duration-200"
+                style={{ transform: `scale(${zoom})` }}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </section>
   );
 };
