@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -46,6 +46,19 @@ const Portfolio = () => {
     { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull },
   ];
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (activeImage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeImage]);
+
   return (
     <section id="portfolio" className="section-padding">
       <div className="max-w-7xl mx-auto">
@@ -72,7 +85,7 @@ const Portfolio = () => {
                 <div
                   onClick={() => {
                     setActiveImage(project.fullImage);
-                    setZoom(1);
+                    setZoom(1); // reset zoom
                   }}
                   className="relative aspect-[4/3] overflow-hidden cursor-pointer"
                 >
@@ -85,7 +98,7 @@ const Portfolio = () => {
                   {/* Small black overlay */}
                   <div className="absolute inset-0 bg-black/20" />
 
-                  {/* Light grey badge */}
+                  {/* Light grey badge (TOP) */}
                   <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1">
                     {project.title}
                   </div>
@@ -95,65 +108,72 @@ const Portfolio = () => {
           </div>
         </div>
 
-{/* Fullscreen Viewer */}
-{activeImage && (
-  <div
-    className="fixed inset-0 z-50 bg-black/70"
-    onClick={() => setActiveImage(null)}
-  >
-    {/* Controls */}
-    <div className="absolute top-6 right-6 z-10 flex gap-3">
-      <button
-        className="text-gray-300 text-xl"
-        onClick={(e) => {
-          e.stopPropagation();
-          setZoom((z) => Math.min(z + 1, 6));
-        }}
-      >
-        +
-      </button>
+        {/* Fullscreen Modal */}
+        {activeImage && (
+          <div
+            className="fixed inset-0 z-50 bg-black/70"
+            onClick={() => setActiveImage(null)}
+          >
+            {/* Controls */}
+            <div className="absolute top-6 right-6 z-10 flex gap-3">
+              <button
+                className="text-gray-300 text-xl"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setZoom((z) => Math.min(z + 1, 6));
+                }}
+              >
+                +
+              </button>
 
-      <button
-        className="text-gray-300 text-xl"
-        onClick={(e) => {
-          e.stopPropagation();
-          setZoom((z) => Math.max(z - 1, 1));
-        }}
-      >
-        −
-      </button>
+              <button
+                className="text-gray-300 text-xl"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setZoom((z) => Math.max(z - 1, 1));
+                }}
+              >
+                −
+              </button>
 
-      <button
-        className="text-gray-300 text-xl"
-        onClick={(e) => {
-          e.stopPropagation();
-          setActiveImage(null);
-        }}
-      >
-        ✕
-      </button>
-    </div>
+              <button
+                className="text-gray-300 text-xl"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImage(null);
+                }}
+              >
+                ✕
+              </button>
+            </div>
 
-    {/* Scrollable container */}
-    <div
-      className="w-full h-full overflow-auto flex items-center justify-center p-12"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <img
-        src={activeImage}
-        alt=""
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          transform: zoom > 1 ? `scale(${zoom})` : "scale(1)",
-          transformOrigin: "center center",
-          display: "block",
-        }}
-      />
-    </div>
-  </div>
-)}
-
+            {/* Scrollable container (both directions) */}
+            <div
+              className="w-full h-full overflow-auto flex items-center justify-center p-12"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div
+                style={{
+                  width: "fit-content",
+                  height: "fit-content",
+                  margin: "auto",
+                }}
+              >
+                <img
+                  src={activeImage}
+                  alt=""
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    transform: zoom > 1 ? `scale(${zoom})` : "scale(1)",
+                    transformOrigin: "center center",
+                    display: "block",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
