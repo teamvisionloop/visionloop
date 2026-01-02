@@ -14,7 +14,6 @@ const Hero = () => {
   const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
   const [slideDuration, setSlideDuration] = useState("20s"); // default desktop speed
 
-  // Stats
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
     { number: 2, suffix: "+", label: "Years Experience" },
@@ -22,29 +21,33 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters and make them visible
+  // Animate counters correctly
   useEffect(() => {
     statsRefs.current.forEach((el, index) => {
       if (!el) return;
 
-      // Make number visible
-      el.style.opacity = "1";
+      el.style.opacity = "1"; // make visible
 
       const end = stats[index].number;
       const duration = 1500;
-      let start = 0;
+      const startTime = performance.now();
 
-      const step = () => {
-        start += Math.ceil(end / (duration / 16));
-        if (start >= end) start = end;
-        el.innerText = `${start}${stats[index].suffix}`;
-        if (start < end) requestAnimationFrame(step);
+      const step = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.floor(progress * end);
+        el.innerText = `${value}${stats[index].suffix}`;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.innerText = `${end}${stats[index].suffix}`; // ensure exact end
+        }
       };
-      step();
+      requestAnimationFrame(step);
     });
   }, [stats]);
 
-  // Prepare logos for infinite carousel
+  // Prepare logos and adjust speed for mobile
   useEffect(() => {
     const containerWidth = window.innerWidth;
     const logoWidth = 80;
@@ -52,15 +55,12 @@ const Hero = () => {
     const totalWidth = logos.length * (logoWidth + gap);
     const repeatCount = Math.ceil((containerWidth * 2) / totalWidth);
     const repeated: string[] = [];
-    for (let i = 0; i < repeatCount; i++) {
-      repeated.push(...logos);
-    }
+    for (let i = 0; i < repeatCount; i++) repeated.push(...logos);
     setCarouselLogos(repeated);
 
-    // Adjust carousel speed for mobile
-    if (containerWidth < 768) {
-      setSlideDuration("10s"); // faster on small screens
-    }
+    // faster on phones
+    if (containerWidth < 768) setSlideDuration("5s"); // much faster
+    else setSlideDuration("20s");
   }, [logos]);
 
   return (
