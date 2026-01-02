@@ -24,8 +24,6 @@ import lehabFull from "@/assets/portfolio/lehab-scents-full.webp";
 
 interface Project {
   title: string;
-  category: string;
-  description: string;
   image: string;
   fullImage: string;
 }
@@ -39,20 +37,20 @@ const Portfolio = () => {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isPanning, setIsPanning] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const lastTap = useRef(0);
   const pointers = useRef(new Map<number, PointerEvent>());
+  const lastTap = useRef(0);
   const startDistance = useRef(0);
   const startZoom = useRef(1);
 
   const projects: Project[] = [
-    { title: "Luxury Brands", category: "Fashion", description: "", image: luxuryBrands, fullImage: luxuryFull },
-    { title: "Fuzzy", category: "Apparel", description: "", image: fuzzy, fullImage: fuzzyFull },
-    { title: "Faya Studio", category: "Streetwear", description: "", image: fayaStudio, fullImage: fayaFull },
-    { title: "Temple Of Scent", category: "Perfume", description: "", image: temple, fullImage: templeFull },
-    { title: "Faya EG", category: "Fashion", description: "", image: fayaEgThumb, fullImage: fayaEgFull },
-    { title: "Lehab Scents", category: "Fragrance", description: "", image: lehabThumb, fullImage: lehabFull },
+    { title: "Luxury Brands", image: luxuryBrands, fullImage: luxuryFull },
+    { title: "Fuzzy", image: fuzzy, fullImage: fuzzyFull },
+    { title: "Faya Studio", image: fayaStudio, fullImage: fayaFull },
+    { title: "Temple Of Scent", image: temple, fullImage: templeFull },
+    { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull },
+    { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull },
   ];
 
   const resetView = () => {
@@ -61,16 +59,19 @@ const Portfolio = () => {
   };
 
   /* =======================
-     Pointer / Gesture Logic
+     Pointer / Pan / Pinch
   ======================= */
 
   const onPointerDown = (e: React.PointerEvent) => {
     pointers.current.set(e.pointerId, e);
-    setIsPanning(true);
+    setIsDragging(true);
 
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()];
-      startDistance.current = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      startDistance.current = Math.hypot(
+        a.clientX - b.clientX,
+        a.clientY - b.clientY
+      );
       startZoom.current = zoom;
     }
   };
@@ -88,28 +89,33 @@ const Portfolio = () => {
 
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()];
-      const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-      const scale = Math.min(Math.max(startZoom.current * (distance / startDistance.current), 1), 6);
+      const distance = Math.hypot(
+        a.clientX - b.clientX,
+        a.clientY - b.clientY
+      );
+      const scale = Math.min(
+        Math.max(startZoom.current * (distance / startDistance.current), 1),
+        6
+      );
       setZoom(scale);
     }
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
     pointers.current.delete(e.pointerId);
-    setIsPanning(false);
+    setIsDragging(false);
   };
 
   /* =======================
-     Double-Tap / Double-Click
+     Double Click / Tap Zoom
   ======================= */
-  const onDoubleTap = () => {
-    setZoom((z) => (z === 1 ? 3 : 1));
-    setPosition({ x: 0, y: 0 });
-  };
 
   const handleTap = () => {
     const now = Date.now();
-    if (now - lastTap.current < 300) onDoubleTap();
+    if (now - lastTap.current < 300) {
+      setZoom((z) => (z === 1 ? 3 : 1));
+      setPosition({ x: 0, y: 0 });
+    }
     lastTap.current = now;
   };
 
@@ -127,20 +133,23 @@ const Portfolio = () => {
                     setActiveImage(project.fullImage);
                     resetView();
                   }}
-                  className="group relative aspect-[4/3] overflow-hidden rounded-xl cursor-pointer"
+                  className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
                 >
+                  {/* Image */}
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
 
-                  {/* Animated Brand Overlay */}
-                  <div className="absolute bottom-3 left-3 bg-black/70 px-3 py-1 rounded-full
-                                  text-xs text-white tracking-wide
-                                  opacity-0 translate-y-2
-                                  group-hover:opacity-100 group-hover:translate-y-0
-                                  transition-all duration-300">
+                  {/* Black overlay (always visible) */}
+                  <div className="absolute inset-0 bg-black/20" />
+
+                  {/* Brand badge */}
+                  <div
+                    className="absolute bottom-3 left-3 bg-gray-500 text-white
+                               text-xs px-3 py-1 tracking-wide"
+                  >
                     {project.title}
                   </div>
                 </div>
@@ -165,10 +174,11 @@ const Portfolio = () => {
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
               onPointerCancel={onPointerUp}
-              className="max-w-full max-h-full cursor-grab active:cursor-grabbing"
+              className="max-w-full max-h-full select-none"
               style={{
+                cursor: zoom > 1 ? "move" : "default",
                 transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
-                transition: isPanning ? "none" : "transform 0.25s ease",
+                transition: isDragging ? "none" : "transform 0.25s ease",
               }}
             />
           </div>
