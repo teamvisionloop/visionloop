@@ -12,31 +12,27 @@ const Hero = () => {
   const [animated, setAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
- useEffect(() => {
-  stats.forEach((stat, index) => {
-    let start = 0;
-    const end = stat.number;
-    const duration = 1500; // total animation time in ms
-    const startTime = performance.now();
+useEffect(() => {
+  const startTime = performance.now();
+  const duration = 1500; // 1.5 seconds
+  const initialCounts = stats.map(() => 0);
 
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const value = Math.floor(progress * end);
+  const animate = (currentTime: number) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
 
-      setCounts((prev) => {
-        const updated = [...prev];
-        updated[index] = value;
-        return updated;
-      });
+    const newCounts = stats.map((stat) =>
+      Math.floor(progress * stat.number)
+    );
 
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
+    setCounts(newCounts);
 
-    requestAnimationFrame(animate);
-  });
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  };
+
+  requestAnimationFrame(animate);
 }, [stats]);
 
   return (
