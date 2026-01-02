@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import brand1 from "@/assets/portfolio/brand1.webp";
 import brand2 from "@/assets/portfolio/brand2.webp";
 import brand3 from "@/assets/portfolio/brand3.webp";
@@ -9,69 +9,55 @@ import brand6 from "@/assets/portfolio/brand6.webp";
 import brand7 from "@/assets/portfolio/brand7.webp";
 
 const Hero = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
 
+  // Only two stats
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
-    { number: 2, suffix: "+", label: "Years Experience" },
+    { number: 2, suffix: "+", label: "Years Expeirence" },
   ];
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters smoothly
+  // Animate counters immediately on page load
   useEffect(() => {
-    statsRefs.current.forEach((el, idx) => {
+    statsRefs.current.forEach((el, index) => {
       if (!el) return;
-      const end = stats[idx].number;
-      const duration = window.innerWidth < 640 ? 8000 : 6000; // slower on mobile
+      const end = stats[index].number;
+      const duration = 1500;
       let start = 0;
+
       const step = () => {
-        start += end / (duration / 60);
+        start += Math.ceil(end / (duration / 16));
         if (start >= end) start = end;
-        el.innerText = `${Math.floor(start)}${stats[idx].suffix}`;
+        el.innerText = `${start}${stats[index].suffix}`;
         if (start < end) requestAnimationFrame(step);
       };
       step();
-      el.style.opacity = "1";
     });
-  }, []);
+  }, [stats]);
 
-  // Infinite carousel left → right
+  // Prepare logos for seamless infinite carousel
   useEffect(() => {
-    const container = carouselRef.current;
-    if (!container) return;
-
-    // Clear any existing content
-    container.innerHTML = "";
-
-    // duplicate logos multiple times to ensure seamless scroll
-    const repeatedLogos = [...logos, ...logos, ...logos, ...logos];
-    repeatedLogos.forEach((logo) => {
-      const img = document.createElement("img");
-      img.src = logo;
-      img.className = "h-8 md:h-10 object-contain flex-shrink-0";
-      container.appendChild(img);
-    });
-
-    const children = Array.from(container.children) as HTMLElement[];
-    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0); // 32px gap
-
-    let scrollX = totalWidth; // start from right side for left→right scroll
-    const speed = window.innerWidth < 640 ? 0.3 : 1; // slower on mobile
-
-    const step = () => {
-      scrollX -= speed;
-      if (scrollX <= 0) scrollX = totalWidth / 2; // seamless reset
-      container.scrollLeft = scrollX;
-      requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, []);
+    const containerWidth = window.innerWidth;
+    const logoWidth = 80; // approximate width per logo
+    const gap = 32; // gap between logos
+    const totalWidth = logos.length * (logoWidth + gap);
+    const repeatCount = Math.ceil((containerWidth * 2) / totalWidth);
+    const repeated = [];
+    for (let i = 0; i < repeatCount; i++) {
+      repeated.push(...logos);
+    }
+    setCarouselLogos(repeated);
+  }, [logos]);
 
   return (
-    <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
-      {/* Whole section fade-up */}
+    <section
+      ref={sectionRef}
+      className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32"
+    >
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
@@ -100,13 +86,14 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* Stats */}
+          {/* Stats in one line */}
           <div className="mt-8 md:mt-12 flex flex-row flex-wrap justify-center gap-6 px-4">
             {stats.map((stat, idx) => (
               <div key={idx} className="text-center min-w-[100px]">
                 <div
                   ref={(el) => (statsRefs.current[idx] = el)}
                   className="text-base sm:text-lg md:text-2xl font-bold mb-1 md:mb-2 opacity-0"
+                  style={{ transition: "opacity 0.5s ease-out" }}
                 >
                   0{stat.suffix}
                 </div>
@@ -120,11 +107,17 @@ const Hero = () => {
 
         {/* Logos carousel */}
         <div className="mt-6 w-full overflow-hidden relative">
-          <div
-            ref={carouselRef}
-            className="flex gap-8 w-max"
-            style={{ scrollBehavior: "auto", overflowX: "hidden" }}
-          ></div>
+          <div className="flex gap-8 w-max animate-slide-loop">
+            {carouselLogos.map((logo, idx) => (
+              <img
+                key={idx}
+                src={logo}
+                alt={`Brand ${idx + 1}`}
+                className="h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos"
+                style={{ animationDelay: `${idx * 0.05}s` }}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -138,9 +131,26 @@ const Hero = () => {
       </a>
 
       <style jsx>{`
+        @keyframes slide-loop {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes fade-up-logos {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
         @keyframes fade-up-section {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-loop {
+          display: inline-flex;
+          width: max-content;
+          animation: slide-loop 20s linear infinite;
+        }
+        .animate-fade-up-logos {
+          opacity: 0;
+          animation: fade-up-logos 0.8s ease-out forwards;
         }
         .animate-fade-up-section {
           opacity: 0;
