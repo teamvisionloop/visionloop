@@ -1,27 +1,26 @@
-import { ArrowUpRight, Plus, Minus } from "lucide-react";
 import { useEffect, useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
 /* =======================
-   Thumbnails
+   Thumbnails (.webp)
 ======================= */
-import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
-import fuzzy from "@/assets/portfolio/fuzzy.png";
-import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
-import temple from "@/assets/portfolio/temple.png";
-import fayaEgThumb from "@/assets/portfolio/faya-eg-thumb.png";
-import lehabThumb from "@/assets/portfolio/lehab-scents-thumb.png";
+import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.webp";
+import fuzzy from "@/assets/portfolio/fuzzy.webp";
+import fayaStudio from "@/assets/portfolio/faya-studio-clean.webp";
+import temple from "@/assets/portfolio/temple.webp";
+import fayaEgThumb from "@/assets/portfolio/faya-eg-thumb.webp";
+import lehabThumb from "@/assets/portfolio/lehab-scents-thumb.webp";
 
 /* =======================
-   Full Screenshots
+   Full Screenshots (.webp)
 ======================= */
-import luxuryFull from "@/assets/portfolio/luxury-brands-full.png";
-import fuzzyFull from "@/assets/portfolio/fuzzy-full.png";
-import fayaFull from "@/assets/portfolio/faya-studio-full.png";
-import templeFull from "@/assets/portfolio/temple-full.png";
-import fayaEgFull from "@/assets/portfolio/faya-eg-full.png";
-import lehabFull from "@/assets/portfolio/lehab-scents-full.png";
+import luxuryFull from "@/assets/portfolio/luxury-brands-full.webp";
+import fuzzyFull from "@/assets/portfolio/fuzzy-full.webp";
+import fayaFull from "@/assets/portfolio/faya-studio-full.webp";
+import templeFull from "@/assets/portfolio/temple-full.webp";
+import fayaEgFull from "@/assets/portfolio/faya-eg-full.webp";
+import lehabFull from "@/assets/portfolio/lehab-scents-full.webp";
 
 interface Project {
   title: string;
@@ -32,12 +31,8 @@ interface Project {
 }
 
 const Portfolio = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    {
-      loop: true,
-      align: "start",
-      containScroll: "trimSnaps",
-    },
+  const [emblaRef] = useEmblaCarousel(
+    { loop: true, align: "start", containScroll: "trimSnaps" },
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
 
@@ -45,16 +40,10 @@ const Portfolio = () => {
   const [activeTitle, setActiveTitle] = useState("");
   const [zoom, setZoom] = useState(1);
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    return () => emblaApi.off("select", onSelect);
-  }, [emblaApi, onSelect]);
+  const closeModal = () => {
+    setActiveImage(null);
+    setZoom(1);
+  };
 
   const projects: Project[] = [
     {
@@ -81,7 +70,7 @@ const Portfolio = () => {
     {
       title: "Temple Of Scent",
       category: "Perfumery",
-      description: "Luxury fragrance brand offering artisan perfumes",
+      description: "Luxury fragrance brand",
       image: temple,
       fullImage: templeFull,
     },
@@ -101,11 +90,6 @@ const Portfolio = () => {
     },
   ];
 
-  const closeModal = () => {
-    setActiveImage(null);
-    setZoom(1);
-  };
-
   return (
     <section id="portfolio" className="section-padding">
       <div className="max-w-7xl mx-auto">
@@ -115,7 +99,7 @@ const Portfolio = () => {
             {projects.map((project, index) => (
               <div
                 key={index}
-                className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
+                className="flex-[0_0_92%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
               >
                 <div
                   onClick={() => {
@@ -123,34 +107,13 @@ const Portfolio = () => {
                     setActiveTitle(project.title);
                     setZoom(1);
                   }}
-                  className="group relative bg-secondary aspect-[4/3] overflow-hidden hover-lift cursor-pointer"
+                  className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
                 >
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                  <div className="absolute inset-0 flex flex-col justify-between p-4 md:p-6">
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider bg-background/80 px-2 py-1 self-start">
-                      {project.category}
-                    </span>
-
-                    <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <h3 className="text-lg md:text-xl font-bold mb-2">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {project.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="absolute top-4 right-4 w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ArrowUpRight size={18} />
-                  </div>
                 </div>
               </div>
             ))}
@@ -160,26 +123,47 @@ const Portfolio = () => {
         {/* Fullscreen Modal */}
         {activeImage && (
           <div
-            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
+            className="fixed inset-0 z-50 bg-black/80"
             onClick={closeModal}
           >
             <div
-              className="relative w-full h-full flex items-center justify-center overflow-hidden"
+              className="relative w-full h-full flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Controls */}
-              <div className="absolute top-6 right-6 z-10 flex gap-2">
+              {/* SVG Controls */}
+              <div className="absolute top-6 right-6 flex gap-3 z-10">
+                {/* Zoom In */}
                 <button
                   onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
-                  className="bg-white/90 p-2 rounded hover:bg-white"
+                  className="bg-white/90 p-2 rounded"
                 >
-                  <Plus size={18} />
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 5v14M5 12h14" stroke="black" strokeWidth="2" />
+                  </svg>
                 </button>
+
+                {/* Zoom Out */}
                 <button
                   onClick={() => setZoom((z) => Math.max(z - 0.25, 1))}
-                  className="bg-white/90 p-2 rounded hover:bg-white"
+                  className="bg-white/90 p-2 rounded"
                 >
-                  <Minus size={18} />
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14" stroke="black" strokeWidth="2" />
+                  </svg>
+                </button>
+
+                {/* Close */}
+                <button
+                  onClick={closeModal}
+                  className="bg-white/90 p-2 rounded"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M6 6l12 12M18 6l-12 12"
+                      stroke="black"
+                      strokeWidth="2"
+                    />
+                  </svg>
                 </button>
               </div>
 
