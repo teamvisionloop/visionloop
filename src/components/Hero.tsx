@@ -21,12 +21,12 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters
+  // Animate counters slower
   useEffect(() => {
     statsRefs.current.forEach((el, idx) => {
       if (!el) return;
       const end = stats[idx].number;
-      const duration = 1500;
+      const duration = 2500; // slower animation
       let start = 0;
       const step = () => {
         start += Math.ceil(end / (duration / 60));
@@ -39,37 +39,28 @@ const Hero = () => {
     });
   }, [stats]);
 
-  // Calculate carousel width for seamless loop
-  useEffect(() => {
-    if (!carouselRef.current) return;
-    const totalWidth = Array.from(carouselRef.current.children).reduce(
-      (acc, child: any) => acc + child.offsetWidth + 32, // 32 = gap
-      0
-    );
-    setCarouselWidth(totalWidth);
-  }, [logos]);
+  // Duplicate logos to fill space seamlessly
+  const repeatedLogos = [...logos, ...logos, ...logos];
 
-  // JS-based seamless infinite scroll
+  // Carousel for PC & mobile
   useEffect(() => {
     const container = carouselRef.current;
     if (!container) return;
 
+    // Total scroll width
+    const totalScrollWidth = container.scrollWidth / 2;
+
     let scrollX = 0;
-    let requestId: number;
 
     const step = () => {
       scrollX += 1; // speed
-      if (scrollX >= carouselWidth) scrollX = 0;
+      if (scrollX >= totalScrollWidth) scrollX = 0;
       container.scrollLeft = scrollX;
-      requestId = requestAnimationFrame(step);
+      requestAnimationFrame(step);
     };
 
-    requestId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(requestId);
-  }, [carouselWidth]);
-
-  // Duplicate logos to fill space seamlessly
-  const repeatedLogos = [...logos, ...logos, ...logos];
+    requestAnimationFrame(step);
+  }, []);
 
   return (
     <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
