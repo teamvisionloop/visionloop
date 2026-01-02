@@ -144,7 +144,7 @@ const Portfolio = () => {
 
                 {/* Zoom Out */}
                 <button
-                  onClick={() => setZoom((z) => Math.max(z - 0.25, 3))}
+                  onClick={() => setZoom((z) => Math.max(z - 4, 2))}
                   className=" p-2 rounded"
                 >
                   <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
