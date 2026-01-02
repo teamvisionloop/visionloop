@@ -95,70 +95,65 @@ const Portfolio = () => {
           </div>
         </div>
 
-        {/* Fullscreen Viewer */}
-        {activeImage && (
-          <div
-            className="fixed inset-0 z-50 bg-black/70"
-            onClick={() => setActiveImage(null)}
-          >
-            {/* Controls */}
-            <div className="absolute top-6 right-6 z-10 flex gap-3">
-              <button
-                className="text-gray-300 text-xl"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setZoom((z) => Math.min(z + 1, 6));
-                }}
-              >
-                +
-              </button>
+{/* Fullscreen Viewer */}
+{activeImage && (
+  <div
+    className="fixed inset-0 z-50 bg-black/70"
+    onClick={() => setActiveImage(null)}
+  >
+    {/* Controls */}
+    <div className="absolute top-6 right-6 z-10 flex gap-3">
+      <button
+        className="text-gray-300 text-xl"
+        onClick={(e) => {
+          e.stopPropagation();
+          setZoom((z) => Math.min(z + 1, 6));
+        }}
+      >
+        +
+      </button>
 
-              <button
-                className="text-gray-300 text-xl"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setZoom((z) => Math.max(z - 1, 1));
-                }}
-              >
-                −
-              </button>
+      <button
+        className="text-gray-300 text-xl"
+        onClick={(e) => {
+          e.stopPropagation();
+          setZoom((z) => Math.max(z - 1, 1));
+        }}
+      >
+        −
+      </button>
 
-              <button
-                className="text-gray-300 text-xl"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveImage(null);
-                }}
-              >
-                ✕
-              </button>
-            </div>
+      <button
+        className="text-gray-300 text-xl"
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveImage(null);
+        }}
+      >
+        ✕
+      </button>
+    </div>
 
-            {/* Scrollable container (both directions) */}
-            <div
-              className="w-full h-full overflow-auto p-12"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div
-                style={{
-                  width: "fit-content",
-                  height: "fit-content",
-                  margin: "auto",
-                }}
-              >
-                <img
-                  src={activeImage}
-                  alt=""
-                  style={{
-                    transform: `scale(${zoom})`,
-                    transformOrigin: "center center",
-                    display: "block",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
+    {/* Scrollable container */}
+    <div
+      className="w-full h-full overflow-auto flex items-center justify-center p-12"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <img
+        src={activeImage}
+        alt=""
+        style={{
+          maxWidth: "100%",
+          maxHeight: "100%",
+          transform: zoom > 1 ? `scale(${zoom})` : "scale(1)",
+          transformOrigin: "center center",
+          display: "block",
+        }}
+      />
+    </div>
+  </div>
+)}
+
       </div>
     </section>
   );
