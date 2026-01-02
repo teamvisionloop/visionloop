@@ -48,28 +48,17 @@ const Hero = () => {
       });
     };
 
-    const handleScroll = () => {
-      if (!sectionRef.current || animated) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 10) {
-        animated = true;
-        animateCounters();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Trigger on page load
+    animateCounters();
   }, [stats]);
 
   // Prepare logos for seamless infinite carousel
   useEffect(() => {
-    const containerWidth = window.innerWidth; // full screen width
-    const logoWidth = 80; // approximate width in px of one logo (adjust if needed)
-    const gap = 32; // gap between logos (px)
+    const containerWidth = window.innerWidth;
+    const logoWidth = 80;
+    const gap = 32;
     const totalWidth = logos.length * (logoWidth + gap);
-    const repeatCount = Math.ceil((containerWidth * 2) / totalWidth); // enough to cover twice screen
-
+    const repeatCount = Math.ceil((containerWidth * 2) / totalWidth);
     const repeated = [];
     for (let i = 0; i < repeatCount; i++) {
       repeated.push(...logos);
@@ -87,7 +76,6 @@ const Hero = () => {
         py-16 md:py-32 pt-24 md:pt-32
       "
     >
-      {/* Whole section fade-up */}
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
@@ -116,13 +104,13 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* Stats */}
-          <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-center gap-4 md:gap-8 px-4">
+          {/* Stats: force one row on mobile */}
+          <div className="mt-8 md:mt-12 flex flex-row flex-wrap justify-center gap-4 md:gap-8 px-4">
             {stats.map((stat, idx) => (
-              <div key={idx} className="text-center">
+              <div key={idx} className="text-center min-w-[80px]">
                 <div
                   ref={(el) => (statsRefs.current[idx] = el)}
-                  className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2 opacity-0"
+                  className="text-base sm:text-lg md:text-2xl font-bold mb-1 md:mb-2 opacity-0"
                   style={{ transition: "opacity 0.5s ease-out" }}
                 >
                   0{stat.suffix}
