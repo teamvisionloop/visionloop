@@ -22,30 +22,24 @@ const Hero = () => {
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
   // Animate counters correctly
-  useEffect(() => {
-    statsRefs.current.forEach((el, index) => {
-      if (!el) return;
+useEffect(() => {
+  statsRefs.current.forEach((el, index) => {
+    if (!el) return;
 
-      el.style.opacity = "1"; // make visible
+    el.style.opacity = "1"; // make visible
 
-      const end = stats[index].number;
-      const duration = 1500;
-      const startTime = performance.now();
-
-      const step = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const value = Math.floor(progress * end);
-        el.innerText = `${value}${stats[index].suffix}`;
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        } else {
-          el.innerText = `${end}${stats[index].suffix}`; // ensure exact end
-        }
-      };
-      requestAnimationFrame(step);
-    });
-  }, [stats]);
+    const end = stats[index].number;
+    const duration = 1500; // 1.5s
+    let start = 0;
+    const step = () => {
+      start += end / (duration / 16); // 16ms per frame approx
+      if (start >= end) start = end; // cap at target
+      el.innerText = `${Math.floor(start)}${stats[index].suffix}`;
+      if (start < end) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}, [stats]);
 
   // Prepare logos and adjust speed for mobile
   useEffect(() => {
