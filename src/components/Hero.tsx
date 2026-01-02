@@ -27,6 +27,7 @@ const Hero = () => {
       if (rect.top < window.innerHeight - 100) {
         setAnimated(true);
 
+        // Animate counters
         stats.forEach((stat, index) => {
           let start = 0;
           const end = stat.number;
@@ -107,28 +108,22 @@ const Hero = () => {
             </div>
           ))}
         </div>
-      </div>
 
-      {/* Full-width logos banner under counters */}
-      <div className="mt-6 w-full overflow-hidden">
-        <div className="flex gap-8 whitespace-nowrap animate-slide-diagonal w-full px-4">
-          {logos.map((logo, idx) => (
-            <img
-              key={idx}
-              src={logo}
-              alt={`Brand ${idx + 1}`}
-              className="h-8 md:h-10 object-contain"
-            />
-          ))}
-          {/* Duplicate logos for seamless loop */}
-          {logos.map((logo, idx) => (
-            <img
-              key={`dup-${idx}`}
-              src={logo}
-              alt={`Brand duplicate ${idx + 1}`}
-              className="h-8 md:h-10 object-contain"
-            />
-          ))}
+        {/* Full-width logos banner with fade-up */}
+        <div className="mt-6 w-full overflow-hidden">
+          <div
+            className="flex gap-8 w-full animate-slide-loop opacity-0 animate-fade-up"
+            style={{ animationDelay: "0.8s", animationFillMode: "forwards" }}
+          >
+            {logos.map((logo, idx) => (
+              <img
+                key={idx}
+                src={logo}
+                alt={`Brand ${idx + 1}`}
+                className="h-8 md:h-10 object-contain flex-shrink-0"
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -142,13 +137,20 @@ const Hero = () => {
       </a>
 
       <style jsx>{`
-        @keyframes slide-diagonal {
-          0% { transform: translateX(0) translateY(0); }
-          100% { transform: translateX(-50%) translateY(-10%); }
+        @keyframes slide-loop {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
         }
-        .animate-slide-diagonal {
+        @keyframes fade-up {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-loop {
           display: inline-flex;
-          animation: slide-diagonal 20s linear infinite;
+          animation: slide-loop 20s linear infinite;
+        }
+        .animate-fade-up {
+          animation: fade-up 0.8s ease-out forwards;
         }
       `}</style>
     </section>
