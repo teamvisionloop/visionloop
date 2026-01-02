@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import brand1 from "@/assets/portfolio/brand1.webp";
 import brand2 from "@/assets/portfolio/brand2.webp";
 import brand3 from "@/assets/portfolio/brand3.webp";
@@ -11,6 +11,7 @@ import brand7 from "@/assets/portfolio/brand7.webp";
 const Hero = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
 
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
@@ -31,14 +32,14 @@ const Hero = () => {
         const duration = 1500;
         let start = 0;
 
-        el.style.opacity = "0"; // initial opacity
+        el.style.opacity = "0";
 
         const step = () => {
           start += Math.ceil(end / (duration / 16));
           if (start >= end) start = end;
           el.innerText = `${start}${stats[index].suffix}`;
 
-          el.style.opacity = "1"; // fade up
+          el.style.opacity = "1";
           el.style.transition = "opacity 0.5s ease-out";
 
           if (start < end) requestAnimationFrame(step);
@@ -57,9 +58,24 @@ const Hero = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // trigger if in view
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, [stats]);
+
+  // Prepare logos for seamless infinite carousel
+  useEffect(() => {
+    const containerWidth = window.innerWidth; // full screen width
+    const logoWidth = 80; // approximate width in px of one logo (adjust if needed)
+    const gap = 32; // gap between logos (px)
+    const totalWidth = logos.length * (logoWidth + gap);
+    const repeatCount = Math.ceil((containerWidth * 2) / totalWidth); // enough to cover twice screen
+
+    const repeated = [];
+    for (let i = 0; i < repeatCount; i++) {
+      repeated.push(...logos);
+    }
+    setCarouselLogos(repeated);
+  }, [logos]);
 
   return (
     <section
@@ -121,15 +137,14 @@ const Hero = () => {
 
         {/* Logos carousel */}
         <div className="mt-6 w-full overflow-hidden relative">
-          <div className="flex gap-8 w-full animate-slide-loop">
-            {/* Duplicate logos only once for infinite seamless scroll */}
-            {[...logos, ...logos].map((logo, idx) => (
+          <div className="flex gap-8 w-max animate-slide-loop">
+            {carouselLogos.map((logo, idx) => (
               <img
                 key={idx}
                 src={logo}
                 alt={`Brand ${idx + 1}`}
                 className="h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos"
-                style={{ animationDelay: `${idx * 0.1}s` }}
+                style={{ animationDelay: `${idx * 0.05}s` }}
               />
             ))}
           </div>
@@ -148,7 +163,7 @@ const Hero = () => {
       <style jsx>{`
         @keyframes slide-loop {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); } /* seamless with single duplication */
+          100% { transform: translateX(-50%); }
         }
         @keyframes fade-up-logos {
           0% { opacity: 0; transform: translateY(20px); }
