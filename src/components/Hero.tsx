@@ -10,28 +10,21 @@ const Hero = () => {
 
   const [counts, setCounts] = useState(stats.map(() => 0));
 
-  // Animate counts immediately on page load
   useEffect(() => {
-    stats.forEach((stat, index) => {
-      let start = 0;
-      const end = stat.number;
-      const duration = 1500;
-      const stepTime = 16;
-      const increment = end / (duration / stepTime);
+    const duration = 1500; // 1.5 seconds
+    const startTime = performance.now();
 
-      const interval = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          start = end;
-          clearInterval(interval);
-        }
-        setCounts((prev) => {
-          const updated = [...prev];
-          updated[index] = Math.floor(start);
-          return updated;
-        });
-      }, stepTime);
-    });
+    const animate = (time: number) => {
+      const progress = Math.min((time - startTime) / duration, 1);
+
+      setCounts(
+        stats.map((stat) => Math.floor(progress * stat.number))
+      );
+
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+
+    requestAnimationFrame(animate);
   }, [stats]);
 
   return (
