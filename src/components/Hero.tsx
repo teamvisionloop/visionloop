@@ -27,7 +27,6 @@ const Hero = () => {
       if (rect.top < window.innerHeight - 100) {
         setAnimated(true);
 
-        // Animate counters
         stats.forEach((stat, index) => {
           let start = 0;
           const end = stat.number;
@@ -110,15 +109,17 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Full-width logos carousel */}
+      {/* Full-width infinite logos carousel */}
       <div className="mt-6 w-full overflow-hidden">
-        <div className="flex gap-8 w-full animate-slide-loop opacity-0 animate-fade-up-logos">
-          {logos.map((logo, idx) => (
+        <div className="flex gap-8 w-full animate-slide-loop">
+          {/* Duplicate logos inside container for seamless infinite scroll */}
+          {[...logos, ...logos].map((logo, idx) => (
             <img
               key={idx}
               src={logo}
               alt={`Brand ${idx + 1}`}
-              className="h-8 md:h-10 object-contain flex-shrink-0"
+              className={`h-8 md:h-10 object-contain flex-shrink-0 animate-fade-up-logos`}
+              style={{ animationDelay: `${idx * 0.1}s` }} // staggered fade-up
             />
           ))}
         </div>
@@ -135,8 +136,8 @@ const Hero = () => {
 
       <style jsx>{`
         @keyframes slide-loop {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); } /* Half the width because we duplicated logos */
         }
         @keyframes fade-up-logos {
           0% { opacity: 0; transform: translateY(20px); }
@@ -144,9 +145,11 @@ const Hero = () => {
         }
         .animate-slide-loop {
           display: inline-flex;
+          width: max-content;
           animation: slide-loop 20s linear infinite;
         }
         .animate-fade-up-logos {
+          opacity: 0;
           animation: fade-up-logos 0.8s ease-out forwards;
         }
       `}</style>
