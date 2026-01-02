@@ -10,9 +10,10 @@ import brand7 from "@/assets/portfolio/brand7.webp";
 
 const Hero = () => {
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [carouselLogos, setCarouselLogos] = useState<string[]>([]);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [carouselWidth, setCarouselWidth] = useState(0);
 
-  // Only two stats
+  // Counters
   const stats = [
     { number: 35, suffix: "+", label: "Projects Completed" },
     { number: 2, suffix: "+", label: "Years Experience" },
@@ -20,38 +21,59 @@ const Hero = () => {
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
 
-  // Animate counters immediately
+  // Animate counters
   useEffect(() => {
-    statsRefs.current.forEach((el, index) => {
+    statsRefs.current.forEach((el, idx) => {
       if (!el) return;
-      const end = stats[index].number;
+      const end = stats[idx].number;
       const duration = 1500;
       let start = 0;
-
       const step = () => {
-        start += Math.ceil(end / (duration / 16));
+        start += Math.ceil(end / (duration / 60));
         if (start >= end) start = end;
-        el.innerText = `${start}${stats[index].suffix}`;
+        el.innerText = `${start}${stats[idx].suffix}`;
         if (start < end) requestAnimationFrame(step);
       };
       step();
-      el.style.opacity = "1"; // Make visible immediately
+      el.style.opacity = "1"; // ensure visible
     });
   }, [stats]);
 
-  // Prepare carousel logos for seamless loop
+  // Calculate carousel width for seamless loop
   useEffect(() => {
-    const repeatCount = 10; // repeat enough times to avoid empty space
-    const repeated: string[] = [];
-    for (let i = 0; i < repeatCount; i++) {
-      repeated.push(...logos);
-    }
-    setCarouselLogos(repeated);
+    if (!carouselRef.current) return;
+    const totalWidth = Array.from(carouselRef.current.children).reduce(
+      (acc, child: any) => acc + child.offsetWidth + 32, // 32 = gap
+      0
+    );
+    setCarouselWidth(totalWidth);
   }, [logos]);
+
+  // JS-based seamless infinite scroll
+  useEffect(() => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    let scrollX = 0;
+    let requestId: number;
+
+    const step = () => {
+      scrollX += 1; // speed
+      if (scrollX >= carouselWidth) scrollX = 0;
+      container.scrollLeft = scrollX;
+      requestId = requestAnimationFrame(step);
+    };
+
+    requestId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(requestId);
+  }, [carouselWidth]);
+
+  // Duplicate logos to fill space seamlessly
+  const repeatedLogos = [...logos, ...logos, ...logos];
 
   return (
     <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
-      {/* Section fade-up */}
+      {/* Whole section fade-up */}
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
@@ -100,8 +122,12 @@ const Hero = () => {
 
         {/* Logos carousel */}
         <div className="mt-6 w-full overflow-hidden relative">
-          <div className="flex gap-8 w-max animate-slide-loop">
-            {carouselLogos.map((logo, idx) => (
+          <div
+            ref={carouselRef}
+            className="flex gap-8 w-max"
+            style={{ scrollBehavior: "auto", overflowX: "hidden" }}
+          >
+            {repeatedLogos.map((logo, idx) => (
               <img
                 key={idx}
                 src={logo}
@@ -124,10 +150,6 @@ const Hero = () => {
       </a>
 
       <style jsx>{`
-        @keyframes slide-loop {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
         @keyframes fade-up-logos {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -135,12 +157,6 @@ const Hero = () => {
         @keyframes fade-up-section {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-slide-loop {
-          display: inline-flex;
-          width: max-content;
-          animation: slide-loop 20s linear infinite;
         }
         .animate-fade-up-logos {
           opacity: 0;
