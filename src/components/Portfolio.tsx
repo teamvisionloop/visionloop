@@ -3,7 +3,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
 /* =======================
-   Thumbnails
+   Assets
 ======================= */
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.webp";
 import fuzzy from "@/assets/portfolio/fuzzy.webp";
@@ -12,9 +12,6 @@ import temple from "@/assets/portfolio/temple.webp";
 import fayaEgThumb from "@/assets/portfolio/faya-eg-thumb.webp";
 import lehabThumb from "@/assets/portfolio/lehab-scents-thumb.webp";
 
-/* =======================
-   Full Images
-======================= */
 import luxuryFull from "@/assets/portfolio/luxury-brands-full.webp";
 import fuzzyFull from "@/assets/portfolio/fuzzy-full.webp";
 import fayaFull from "@/assets/portfolio/faya-studio-full.webp";
@@ -59,10 +56,11 @@ const Portfolio = () => {
   };
 
   /* =======================
-     Pointer / Pan / Pinch
+     Pointer / Drag / Pinch
   ======================= */
 
   const onPointerDown = (e: React.PointerEvent) => {
+    e.stopPropagation();
     pointers.current.set(e.pointerId, e);
     setIsDragging(true);
 
@@ -80,6 +78,7 @@ const Portfolio = () => {
     if (!pointers.current.has(e.pointerId)) return;
     pointers.current.set(e.pointerId, e);
 
+    // ✅ Drag freely up / down / left / right
     if (pointers.current.size === 1 && zoom > 1) {
       setPosition((p) => ({
         x: p.x + e.movementX,
@@ -87,6 +86,7 @@ const Portfolio = () => {
       }));
     }
 
+    // ✅ Pinch zoom
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()];
       const distance = Math.hypot(
@@ -133,19 +133,15 @@ const Portfolio = () => {
                     setActiveImage(project.fullImage);
                     resetView();
                   }}
-                  className="group relative aspect-[4/3] overflow-hidden cursor-pointer"
+                  className="relative aspect-[4/3] overflow-hidden cursor-pointer"
                 >
                   <img
                     src={project.image}
                     alt={project.title}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
-
-                  {/* Small black overlay */}
                   <div className="absolute inset-0 bg-black/20" />
-
-                  {/* Grey badge (TOP) */}
-                  <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1 tracking-wide">
+                  <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1">
                     {project.title}
                   </div>
                 </div>
@@ -162,35 +158,31 @@ const Portfolio = () => {
           >
             {/* Controls */}
             <div className="absolute top-6 right-6 z-10 flex gap-3">
-              {/* Zoom In */}
               <button
-                onClick={() => setZoom((z) => Math.min(z + 1, 6))}
-                className="p-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setZoom((z) => Math.min(z + 1, 6));
+                }}
               >
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 5v14M5 12h14" stroke="gray" strokeWidth="2" />
-                </svg>
+                +
               </button>
 
-              {/* Zoom Out */}
               <button
-                onClick={() => setZoom((z) => Math.max(z - 1, 1))}
-                className="p-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setZoom((z) => Math.max(z - 1, 1));
+                }}
               >
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 12h14" stroke="gray" strokeWidth="2" />
-                </svg>
+                −
               </button>
 
-              {/* Close */}
-              <button onClick={() => setActiveImage(null)} className="p-2">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M6 6l12 12M18 6l-12 12"
-                    stroke="gray"
-                    strokeWidth="2"
-                  />
-                </svg>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImage(null);
+                }}
+              >
+                ✕
               </button>
             </div>
 
@@ -206,9 +198,14 @@ const Portfolio = () => {
                 onPointerMove={onPointerMove}
                 onPointerUp={onPointerUp}
                 onPointerCancel={onPointerUp}
-                className="max-w-full max-h-full select-none"
+                className="select-none"
                 style={{
-                  cursor: zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default",
+                  cursor:
+                    zoom > 1
+                      ? isDragging
+                        ? "grabbing"
+                        : "grab"
+                      : "default",
                   transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
                   transition: isDragging ? "none" : "transform 0.25s ease",
                 }}
