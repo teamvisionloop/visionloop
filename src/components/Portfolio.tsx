@@ -135,7 +135,7 @@ const Portfolio = () => {
                 {/* Zoom In */}
                 <button
                   onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
-                  className="bg-white/90 p-2 rounded"
+                  className="p-2 rounded"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M12 5v14M5 12h14" stroke="black" strokeWidth="2" />
@@ -144,8 +144,8 @@ const Portfolio = () => {
 
                 {/* Zoom Out */}
                 <button
-                  onClick={() => setZoom((z) => Math.max(z - 0.25, 1))}
-                  className="bg-white/90 p-2 rounded"
+                  onClick={() => setZoom((z) => Math.max(z - 0.45, 1))}
+                  className=" p-2 rounded"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M5 12h14" stroke="black" strokeWidth="2" />
@@ -155,7 +155,7 @@ const Portfolio = () => {
                 {/* Close */}
                 <button
                   onClick={closeModal}
-                  className="bg-white/90 p-2 rounded"
+                  className=" p-2 rounded"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path
