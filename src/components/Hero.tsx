@@ -1,9 +1,9 @@
 import { ArrowDown } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import brand1 from "@/assets/brands/brand1.png";
-import brand2 from "@/assets/brands/brand2.png";
-import brand3 from "@/assets/brands/brand3.png";
-import brand4 from "@/assets/brands/brand4.png";
+import brand1 from "@/assets/portfolio/brand1.png";
+import brand2 from "@/assets/portfolio/brand2.png";
+import brand3 from "@/assets/portfolio/brand3.png";
+import brand4 from "@/assets/portfolio/brand4.png";
 
 const Hero = () => {
   const stats = [
