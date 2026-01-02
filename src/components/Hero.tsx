@@ -18,13 +18,16 @@ const Hero = () => {
   ];
 
   const logos = [brand1, brand2, brand3, brand4, brand5, brand6, brand7];
+  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]; // enough for seamless scroll
 
-  // Animate counters slower
+  // Animate counters
   useEffect(() => {
     statsRefs.current.forEach((el, idx) => {
       if (!el) return;
       const end = stats[idx].number;
-      const duration = 4000; // slower
+
+      // longer duration: 6s
+      const duration = window.innerWidth < 640 ? 8000 : 6000; // slower on mobile
       let start = 0;
 
       const step = () => {
@@ -38,21 +41,20 @@ const Hero = () => {
     });
   }, [stats]);
 
-  // Infinite carousel with JS
+  // Infinite carousel left → right
   useEffect(() => {
     const container = carouselRef.current;
     if (!container) return;
 
-    // duplicate logos for seamless scroll
     const children = Array.from(container.children) as HTMLElement[];
-    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0);
+    const totalWidth = children.reduce((sum, el) => sum + el.offsetWidth + 32, 0); // 32px gap
 
-    let scrollX = 0;
-    const speed = 1; // pixels per frame
+    let scrollX = totalWidth; // start from the right for left→right scroll
+    const speed = window.innerWidth < 640 ? 0.3 : 1; // slower on mobile
 
     const step = () => {
-      scrollX += speed;
-      if (scrollX >= totalWidth / 2) scrollX = 0; // reset for seamless scroll
+      scrollX -= speed;
+      if (scrollX <= 0) scrollX = totalWidth / 2; // reset seamlessly
       container.scrollLeft = scrollX;
       requestAnimationFrame(step);
     };
@@ -60,12 +62,9 @@ const Hero = () => {
     requestAnimationFrame(step);
   }, []);
 
-  // duplicate logos multiple times for seamless loop
-  const repeatedLogos = [...logos, ...logos, ...logos, ...logos];
-
   return (
     <section className="min-h-[75vh] sm:min-h-[85vh] md:min-h-screen flex flex-col justify-center items-center relative px-4 md:px-6 lg:px-24 py-16 md:py-32 pt-24 md:pt-32">
-      {/* Section fade-up */}
+      {/* Whole section fade-up */}
       <div className="w-full flex flex-col items-center animate-fade-up-section opacity-0">
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 md:mb-6">
