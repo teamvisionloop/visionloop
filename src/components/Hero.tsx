@@ -1,9 +1,9 @@
 import { ArrowDown } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import brand1 from "@/assets/portfolio/brand1.png";
-import brand2 from "@/assets/portfolio/brand2.png";
-import brand3 from "@/assets/portfolio/brand3.png";
-import brand4 from "@/assets/portfolio/brand4.png";
+import brand1 from "@/assets/portfolio/brand1.webp";
+import brand2 from "@/assets/portfolio/brand2.webp";
+import brand3 from "@/assets/portfolio/brand3.webp";
+import brand4 from "@/assets/portfolio/brand4.webp";
 
 const Hero = () => {
   const stats = [
@@ -105,15 +105,15 @@ const Hero = () => {
           ))}
         </div>
 
-        {/* Logos banner under counters */}
+        {/* Smaller logos banner under counters */}
         <div className="mt-6 w-full overflow-hidden">
-          <div className="flex gap-12 whitespace-nowrap animate-slide-diagonal">
+          <div className="flex gap-8 whitespace-nowrap animate-slide-diagonal">
             {logos.map((logo, idx) => (
               <img
                 key={idx}
                 src={logo}
                 alt={`Brand ${idx + 1}`}
-                className="h-12 md:h-16 object-contain"
+                className="h-8 md:h-10 object-contain"
               />
             ))}
             {/* Duplicate logos for seamless loop */}
@@ -122,7 +122,7 @@ const Hero = () => {
                 key={`dup-${idx}`}
                 src={logo}
                 alt={`Brand duplicate ${idx + 1}`}
-                className="h-12 md:h-16 object-contain"
+                className="h-8 md:h-10 object-contain"
               />
             ))}
           </div>
