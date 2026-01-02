@@ -3,13 +3,19 @@ import { useEffect, useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
-// Thumbnails
+/* =======================
+   Thumbnails
+======================= */
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.png";
 import fuzzy from "@/assets/portfolio/fuzzy.png";
 import fayaStudio from "@/assets/portfolio/faya-studio-clean.png";
 import temple from "@/assets/portfolio/temple.png";
+import fayaEgThumb from "@/assets/portfolio/faya-eg-thumb.png";
+import lehabThumb from "@/assets/portfolio/lehab-scents-thumb.png";
 
-// Full screenshots
+/* =======================
+   Full Screenshots
+======================= */
 import luxuryFull from "@/assets/portfolio/luxury-brands-full.png";
 import fuzzyFull from "@/assets/portfolio/fuzzy-full.png";
 import fayaFull from "@/assets/portfolio/faya-studio-full.png";
@@ -21,8 +27,8 @@ interface Project {
   title: string;
   category: string;
   description: string;
-  image: string;
-  fullImage: string;
+  image: string;      // thumbnail
+  fullImage: string;  // fullscreen screenshot
 }
 
 const Portfolio = () => {
@@ -84,14 +90,14 @@ const Portfolio = () => {
       title: "Faya EG",
       category: "Fashion",
       description: "Modern Egyptian fashion brand",
-      image: fayaStudio,
+      image: fayaEgThumb,
       fullImage: fayaEgFull,
     },
     {
       title: "Lehab Scents",
       category: "Fragrance",
       description: "Luxury Arabic perfume house",
-      image: temple,
+      image: lehabThumb,
       fullImage: lehabFull,
     },
   ];
@@ -161,7 +167,7 @@ const Portfolio = () => {
           </div>
         </div>
 
-        {/* Fullscreen Image Modal */}
+        {/* Fullscreen Modal */}
         {activeImage && (
           <div
             className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
