@@ -63,15 +63,17 @@ const Hero = () => {
           </a>
         </div>
 
-        {/* Stats (smaller font) */}
+        {/* Stats (like About Us) */}
         <div className="grid grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-16 pt-8 md:pt-16">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
-              <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 md:mb-2">
+              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 md:mb-2">
                 {counts[idx]}
                 {stat.suffix}
               </div>
-              <div className="text-xs text-muted-foreground">{stat.label}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
