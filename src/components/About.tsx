@@ -84,7 +84,7 @@ const WhyChooseUsTimeline = () => {
         {/* ================= MOBILE TIMELINE (WAVY AND HIGHER) ================= */}
         <svg
           className="md:hidden absolute h-full w-20"
-          style={{ left: "3rem", top: "20px" }} // move up slightly
+          style={{ left: "-2rem", top: "20px" }} // move up slightly
           viewBox="0 0 200 1200"
           fill="none"
           preserveAspectRatio="none"
