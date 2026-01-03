@@ -1,5 +1,5 @@
 import { Zap, Shield, Users } from "lucide-react";
-import myLoopImage from "@/assets/loop.png"; // <-- your image path
+import myLoopImage from "@/assets/loop.jpg"; // <-- your image path
 import { useEffect, useRef } from "react";
 
 const About = () => {
