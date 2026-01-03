@@ -7,7 +7,7 @@ const About = () => {
       icon: Zap,
       title: "Fast Delivery",
       description:
-        "We deliver your store quickly without compromising on quality. Our efficient workflow ensures your project is completed on time, so you can start selling faster and meet your business goals without delays.",
+        "We deliver your store quickly without compromising on quality. Our workflow ensures your project is completed on time so you can start selling faster and meet your business goals.",
     },
     {
       icon: Shield,
@@ -60,16 +60,16 @@ const About = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex-shrink-0 md:flex-1 bg-background p-3 md:p-4 flex flex-col justify-between opacity-0"
+              className="flex-shrink-0 md:flex-1 bg-background p-4 flex flex-col justify-between opacity-0"
               style={{ minWidth: "200px", aspectRatio: "1 / 1" }}
             >
               {/* Icon + Title */}
               <div className="flex items-center gap-2 mb-3">
-                <feature.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                <feature.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                 <h3 className="text-base md:text-lg font-semibold">{feature.title}</h3>
               </div>
               {/* Description */}
-              <p className="text-muted-foreground text-sm md:text-base mt-auto">
+              <p className="text-muted-foreground text-base md:text-base mt-auto leading-snug overflow-hidden">
                 {feature.description}
               </p>
             </div>
