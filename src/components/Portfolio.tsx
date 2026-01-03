@@ -66,7 +66,7 @@ const Portfolio = () => {
         {/* Heading */}
         <div className="mb-10 px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold select-text">
-            Our Featured Projects
+            Selected Work
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
             A curated selection of fashion and fragrance brands designed with
