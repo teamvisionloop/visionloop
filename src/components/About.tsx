@@ -23,15 +23,20 @@ const steps = [
 ];
 
 const WhyChooseUsTimeline = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeStep, setActiveStep] = useState(-1);
+  const stepRefs = useRef([]);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
+    if (hasAnimatedRef.current) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !hasAnimatedRef.current) {
             setActiveStep(Number(entry.target.dataset.step));
+            hasAnimatedRef.current = true;
+            observer.disconnect();
           }
         });
       },
@@ -39,39 +44,37 @@ const WhyChooseUsTimeline = () => {
     );
 
     stepRefs.current.forEach((el) => el && observer.observe(el));
+
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="py-28 bg-secondary overflow-hidden">
+    <section
+      id="about"
+      className="py-28 bg-secondary overflow-hidden"
+    >
       <h2 className="text-4xl font-bold text-center mb-24">
         Why Choose Us
       </h2>
 
       <div className="relative max-w-7xl mx-auto px-6">
 
-        {/* ================= DESKTOP TIMELINE (WAVY AND HIGHER) ================= */}
+        {/* ================= DESKTOP TIMELINE ================= */}
         <svg
           className="hidden md:block absolute w-full h-48"
-          style={{ top: "-78px", left: 0 }} // move up
+          style={{ top: "-78px", left: 0 }}
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
         >
-          {/* Background path */}
           <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
+            d="M0 100 C 200 20, 400 180, 600 100 C 800 20, 1000 180, 1200 100"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
-          {/* Active path */}
           <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
+            d="M0 100 C 200 20, 400 180, 600 100 C 800 20, 1000 180, 1200 100"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
@@ -81,28 +84,22 @@ const WhyChooseUsTimeline = () => {
           />
         </svg>
 
-        {/* ================= MOBILE TIMELINE (WAVY AND HIGHER) ================= */}
+        {/* ================= MOBILE TIMELINE ================= */}
         <svg
           className="md:hidden absolute h-full w-20"
-          style={{ left: "-0.5rem", top: "20px" }} // move up slightly
+          style={{ left: "-0.5rem", top: "20px" }}
           viewBox="0 0 200 1200"
           fill="none"
           preserveAspectRatio="none"
         >
-          {/* Background path */}
           <path
-            d="M100 0
-               C 20 200, 180 400, 100 600
-               C 20 800, 180 1000, 100 1200"
+            d="M100 0 C 20 200, 180 400, 100 600 C 20 800, 180 1000, 100 1200"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
-          {/* Active path */}
           <path
-            d="M100 0
-               C 20 200, 180 400, 100 600
-               C 20 800, 180 1000, 100 1200"
+            d="M100 0 C 20 200, 180 400, 100 600 C 20 800, 180 1000, 100 1200"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
@@ -126,33 +123,36 @@ const WhyChooseUsTimeline = () => {
                 {step.number}
               </span>
 
-              {/* DOT (CENTERED ON TIMELINE) */}
+              {/* BIGGER DOT */}
               <div
-                className={`relative z-10
-                  transition-all duration-700 ease-out
+                className={`relative z-10 transition-all duration-700 ease-out
                   ${
                     activeStep >= i
-                      ? "md:translate-y-0 md:opacity-100"
-                      : "md:-translate-y-20 md:opacity-0"
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 -translate-y-10"
                   }
                 `}
               >
-                <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-black flex items-center justify-center">
+                  <div className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 bg-white rounded-full" />
                 </div>
               </div>
 
               {/* CONTENT */}
               <div
-                className={`ml-8 md:ml-0 mt-0 md:mt-12 transition-all duration-700 ${
-                  activeStep >= i
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
+                className={`ml-8 md:ml-0 mt-0 md:mt-12 transition-all duration-700
+                  ${
+                    activeStep >= i
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-8"
+                  }
+                `}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <step.icon className="w-6 h-6 text-primary" />
-                  <h3 className="text-xl font-semibold">{step.title}</h3>
+                  <h3 className="text-xl font-semibold">
+                    {step.title}
+                  </h3>
                 </div>
                 <p className="text-muted-foreground text-lg max-w-sm">
                   {step.text}
@@ -167,4 +167,4 @@ const WhyChooseUsTimeline = () => {
   );
 };
 
-export default WhyChooseUsTimeline; 
+export default WhyChooseUsTimeline;
