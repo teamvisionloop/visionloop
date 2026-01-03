@@ -1,4 +1,4 @@
-import { Zap, Shield, Users } from "lucide-react";
+oimport { Zap, Shield, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const steps = [
@@ -44,14 +44,16 @@ const WhyChooseUsTimeline = () => {
 
   return (
     <section className="py-28 bg-secondary overflow-hidden">
-      <h2 className="text-4xl font-bold text-center mb-24">Why Choose Us</h2>
+      <h2 className="text-4xl font-bold text-center mb-24">
+        Why Choose Us
+      </h2>
 
       <div className="relative max-w-7xl mx-auto px-6">
 
-        {/* ================= DESKTOP TIMELINE (WAVY UNDER DOTS) ================= */}
+        {/* ================= DESKTOP TIMELINE (WAVY AND HIGHER) ================= */}
         <svg
           className="hidden md:block absolute w-full h-48"
-          style={{ top: "50px", left: 0 }} // adjusted to be below dots
+          style={{ top: "-78px", left: 0 }} // move up
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
@@ -75,6 +77,37 @@ const WhyChooseUsTimeline = () => {
             strokeLinecap="round"
             strokeDasharray="1400"
             strokeDashoffset={1400 - activeStep * 460}
+            className="transition-all duration-700 ease-out"
+          />
+        </svg>
+
+        {/* ================= MOBILE TIMELINE (WAVY AND HIGHER) ================= */}
+        <svg
+          className="md:hidden absolute h-full w-20"
+          style={{ left: "-0.5rem", top: "20px" }} // move up slightly
+          viewBox="0 0 200 1200"
+          fill="none"
+          preserveAspectRatio="none"
+        >
+          {/* Background path */}
+          <path
+            d="M100 0
+               C 20 200, 180 400, 100 600
+               C 20 800, 180 1000, 100 1200"
+            stroke="#d1d5db"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          {/* Active path */}
+          <path
+            d="M100 0
+               C 20 200, 180 400, 100 600
+               C 20 800, 180 1000, 100 1200"
+            stroke="#000"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeDasharray="1600"
+            strokeDashoffset={1600 - activeStep * 520}
             className="transition-all duration-700 ease-out"
           />
         </svg>
@@ -134,4 +167,4 @@ const WhyChooseUsTimeline = () => {
   );
 };
 
-export default WhyChooseUsTimeline;
+export default WhyChooseUsTimeline; 
