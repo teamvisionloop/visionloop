@@ -30,9 +30,10 @@ interface Project {
 }
 
 const Portfolio = () => {
-  const [emblaRef] = useEmblaCarousel({ loop: true, align: "start" });
-  const autoplay = useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: false })
+  // Embla carousel with autoplay
+  const [emblaRef, embla] = useEmblaCarousel(
+    { loop: true, align: "start" },
+    [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: false })]
   );
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -42,9 +43,9 @@ const Portfolio = () => {
     { title: "Luxury Brands", image: luxuryBrands, fullImage: luxuryFull, year: 2024 },
     { title: "Fuzzy", image: fuzzy, fullImage: fuzzyFull, year: 2025 },
     { title: "Faya Studio", image: fayaStudio, fullImage: fayaFull, year: 2024 },
-    { title: "Temple Of Scent", image: temple, fullImage: templeFull, year: 2026 },
-    { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull, year: 2024 },
     { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull, year: 2024 },
+    { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull, year: 2024 },
+    { title: "Temple Of Scent", image: temple, fullImage: templeFull, year: 2026 },
   ];
 
   // Prevent body scroll when modal is open
@@ -53,7 +54,7 @@ const Portfolio = () => {
     return () => { document.body.style.overflow = ""; };
   }, [activeImage]);
 
-  // IntersectionObserver for fade-up on scroll (headings only)
+  // IntersectionObserver for fade-up (headings & carousel)
   const fadeRefs = useRef<HTMLDivElement[]>([]);
   useEffect(() => {
     fadeRefs.current.forEach((el, i) => {
@@ -100,7 +101,13 @@ const Portfolio = () => {
         </div>
 
         {/* Carousel */}
-        <div ref={emblaRef} className="overflow-hidden">
+        <div
+          ref={(el) => {
+            el && fadeRefs.current.push(el); // add carousel to fadeRefs for fade-up animation
+            emblaRef(el);
+          }}
+          className="overflow-hidden opacity-0"
+        >
           <div className="flex gap-4 px-4 md:px-6 lg:px-12">
             {projects.map((project, index) => (
               <div
@@ -144,19 +151,19 @@ const Portfolio = () => {
             {/* Controls */}
             <div className="absolute top-6 right-6 z-10 flex gap-1.5">
               <button
-                className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
+                className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
                 onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.min(z + 1, 6)); }}
               >
                 +
               </button>
               <button
-                className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
+                className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
                 onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.max(z - 1, 1)); }}
               >
                 −
               </button>
               <button
-                className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
+                className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
                 onClick={(e) => { e.stopPropagation(); setActiveImage(null); }}
               >
                 ✕
