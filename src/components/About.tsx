@@ -7,19 +7,19 @@ const About = () => {
       icon: Zap,
       title: "Fast Delivery",
       description:
-        "We deliver your store quickly without compromising on quality. Our workflow ensures your project is completed on time so you can start selling faster and meet your business goals.",
+        "We deliver your store quickly without compromising on quality. Our workflow ensures your project is completed on time so you can start selling faster.",
     },
     {
       icon: Shield,
       title: "Premium Quality",
       description:
-        "Every store we build is crafted with attention to detail. From design to functionality, we focus on creating high-quality e-commerce experiences that delight customers and drive conversions.",
+        "Every store we build is crafted with attention to detail. From design to functionality, we focus on high-quality e-commerce experiences.",
     },
     {
       icon: Users,
       title: "Dedicated Support",
       description:
-        "We're with you every step of the way, from launch and beyond. Our support team is always ready to help you with updates, optimizations, and any questions you may have.",
+        "We're with you every step of the way, from launch and beyond. Our support team is always ready to help you with updates and questions.",
     },
   ];
 
@@ -55,13 +55,19 @@ const About = () => {
         {/* Features */}
         <div
           ref={containerRef}
-          className="flex flex-wrap gap-4 justify-center px-4"
+          className="flex gap-4 overflow-x-auto md:overflow-x-visible px-4 justify-center"
         >
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-background p-4 md:p-5 flex flex-col opacity-0"
-              style={{ display: "inline-flex", maxWidth: "100%" }}
+              className="flex-shrink-0 bg-background p-4 md:p-5 flex flex-col justify-between opacity-0"
+              style={{
+                width: "220px",
+                height: "220px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+              }}
             >
               {/* Icon + Title */}
               <div className="flex items-center gap-2 mb-2">
@@ -69,7 +75,7 @@ const About = () => {
                 <h3 className="text-base md:text-lg font-semibold">{feature.title}</h3>
               </div>
               {/* Description */}
-              <p className="text-muted-foreground text-base md:text-base">
+              <p className="text-muted-foreground text-sm md:text-base mt-2 overflow-hidden">
                 {feature.description}
               </p>
             </div>
