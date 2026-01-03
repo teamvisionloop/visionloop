@@ -80,12 +80,12 @@ const Portfolio = () => {
 
   return (
     <>
-      {/* Inline CSS for animation */}
+      {/* Inline CSS for slower fade-up animation */}
       <style>{`
         .fade-up-section {
           opacity: 0;
           transform: translateY(50px);
-          transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+          transition: opacity 1.5s ease-out, transform 1.5s ease-out;
         }
         .fade-up-section.is-visible {
           opacity: 1;
