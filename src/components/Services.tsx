@@ -5,12 +5,42 @@ const ServicesAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const services = [
-    { icon: Store, title: "Store Setup", description: "Complete store configuration from scratch with all essential features and integrations." },
-    { icon: Palette, title: "Premium Theme Customization", description: "Tailored design modifications to make your store unique and on-brand." },
-    { icon: Code, title: "Custom Coded Sections", description: "Bespoke functionality and design elements built specifically for your needs." },
-    { icon: Settings, title: "Flow Automations", description: "Automated workflows to streamline operations and enhance customer experience." },
-    { icon: Rocket, title: "SEO Setup", description: "Basic search engine optimization to help your store get discovered." },
-    { icon: HeadphonesIcon, title: "Video Tutorials", description: "Custom training videos to help you manage your store independently." }
+    {
+      icon: Store,
+      title: "Shopify Store Setup",
+      description: "Complete store configuration from scratch with all essential features and integrations.",
+      svg: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-12 h-12 text-gray-300"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18v18H3V3z" /></svg>`,
+    },
+    {
+      icon: Palette,
+      title: "Premium Theme Customization",
+      description: "Tailored design modifications to make your store unique and on-brand.",
+      svg: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-12 h-12 text-gray-300"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v18m9-9H3" /></svg>`,
+    },
+    {
+      icon: Code,
+      title: "Custom Coded Sections",
+      description: "Bespoke functionality and design elements built specifically for your needs.",
+      svg: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-12 h-12 text-gray-300"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4M8 15l4 4 4-4" /></svg>`,
+    },
+    {
+      icon: Settings,
+      title: "Flow Automations",
+      description: "Automated workflows to streamline operations and enhance customer experience.",
+      svg: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-12 h-12 text-gray-300"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v8m4-4H8" /></svg>`,
+    },
+    {
+      icon: Rocket,
+      title: "SEO Setup",
+      description: "Basic search engine optimization to help your store get discovered.",
+      svg: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-12 h-12 text-gray-300"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-6l6-6 6 6v6" /></svg>`,
+    },
+    {
+      icon: HeadphonesIcon,
+      title: "Video Tutorials",
+      description: "Custom training videos to help you manage your store independently.",
+      svg: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-12 h-12 text-gray-300"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1v22M1 12h22" /></svg>`,
+    },
   ];
 
   return (
@@ -29,26 +59,26 @@ const ServicesAccordion = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className={`bg-gray-100 rounded-[12px] border border-gray-300 overflow-hidden transition-all`}
+              className="bg-gray-900 rounded-[16px] overflow-hidden border border-gray-700"
             >
               <button
-                className="w-full flex items-center justify-between p-4 md:p-6 text-left"
-                onClick={() =>
-                  setOpenIndex(openIndex === index ? null : index)
-                }
+                className="w-full flex items-center justify-between p-6 text-left"
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
                 <div className="flex items-center gap-4">
-                  <service.icon className="w-6 h-6 md:w-8 md:h-8 text-gray-700" />
-                  <span className="font-semibold text-gray-800 md:text-lg">{service.title}</span>
+                  <service.icon className="w-8 h-8 text-gray-300" />
+                  <span className="font-semibold text-gray-100 text-lg md:text-xl">{service.title}</span>
                 </div>
-                <span className="text-gray-500 text-xl md:text-2xl">
-                  {openIndex === index ? "−" : "+"}
-                </span>
+                <span className="text-gray-400 text-2xl">{openIndex === index ? "−" : "+"}</span>
               </button>
 
               {openIndex === index && (
-                <div className="p-4 md:p-6 border-t border-gray-300 text-gray-700 text-sm md:text-base bg-gray-50">
-                  {service.description}
+                <div className="p-8 bg-gray-800 text-gray-100 text-lg flex items-start gap-6">
+                  <div
+                    className="flex-shrink-0"
+                    dangerouslySetInnerHTML={{ __html: service.svg }}
+                  />
+                  <p>{service.description}</p>
                 </div>
               )}
             </div>
