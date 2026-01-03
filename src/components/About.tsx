@@ -55,21 +55,21 @@ const About = () => {
         {/* Features */}
         <div
           ref={containerRef}
-          className="flex gap-4 overflow-x-auto md:overflow-x-visible px-4"
+          className="flex flex-wrap gap-4 justify-center px-4"
         >
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex-shrink-0 md:flex-1 bg-background p-4 flex flex-col justify-between opacity-0"
-              style={{ minWidth: "200px", aspectRatio: "1 / 1" }}
+              className="bg-background p-4 md:p-5 flex flex-col opacity-0"
+              style={{ display: "inline-flex", maxWidth: "100%" }}
             >
               {/* Icon + Title */}
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <feature.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                 <h3 className="text-base md:text-lg font-semibold">{feature.title}</h3>
               </div>
               {/* Description */}
-              <p className="text-muted-foreground text-base md:text-base mt-auto leading-snug overflow-hidden">
+              <p className="text-muted-foreground text-base md:text-base">
                 {feature.description}
               </p>
             </div>
