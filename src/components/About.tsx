@@ -1,28 +1,29 @@
-import { Zap, Shield, Users } from "lucide-react";
+import { Search, Monitor, Rocket } from "lucide-react"; // new icons
 import { useEffect, useRef, useState } from "react";
 import loopImg from "../assets/loop.png"; // adjust path if needed
+
+
 
 const steps = [
   {
     number: "1",
     title: "Discovery",
     text: "We dive deep into understanding your brand, goals, and audience to craft a tailored digital strategy.",
-    icon: Zap,
+    icon: Search, // matches “Discovery”
   },
   {
     number: "2",
     title: "Design & Develop",
     text: "Our team creates stunning, responsive websites with clean code and pixel-perfect design.",
-    icon: Shield,
+    icon: Monitor, // matches “Design & Develop”
   },
   {
     number: "3",
     title: "Launch & Support",
-    text: "WWe launch your site and provide ongoing support to ensure continued success and growth.",
-    icon: Users,
+    text: "We launch your site and provide ongoing support to ensure continued success and growth.",
+    icon: Rocket, // matches “Launch & Support”
   },
 ];
-
 const DESKTOP_DOT_POSITIONS = ["16.5%", "50%", "83.5%"];
 
 const WhyChooseUsTimeline = () => {
