@@ -65,7 +65,7 @@ const Portfolio = () => {
 
         {/* Heading */}
         <div className="mb-10 px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-semibold select-text">
+          <h2 className="text-3xl md:text-4xl font-bold select-text">
             Our Featured Projects
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
@@ -100,17 +100,14 @@ const Portfolio = () => {
                   </div>
 
                   {/* Brand info box */}
-                  <div className="mt-2 w-full bg-gray-200 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
+                  <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
                     {/* Left: number + brand name */}
                     <span className="font-semibold flex items-center gap-2">
                       {String(index + 1).padStart(2, "0")} {project.title}
                     </span>
 
-                    {/* Middle: dot */}
-                    <span className="inline-block w-1 h-1 bg-black rounded-full" />
-
-                    {/* Right: year */}
-                    <span>{project.year}</span>
+                    {/* Right: year (smaller) */}
+                    <span className="text-sm">{project.year}</span>
                   </div>
                 </div>
               </div>
