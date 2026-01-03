@@ -61,10 +61,21 @@ const Portfolio = () => {
 
   return (
     <section id="portfolio" className="section-padding" style={{ fontFamily: "inherit" }}>
+      {/* Inline animation CSS */}
+      <style>{`
+        @keyframes fadeUp {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up {
+          animation: fadeUp 0.8s ease-out forwards;
+        }
+      `}</style>
+
       <div className="max-w-7xl mx-auto">
 
-        {/* Heading */}
-        <div className="mb-10 px-4 text-center">
+        {/* Heading with fade-up animation */}
+        <div className="mb-10 px-4 text-center fade-up">
           <h2 className="text-3xl md:text-4xl font-bold select-text">
             Selected Work
           </h2>
@@ -89,24 +100,21 @@ const Portfolio = () => {
                   }}
                   className="cursor-pointer"
                 >
-                  {/* Thumbnail image with exact size and black overlay */}
-                  <div className="relative w-full h-[300px] overflow-hidden rounded-md">
+                  {/* Thumbnail image with 6px radius */}
+                  <div className="relative w-full h-[300px] overflow-hidden rounded-[6px]">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover rounded-[6px]"
                     />
-                    <div className="absolute inset-0 bg-black/20" />
+                    <div className="absolute inset-0 bg-black/20 rounded-[6px]" />
                   </div>
 
                   {/* Brand info box */}
                   <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
-                    {/* Left: number + brand name */}
                     <span className="font-semibold flex items-center gap-2">
                       {String(index + 1).padStart(2, "0")} {project.title}
                     </span>
-
-                    {/* Right: year (smaller) */}
                     <span className="text-sm">{project.year}</span>
                   </div>
                 </div>
@@ -125,30 +133,19 @@ const Portfolio = () => {
             <div className="absolute top-6 right-6 z-10 flex gap-1.5">
               <button
                 className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setZoom((z) => Math.min(z + 1, 6));
-                }}
+                onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.min(z + 1, 6)); }}
               >
                 +
               </button>
-
               <button
                 className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setZoom((z) => Math.max(z - 1, 1));
-                }}
+                onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.max(z - 1, 1)); }}
               >
                 −
               </button>
-
               <button
                 className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveImage(null);
-                }}
+                onClick={(e) => { e.stopPropagation(); setActiveImage(null); }}
               >
                 ✕
               </button>
