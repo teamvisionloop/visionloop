@@ -53,7 +53,7 @@ const WhyChooseUsTimeline = () => {
         {/* ================= DESKTOP TIMELINE (WAVY AND HIGHER) ================= */}
         <svg
           className="hidden md:block absolute w-full h-48"
-          style={{ top: "-15px", left: 0 }} // move up
+          style={{ top: "-25px", left: 0 }} // move up
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
@@ -84,7 +84,7 @@ const WhyChooseUsTimeline = () => {
         {/* ================= MOBILE TIMELINE (WAVY AND HIGHER) ================= */}
         <svg
           className="md:hidden absolute h-full w-20"
-          style={{ left: "-1rem", top: "20px" }} // move up slightly
+          style={{ left: "-1.5rem", top: "20px" }} // move up slightly
           viewBox="0 0 200 1200"
           fill="none"
           preserveAspectRatio="none"
