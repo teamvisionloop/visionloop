@@ -1,4 +1,5 @@
-import { Infinity, Zap, Shield, Users } from "lucide-react";
+import { Zap, Shield, Users } from "lucide-react";
+import myLoopImage from "@/assets/loop.png"; // <-- your image path
 import { useEffect, useRef } from "react";
 
 const About = () => {
@@ -49,7 +50,12 @@ const About = () => {
         {/* Title */}
         <div className="flex items-center justify-center mb-6 md:mb-10 gap-3">
           <h2 className="text-3xl md:text-4xl font-bold">Why Choose Us</h2>
-          <Infinity className="w-8 h-8 md:w-10 md:h-10 text-primary" />
+          {/* Replace Infinity icon with your image */}
+          <img
+            src={myLoopImage}
+            alt="Loop Sign"
+            className="w-8 h-8 md:w-10 md:h-10"
+          />
         </div>
 
         {/* Features */}
