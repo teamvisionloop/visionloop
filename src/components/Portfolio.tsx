@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -59,6 +59,27 @@ const Portfolio = () => {
     };
   }, [activeImage]);
 
+  // IntersectionObserver for fade-up on scroll
+  const fadeRefs = useRef<HTMLDivElement[]>([]);
+  useEffect(() => {
+    fadeRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("animate-fade-up");
+              entry.target.style.animationDelay = `${i * 0.2}s`;
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(el);
+    });
+  }, []);
+
   return (
     <section id="portfolio" className="section-padding" style={{ fontFamily: "inherit" }}>
       {/* Inline animation CSS */}
@@ -67,15 +88,18 @@ const Portfolio = () => {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        .fade-up {
+        .animate-fade-up {
           animation: fadeUp 0.8s ease-out forwards;
         }
       `}</style>
 
       <div className="max-w-7xl mx-auto">
 
-        {/* Heading with fade-up animation */}
-        <div className="mb-10 px-4 text-center fade-up">
+        {/* Heading */}
+        <div
+          ref={(el) => el && fadeRefs.current.push(el)}
+          className="mb-10 px-4 text-center opacity-0"
+        >
           <h2 className="text-3xl md:text-4xl font-bold select-text">
             Selected Work
           </h2>
@@ -92,6 +116,8 @@ const Portfolio = () => {
               <div
                 key={index}
                 className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
+                ref={(el) => el && fadeRefs.current.push(el)}
+                style={{ opacity: 0 }}
               >
                 <div
                   onClick={() => {
@@ -100,12 +126,12 @@ const Portfolio = () => {
                   }}
                   className="cursor-pointer"
                 >
-                  {/* Thumbnail image with 6px radius */}
-                  <div className="relative w-full h-[300px] overflow-hidden rounded-[6px]">
+                  {/* Thumbnail image - smaller height on phones, full image shown */}
+                  <div className="relative w-full h-[200px] sm:h-[300px] overflow-hidden rounded-[6px]">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover rounded-[6px]"
+                      className="w-full h-full object-contain rounded-[6px]" // object-contain avoids zoom
                     />
                     <div className="absolute inset-0 bg-black/20 rounded-[6px]" />
                   </div>
