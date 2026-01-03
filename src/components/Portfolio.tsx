@@ -145,67 +145,78 @@ const Portfolio = () => {
             </div>
           </div>
 
-          {/* Fullscreen Modal */}
-          {activeImage && (
+ 
+      
+                    {/* Fullscreen Modal */}
+        {activeImage && (
+          <div
+            className="fixed inset-0 z-50 bg-black/70"
+            onClick={() => setActiveImage(null)}
+          >
+
+ {/* Controls */}
+<div className="absolute top-6 right-6 z-10 flex gap-1.5">
+  {/* Zoom In */}
+  <button
+    className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+    onClick={(e) => {
+      e.stopPropagation();
+      setZoom((z) => Math.min(z + 1, 6));
+    }}
+  >
+    +
+  </button>
+
+  {/* Zoom Out */}
+  <button
+    className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+    onClick={(e) => {
+      e.stopPropagation();
+      setZoom((z) => Math.max(z - 1, 1));
+    }}
+  >
+    −
+  </button>
+
+  {/* Exit */}
+  <button
+    className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+    onClick={(e) => {
+      e.stopPropagation();
+      setActiveImage(null);
+    }}
+  >
+    ✕
+  </button>
+</div>
+            {/* Scrollable container */}
             <div
-              className="fixed inset-0 z-50 bg-black/70"
-              onClick={() => setActiveImage(null)}
+              className="w-full h-full overflow-auto p-12"
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="absolute top-6 right-6 z-10 flex gap-1.5">
-                <button
-                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setZoom((z) => Math.min(z + 1, 6));
-                  }}
-                >
-                  +
-                </button>
-
-                <button
-                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setZoom((z) => Math.max(z - 1, 1));
-                  }}
-                >
-                  −
-                </button>
-
-                <button
-                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveImage(null);
-                  }}
-                >
-                  ✕
-                </button>
-              </div>
-
               <div
-                className="w-full h-full overflow-auto p-12"
-                onClick={(e) => e.stopPropagation()}
+                style={{
+                  display: "inline-block",
+                  margin: "auto",
+                }}
               >
-                <div style={{ display: "inline-block", margin: "auto" }}>
-                  <img
-                    src={activeImage}
-                    alt=""
-                    style={{
-                      display: "inline-block",
-                      transform: `scale(${zoom})`,
-                      transformOrigin: "top center",
-                      maxWidth: "100%",
-                      maxHeight: "none",
-                    }}
-                  />
-                </div>
+                <img
+                  src={activeImage}
+                  alt=""
+                  style={{
+                    display: "inline-block",
+                    transform: `scale(${zoom})`,
+                    transformOrigin: "top center", // ⚡ top of image visible
+                    maxWidth: "100%",             // fits width initially
+                    maxHeight: "none",            // allows vertical scroll
+                  }}
+                />
               </div>
             </div>
-          )}
-        </div>
-      </section>
-    </>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 
