@@ -1,5 +1,6 @@
 import { Zap, Shield, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import loopImg from "../assets/loop.png"; // adjust path if needed
 
 const steps = [
   {
@@ -26,16 +27,24 @@ const DESKTOP_DOT_POSITIONS = ["16.5%", "50%", "83.5%"];
 
 const WhyChooseUsTimeline = () => {
   const [activeStep, setActiveStep] = useState(-1);
+  const [sectionVisible, setSectionVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
+          if (entry.target === sectionRef.current && entry.isIntersecting) {
+            setSectionVisible(true);
+          }
 
-          const index = Number(entry.target.dataset.step);
-          setActiveStep((prev) => Math.max(prev, index));
+          if (stepRefs.current.includes(entry.target as HTMLDivElement)) {
+            const index = Number(entry.target.dataset.step);
+            if (entry.isIntersecting) {
+              setActiveStep((prev) => Math.max(prev, index));
+            }
+          }
         });
       },
       {
@@ -44,27 +53,33 @@ const WhyChooseUsTimeline = () => {
       }
     );
 
+    if (sectionRef.current) observer.observe(sectionRef.current);
     stepRefs.current.forEach((el) => el && observer.observe(el));
+
     return () => observer.disconnect();
   }, []);
 
   const isComplete = activeStep >= steps.length - 1;
 
   return (
-<section
-  id="about"
-  className="py-28 bg-secondary overflow-hidden"
-  style={{ borderRadius: "30px" }}
->
-      <h2 className="text-4xl font-bold text-center mb-24">
-        Why Choose Us
-      </h2>
+    <section
+      ref={sectionRef}
+      id="about"
+      className={`py-16 bg-secondary overflow-hidden transition-all duration-1000 ${
+        sectionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+      }`}
+      style={{ borderRadius: "30px" }}
+    >
+      <div className="flex items-center justify-center gap-6 mb-16 md:mb-20">
+        <h2 className="text-4xl font-bold text-center">Why Choose Us</h2>
+        <img src={loopImg} alt="Loop" className="w-16 h-16 object-contain" />
+      </div>
 
-      <div className="relative max-w-7xl mx-auto px-6">
+      <div className="relative max-w-6xl mx-auto px-6">
 
         {/* ================= DESKTOP WAVY TIMELINE ================= */}
         <svg
-          className="hidden md:block absolute w-full h-48"
+          className="hidden md:block absolute w-full h-40"
           style={{ top: "-78px", left: 0 }}
           viewBox="0 0 1200 200"
           fill="none"
@@ -133,7 +148,7 @@ const WhyChooseUsTimeline = () => {
         </div>
 
         {/* ================= STEPS ================= */}
-        <div className="grid md:grid-cols-3 gap-28 relative">
+        <div className="grid md:grid-cols-3 gap-20 relative">
           {steps.map((step, i) => (
             <div
               key={i}
