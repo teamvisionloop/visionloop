@@ -5,20 +5,20 @@ import loopImg from "../assets/loop.png"; // adjust path if needed
 const steps = [
   {
     number: "1",
-    title: "Fast Delivery",
-    text: "We deliver your store quickly without compromising on quality.",
+    title: "Discovery",
+    text: "We dive deep into understanding your brand, goals, and audience to craft a tailored digital strategy.",
     icon: Zap,
   },
   {
     number: "2",
-    title: "Premium Quality",
-    text: "Every store is crafted with attention to detail and performance.",
+    title: "Design & Develop",
+    text: "Our team creates stunning, responsive websites with clean code and pixel-perfect design.",
     icon: Shield,
   },
   {
     number: "3",
-    title: "Dedicated Support",
-    text: "We support you from launch and beyond with continuous updates.",
+    title: "Launch & Support",
+    text: "WWe launch your site and provide ongoing support to ensure continued success and growth.",
     icon: Users,
   },
 ];
