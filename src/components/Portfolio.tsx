@@ -115,7 +115,7 @@ const Portfolio = () => {
             {projects.map((project, index) => (
               <div
                 key={index}
-                className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
+                className="flex-[0_0_auto]" // container fits image width
                 ref={(el) => el && fadeRefs.current.push(el)}
                 style={{ opacity: 0 }}
               >
@@ -126,18 +126,19 @@ const Portfolio = () => {
                   }}
                   className="cursor-pointer"
                 >
-                  {/* Thumbnail image - smaller height on phones, full image shown */}
-                  <div className="relative w-full h-[200px] sm:h-[300px] overflow-hidden rounded-[6px]">
+                  {/* Thumbnail image - auto height based on image, full image shown */}
+                  <div className="relative w-full overflow-hidden rounded-[6px]">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-contain rounded-[6px]" // object-contain avoids zoom
+                      className="w-full object-contain rounded-[6px]" // shows full image
                     />
                     <div className="absolute inset-0 bg-black/20 rounded-[6px]" />
                   </div>
 
                   {/* Brand info box */}
-                  <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
+                  <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between opacity-0"
+                       ref={(el) => el && fadeRefs.current.push(el)}>
                     <span className="font-semibold flex items-center gap-2">
                       {String(index + 1).padStart(2, "0")} {project.title}
                     </span>
