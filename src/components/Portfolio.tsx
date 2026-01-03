@@ -153,7 +153,7 @@ const Portfolio = () => {
             >
               <div className="absolute top-6 right-6 z-10 flex gap-1.5">
                 <button
-                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                  className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
                   onClick={(e) => {
                     e.stopPropagation();
                     setZoom((z) => Math.min(z + 1, 6));
@@ -163,7 +163,7 @@ const Portfolio = () => {
                 </button>
 
                 <button
-                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                  className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
                   onClick={(e) => {
                     e.stopPropagation();
                     setZoom((z) => Math.max(z - 1, 1));
@@ -173,7 +173,7 @@ const Portfolio = () => {
                 </button>
 
                 <button
-                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                  className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
                   onClick={(e) => {
                     e.stopPropagation();
                     setActiveImage(null);
