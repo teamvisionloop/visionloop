@@ -22,7 +22,7 @@ const steps = [
   },
 ];
 
-// X positions where the SVG wave passes under each step (desktop)
+// Desktop X positions aligned to SVG wave
 const DESKTOP_DOT_POSITIONS = ["16.5%", "50%", "83.5%"];
 
 const WhyChooseUsTimeline = () => {
@@ -33,7 +33,7 @@ const WhyChooseUsTimeline = () => {
     const isMobile = window.innerWidth < 768;
     const hasPlayed = sessionStorage.getItem("timelinePlayed");
 
-    // Mobile: lock animation if already played
+    // Mobile: lock animation after first play
     if (isMobile && hasPlayed) {
       setActiveStep(steps.length - 1);
       return;
@@ -59,6 +59,9 @@ const WhyChooseUsTimeline = () => {
     return () => observer.disconnect();
   }, []);
 
+  // When last step reached → timeline fully black
+  const isComplete = activeStep >= steps.length - 1;
+
   return (
     <section id="about" className="py-28 bg-secondary overflow-hidden">
       <h2 className="text-4xl font-bold text-center mb-24">
@@ -75,6 +78,7 @@ const WhyChooseUsTimeline = () => {
           fill="none"
           preserveAspectRatio="none"
         >
+          {/* Background */}
           <path
             d="M0 100
                C 200 20, 400 180, 600 100
@@ -83,6 +87,8 @@ const WhyChooseUsTimeline = () => {
             strokeWidth="4"
             strokeLinecap="round"
           />
+
+          {/* Animated / Final Black Path */}
           <path
             d="M0 100
                C 200 20, 400 180, 600 100
@@ -91,7 +97,7 @@ const WhyChooseUsTimeline = () => {
             strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray="1400"
-            strokeDashoffset={1400 - activeStep * 460}
+            strokeDashoffset={isComplete ? 0 : 1400 - activeStep * 460}
             className="transition-all duration-700 ease-out"
           />
         </svg>
@@ -131,11 +137,18 @@ const WhyChooseUsTimeline = () => {
             <div
               key={i}
               className={`absolute transition-all duration-700 ${
-                activeStep >= i ? "opacity-100 scale-100" : "opacity-0 scale-75"
+                activeStep >= i
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-75"
               }`}
-              style={{ left: DESKTOP_DOT_POSITIONS[i] }}
+              style={{
+                left: DESKTOP_DOT_POSITIONS[i],
+                transform: `translateX(-50%) ${
+                  i === 2 ? "translateY(14px)" : ""
+                }`,
+              }}
             >
-              <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center -translate-x-1/2">
+              <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center">
                 <div className="w-4 h-4 bg-white rounded-full" />
               </div>
             </div>
