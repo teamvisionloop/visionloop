@@ -53,7 +53,7 @@ const WhyChooseUsTimeline = () => {
         {/* ================= DESKTOP TIMELINE (WAVY AND HIGHER) ================= */}
         <svg
           className="hidden md:block absolute w-full h-48"
-          style={{ top: "-48px", left: 0 }} // move up
+          style={{ top: "-78px", left: 0 }} // move up
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
