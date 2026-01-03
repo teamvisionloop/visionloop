@@ -51,8 +51,11 @@ const WhyChooseUsTimeline = () => {
   const isComplete = activeStep >= steps.length - 1;
 
   return (
-    <section id="about" className="py-28 bg-secondary overflow-hidden" style="
-    border-radius: 30px;">
+<section
+  id="about"
+  className="py-28 bg-secondary overflow-hidden"
+  style={{ borderRadius: "30px" }}
+>
       <h2 className="text-4xl font-bold text-center mb-24">
         Why Choose Us
       </h2>
