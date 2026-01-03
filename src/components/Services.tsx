@@ -1,36 +1,11 @@
 import { Store, Palette, Code, Settings, Rocket, HeadphonesIcon } from "lucide-react";
-import { useEffect, useCallback, useState } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
+import { useState } from "react";
 
-const Services = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    {
-      loop: true,
-      align: "start",
-      containScroll: "trimSnaps", // ensures spacing at start/end
-    },
-    [Autoplay({ delay: 3000, stopOnInteraction: false })]
-  );
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
-    };
-  }, [emblaApi, onSelect]);
+const ServicesAccordion = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const services = [
-    { icon: Store, title: "Shopify Store Setup", description: "Complete store configuration from scratch with all essential features and integrations." },
+    { icon: Store, title: "Store Setup", description: "Complete store configuration from scratch with all essential features and integrations." },
     { icon: Palette, title: "Premium Theme Customization", description: "Tailored design modifications to make your store unique and on-brand." },
     { icon: Code, title: "Custom Coded Sections", description: "Bespoke functionality and design elements built specifically for your needs." },
     { icon: Settings, title: "Flow Automations", description: "Automated workflows to streamline operations and enhance customer experience." },
@@ -40,7 +15,7 @@ const Services = () => {
 
   return (
     <section id="services" className="section-padding bg-primary text-primary-foreground">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12 md:mb-16">
           <span className="text-xs md:text-sm font-medium opacity-70 uppercase tracking-wider">What We Do</span>
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mt-3 md:mt-4">Our Services</h2>
@@ -49,26 +24,39 @@ const Services = () => {
           </p>
         </div>
 
-        {/* Carousel */}
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-4 px-4 sm:px-6 md:px-8"> {/* <-- added horizontal padding */}
-            {services.map((service, index) => (
-              <div key={index} className="flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]">
-                <div className="group p-6 md:p-8 border border-primary-foreground/20 hover:bg-primary-foreground/5 transition-colors h-full">
-                  <service.icon className="w-8 h-8 md:w-10 md:h-10 mb-4 md:mb-6 opacity-80 group-hover:opacity-100 transition-opacity" />
-                  <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">{service.title}</h3>
-                  <p className="opacity-70 text-sm md:text-base">{service.description}</p>
+        {/* Accordion */}
+        <div className="flex flex-col gap-4 px-4 md:px-0">
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className={`bg-gray-100 rounded-[12px] border border-gray-300 overflow-hidden transition-all`}
+            >
+              <button
+                className="w-full flex items-center justify-between p-4 md:p-6 text-left"
+                onClick={() =>
+                  setOpenIndex(openIndex === index ? null : index)
+                }
+              >
+                <div className="flex items-center gap-4">
+                  <service.icon className="w-6 h-6 md:w-8 md:h-8 text-gray-700" />
+                  <span className="font-semibold text-gray-800 md:text-lg">{service.title}</span>
                 </div>
-              </div>
-            ))}
-          </div>
+                <span className="text-gray-500 text-xl md:text-2xl">
+                  {openIndex === index ? "−" : "+"}
+                </span>
+              </button>
+
+              {openIndex === index && (
+                <div className="p-4 md:p-6 border-t border-gray-300 text-gray-700 text-sm md:text-base bg-gray-50">
+                  {service.description}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-
-        {/* Dots */}
-
       </div>
     </section>
   );
 };
 
-export default Services;
+export default ServicesAccordion;
