@@ -60,22 +60,21 @@ const About = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex-shrink-0 bg-background p-4 md:p-5 flex flex-col justify-between opacity-0"
+              className="flex-shrink-0 bg-background p-5 md:p-6 flex flex-col justify-start opacity-0"
               style={{
-                width: "220px",
-                height: "220px",
+                width: "260px",
+                height: "260px",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "flex-start",
               }}
             >
               {/* Icon + Title */}
-              <div className="flex items-center gap-2 mb-2">
-                <feature.icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
-                <h3 className="text-base md:text-lg font-semibold">{feature.title}</h3>
+              <div className="flex items-center gap-2 mb-3">
+                <feature.icon className="w-7 h-7 md:w-8 md:h-8 text-primary" />
+                <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
               </div>
               {/* Description */}
-              <p className="text-muted-foreground text-sm md:text-base mt-2 overflow-hidden">
+              <p className="text-muted-foreground text-base md:text-lg mt-2 overflow-hidden">
                 {feature.description}
               </p>
             </div>
