@@ -36,7 +36,8 @@ const WhyChooseUsTimeline = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.target === sectionRef.current && entry.isIntersecting) {
-            setSectionVisible(true);
+            // Only animate on desktop
+            if (window.innerWidth >= 768) setSectionVisible(true);
           }
 
           if (stepRefs.current.includes(entry.target as HTMLDivElement)) {
@@ -65,14 +66,18 @@ const WhyChooseUsTimeline = () => {
     <section
       ref={sectionRef}
       id="about"
-      className={`py-16 bg-secondary overflow-hidden transition-all duration-1000 ${
-        sectionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-      }`}
+      className={`py-16 bg-secondary overflow-hidden transition-all duration-1000
+        md:${sectionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}
+      `}
       style={{ borderRadius: "30px" }}
     >
-      <div className="flex items-center justify-center gap-6 mb-16 md:mb-20">
+      <div className="flex items-center justify-center gap-4 mb-16 md:mb-20">
         <h2 className="text-4xl font-bold text-center">Why Choose Us</h2>
-        <img src={loopImg} alt="Loop" className="w-16 h-16 object-contain" />
+        <img
+          src={loopImg}
+          alt="Loop"
+          className="w-12 h-12 md:w-16 md:h-16 object-contain"
+        />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-6">
