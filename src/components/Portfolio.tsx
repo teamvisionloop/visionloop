@@ -80,12 +80,12 @@ const Portfolio = () => {
 
   return (
     <>
-      {/* Inline CSS for animation */}
+      {/* Inline CSS for slower fade-up animation */}
       <style>{`
         .fade-up-section {
           opacity: 0;
           transform: translateY(50px);
-          transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+          transition: opacity 1.5s ease-out, transform 1.5s ease-out;
         }
         .fade-up-section.is-visible {
           opacity: 1;
@@ -145,78 +145,77 @@ const Portfolio = () => {
             </div>
           </div>
 
- 
-      
-                    {/* Fullscreen Modal */}
-        {activeImage && (
-          <div
-            className="fixed inset-0 z-50 bg-black/70"
-            onClick={() => setActiveImage(null)}
-          >
-
- {/* Controls */}
-<div className="absolute top-6 right-6 z-10 flex gap-1.5">
-  {/* Zoom In */}
-  <button
-    className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-    onClick={(e) => {
-      e.stopPropagation();
-      setZoom((z) => Math.min(z + 1, 6));
-    }}
-  >
-    +
-  </button>
-
-  {/* Zoom Out */}
-  <button
-    className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-    onClick={(e) => {
-      e.stopPropagation();
-      setZoom((z) => Math.max(z - 1, 1));
-    }}
-  >
-    −
-  </button>
-
-  {/* Exit */}
-  <button
-    className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
-    onClick={(e) => {
-      e.stopPropagation();
-      setActiveImage(null);
-    }}
-  >
-    ✕
-  </button>
-</div>
-            {/* Scrollable container */}
+          {/* Fullscreen Modal */}
+          {activeImage && (
             <div
-              className="w-full h-full overflow-auto p-12"
-              onClick={(e) => e.stopPropagation()}
+              className="fixed inset-0 z-50 bg-black/70"
+              onClick={() => setActiveImage(null)}
             >
+              {/* Controls */}
+              <div className="absolute top-6 right-6 z-10 flex gap-1.5">
+                {/* Zoom In */}
+                <button
+                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setZoom((z) => Math.min(z + 1, 6));
+                  }}
+                >
+                  +
+                </button>
+
+                {/* Zoom Out */}
+                <button
+                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setZoom((z) => Math.max(z - 1, 1));
+                  }}
+                >
+                  −
+                </button>
+
+                {/* Exit */}
+                <button
+                  className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveImage(null);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Scrollable container */}
               <div
-                style={{
-                  display: "inline-block",
-                  margin: "auto",
-                }}
+                className="w-full h-full overflow-auto p-12"
+                onClick={(e) => e.stopPropagation()}
               >
-                <img
-                  src={activeImage}
-                  alt=""
+                <div
                   style={{
                     display: "inline-block",
-                    transform: `scale(${zoom})`,
-                    transformOrigin: "top center", // ⚡ top of image visible
-                    maxWidth: "100%",             // fits width initially
-                    maxHeight: "none",            // allows vertical scroll
+                    margin: "auto",
                   }}
-                />
+                >
+                  <img
+                    src={activeImage}
+                    alt=""
+                    style={{
+                      display: "inline-block",
+                      transform: `scale(${zoom})`,
+                      transformOrigin: "top center", // ⚡ top of image visible
+                      maxWidth: "100%",             // fits width initially
+                      maxHeight: "none",            // allows vertical scroll
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-    </section>
+          )}
+        </div>
+      </section>
+    </>
   );
 };
 
