@@ -112,26 +112,41 @@ const Portfolio = () => {
           </p>
         </div>
 
-        {/* Carousel (no scroll animation, autoloop, swipeable) */}
-        <div ref={emblaRef} className="flex gap-4 px-4 md:px-6 lg:px-12 touch-pan-y">
-          {projects.map((project, index) => (
-            <div
-              key={index}
-              className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
-            >
+ 
+ {/* Carousel */}
+        <div ref={emblaRef} className="overflow-hidden">
+          <div className="flex gap-4 px-4 md:px-6 lg:px-12">
+            {projects.map((project, index) => (
               <div
-                onClick={() => { setActiveImage(project.fullImage); setZoom(1); }}
-                className="cursor-pointer"
+                key={index}
+                className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
               >
-                {/* Thumbnail image */}
-                <div className="relative w-full h-[200px] sm:h-[300px] overflow-hidden rounded-[6px]">
+                <div
+                  onClick={() => {
+                    setActiveImage(project.fullImage);
+                    setZoom(1); // reset zoom
+                  }}
+                  className="relative aspect-[4/3] overflow-hidden cursor-pointer"
+                >
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-contain rounded-[6px]"
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/20 rounded-[6px]" />
+
+                  {/* Small black overlay */}
+                  <div className="absolute inset-0 bg-black/20" />
+
+                  {/* Light grey badge (TOP) */}
+                  <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1">
+                    {project.title}
+                  </div>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
 
                 {/* Brand info box */}
                 <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
