@@ -1,4 +1,4 @@
-oimport { Zap, Shield, Users } from "lucide-react";
+import { Zap, Shield, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const steps = [
