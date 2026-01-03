@@ -36,7 +36,6 @@ const WhyChooseUsTimeline = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.target === sectionRef.current && entry.isIntersecting) {
-            // Only animate on desktop
             if (window.innerWidth >= 768) setSectionVisible(true);
           }
 
@@ -67,13 +66,13 @@ const WhyChooseUsTimeline = () => {
       ref={sectionRef}
       id="about"
       className={`bg-secondary overflow-hidden transition-all duration-1000
-        py-12 md:py-16
+        py-10 md:py-16
         md:${sectionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}
       `}
       style={{ borderRadius: "30px" }}
     >
       {/* Title + Image */}
-      <div className="flex items-center justify-center gap-3 md:gap-6 mb-12 md:mb-16">
+      <div className="flex items-center justify-center gap-3 md:gap-6 mb-8 md:mb-16">
         <h2 className="text-3xl md:text-4xl font-bold text-center">Why Choose Us</h2>
         <img
           src={loopImg}
@@ -87,7 +86,7 @@ const WhyChooseUsTimeline = () => {
         {/* ================= DESKTOP WAVY TIMELINE ================= */}
         <svg
           className="hidden md:block absolute w-full h-40"
-          style={{ top: "-60px", left: 0 }}
+          style={{ top: "-78px", left: 0 }}
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
@@ -135,19 +134,17 @@ const WhyChooseUsTimeline = () => {
         </svg>
 
         {/* ================= DESKTOP DOTS ================= */}
-        <div className="hidden md:block absolute top-[-16px] w-full h-0">
+        <div className="hidden md:block absolute top-[-16px] w-full h-0 z-10">
           {steps.map((_, i) => (
             <div
               key={i}
-              className={`absolute transition-all duration-700 ${
-                activeStep >= i ? "opacity-100 scale-100" : "opacity-0 scale-75"
-              }`}
+              className="absolute opacity-100 scale-100"
               style={{
                 left: DESKTOP_DOT_POSITIONS[i],
                 transform: `translateX(-50%) ${i === 2 ? "translateY(32px)" : ""}`,
               }}
             >
-              <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center z-10">
                 <div className="w-4 h-4 bg-white rounded-full" />
               </div>
             </div>
@@ -163,7 +160,8 @@ const WhyChooseUsTimeline = () => {
               data-step={i}
               className="relative flex items-start md:flex-col md:items-center"
             >
-              <span className="absolute -top-20 md:-top-28 text-[100px] md:text-[140px] font-bold text-gray-300 opacity-30">
+              {/* Large faded numbers behind steps removed z-index overlap */}
+              <span className="absolute -top-20 md:-top-28 text-[100px] md:text-[140px] font-bold text-gray-300 opacity-30 -z-0">
                 {step.number}
               </span>
 
