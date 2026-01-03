@@ -3,105 +3,103 @@ import { useEffect, useRef, useState } from "react";
 
 const steps = [
   {
+    label: "1",
     title: "Fast Delivery",
     text: "We deliver your store quickly without compromising on quality.",
     icon: Zap,
   },
   {
+    label: "2",
     title: "Premium Quality",
     text: "Every store is crafted with attention to detail and performance.",
     icon: Shield,
   },
   {
+    label: "3",
     title: "Dedicated Support",
     text: "We support you from launch and beyond with continuous updates.",
     icon: Users,
   },
 ];
 
-const WhyChooseUsTimeline = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
+const WhyChooseUsHorizontal = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const items = document.querySelectorAll(".timeline-step");
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveStep(Number(entry.target.getAttribute("data-step")));
+            setActiveStep(Number(entry.target.dataset.step));
           }
         });
       },
       { threshold: 0.6 }
     );
 
-    items.forEach((item) => observer.observe(item));
+    stepRefs.current.forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-24 bg-secondary overflow-hidden"
-    >
-      <h2 className="text-4xl font-bold text-center mb-20">
+    <section className="py-28 bg-secondary overflow-hidden">
+      <h2 className="text-4xl font-bold text-center mb-24">
         Why Choose Us
       </h2>
 
-      {/* SVG Timeline */}
-      <svg
-        className="absolute left-1/2 top-0 -translate-x-1/2 h-full w-[500px]"
-        viewBox="0 0 500 1200"
-        fill="none"
-      >
-        <path
-          d="M250 50
-             C 100 200, 100 400, 250 550
-             C 400 700, 400 900, 250 1050"
-          stroke="#111"
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeDasharray="1600"
-          strokeDashoffset={1600 - activeStep * 550}
-          className="transition-all duration-700 ease-out"
+      {/* Timeline */}
+      <div className="relative max-w-7xl mx-auto px-6">
+        {/* Horizontal line */}
+        <div className="absolute top-10 left-0 w-full h-[3px] bg-muted" />
+        <div
+          className="absolute top-10 left-0 h-[3px] bg-black transition-all duration-700 ease-out"
+          style={{ width: `${(activeStep + 1) * 33.3}%` }}
         />
-      </svg>
 
-      {/* Steps */}
-      <div className="relative max-w-6xl mx-auto space-y-48">
-        {steps.map((step, i) => (
-          <div
-            key={i}
-            data-step={i}
-            className="timeline-step grid grid-cols-2 items-center gap-12"
-          >
-            {/* Text */}
+        {/* Steps */}
+        <div className="grid grid-cols-3 gap-20 relative">
+          {steps.map((step, i) => (
             <div
-              className={`transition-all duration-700 ${
-                activeStep >= i
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-30 translate-y-8"
-              }`}
+              key={i}
+              ref={(el) => (stepRefs.current[i] = el)}
+              data-step={i}
+              className="relative flex flex-col items-center text-center"
             >
-              <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
-              <p className="text-muted-foreground text-lg">{step.text}</p>
-            </div>
+              {/* Large background number */}
+              <span className="absolute -top-20 text-[140px] font-bold text-gray-300 opacity-30 select-none">
+                {step.label}
+              </span>
 
-            {/* Dot */}
-            <div className="relative flex justify-center">
+              {/* Dot */}
               <div
-                className={`w-6 h-6 rounded-full bg-black transition-transform duration-500 ${
-                  activeStep === i ? "scale-150" : "scale-100"
+                className={`w-6 h-6 rounded-full bg-black z-10 transition-transform duration-500 ${
+                  activeStep >= i ? "scale-150" : "scale-100"
                 }`}
               />
+
+              {/* Content */}
+              <div
+                className={`mt-10 transition-all duration-700 ${
+                  activeStep >= i
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+                }`}
+              >
+                <step.icon className="w-8 h-8 mx-auto mb-4 text-primary" />
+                <h3 className="text-xl font-semibold mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-muted-foreground text-lg">
+                  {step.text}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
-export default WhyChooseUsTimeline;
+export default WhyChooseUsHorizontal;
