@@ -117,8 +117,10 @@ const Portfolio = () => {
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-contain rounded-[6px]"
+                    className="absolute inset-0 w-full h-full object-cover rounded-[6px]"
                   />
+                  <div className="absolute inset-0 bg-black/20 rounded-[6px]" />
+                  {/* Brand badge removed */}
                 </div>
 
                 {/* Brand info box */}
@@ -142,19 +144,19 @@ const Portfolio = () => {
             {/* Controls */}
             <div className="absolute top-6 right-6 z-10 flex gap-1.5">
               <button
-                className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
                 onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.min(z + 1, 6)); }}
               >
                 +
               </button>
               <button
-                className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
                 onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.max(z - 1, 1)); }}
               >
                 −
               </button>
               <button
-                className="text-gray-300 text-2xl w-16 h-16 flex items-center justify-center"
+                className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
                 onClick={(e) => { e.stopPropagation(); setActiveImage(null); }}
               >
                 ✕
