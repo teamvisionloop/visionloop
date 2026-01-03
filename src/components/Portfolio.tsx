@@ -30,17 +30,9 @@ interface Project {
 }
 
 const Portfolio = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "start" },
-    []
-  );
-
+  const [emblaRef] = useEmblaCarousel({ loop: true, align: "start" });
   const autoplay = useRef(
-    Autoplay({
-      delay: 4000,
-      stopOnInteraction: false,
-      stopOnMouseEnter: false,
-    })
+    Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: false })
   );
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -57,8 +49,7 @@ const Portfolio = () => {
 
   // Prevent body scroll when modal is open
   useEffect(() => {
-    if (activeImage) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
+    document.body.style.overflow = activeImage ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [activeImage]);
 
@@ -85,7 +76,6 @@ const Portfolio = () => {
 
   return (
     <section id="portfolio" className="section-padding" style={{ fontFamily: "inherit" }}>
-      {/* Inline animation CSS */}
       <style>{`
         @keyframes fadeUp {
           0% { opacity: 0; transform: translateY(20px); }
@@ -98,22 +88,18 @@ const Portfolio = () => {
 
       <div className="max-w-7xl mx-auto">
 
-        {/* Heading (fade-up stagger) */}
+        {/* Heading */}
         <div
           ref={(el) => el && fadeRefs.current.push(el)}
           className="mb-10 px-4 text-center opacity-0"
         >
-          <h2 className="text-3xl md:text-4xl font-bold select-text">
-            Selected Work
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold select-text">Selected Work</h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            A curated selection of fashion and fragrance brands designed with
-            precision, clarity, and strong visual identity.
+            A curated selection of fashion and fragrance brands designed with precision, clarity, and strong visual identity.
           </p>
         </div>
 
- 
- {/* Carousel */}
+        {/* Carousel */}
         <div ref={emblaRef} className="overflow-hidden">
           <div className="flex gap-4 px-4 md:px-6 lg:px-12">
             {projects.map((project, index) => (
@@ -124,7 +110,7 @@ const Portfolio = () => {
                 <div
                   onClick={() => {
                     setActiveImage(project.fullImage);
-                    setZoom(1); // reset zoom
+                    setZoom(1);
                   }}
                   className="relative aspect-[4/3] overflow-hidden cursor-pointer"
                 >
@@ -133,20 +119,11 @@ const Portfolio = () => {
                     alt={project.title}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
-
-                  {/* Small black overlay */}
                   <div className="absolute inset-0 bg-black/20" />
-
-                  {/* Light grey badge (TOP) */}
                   <div className="absolute top-3 left-3 bg-gray-300 text-black text-xs px-3 py-1">
                     {project.title}
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
 
                 {/* Brand info box */}
                 <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
@@ -156,8 +133,8 @@ const Portfolio = () => {
                   <span className="text-sm">{project.year}</span>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Fullscreen Modal */}
@@ -189,22 +166,19 @@ const Portfolio = () => {
             </div>
 
             <div
-              className="w-full h-full overflow-auto p-12"
+              className="w-full h-full overflow-auto p-12 flex justify-center items-start"
               onClick={(e) => e.stopPropagation()}
             >
-              <div style={{ display: "inline-block", margin: "auto" }}>
-                <img
-                  src={activeImage}
-                  alt=""
-                  style={{
-                    display: "inline-block",
-                    transform: `scale(${zoom})`,
-                    transformOrigin: "top center",
-                    maxWidth: "100%",
-                    maxHeight: "none",
-                  }}
-                />
-              </div>
+              <img
+                src={activeImage}
+                alt=""
+                style={{
+                  transform: `scale(${zoom})`,
+                  transformOrigin: "top center",
+                  maxWidth: "100%",
+                  maxHeight: "none",
+                }}
+              />
             </div>
           </div>
         )}
