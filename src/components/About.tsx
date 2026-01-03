@@ -103,7 +103,7 @@ const WhyChooseUsTimeline = () => {
             strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray="1600"
-            strokeDashoffset={1600 - Math.max(activeStep, 0) * 520}
+            strokeDashoffset={isComplete ? 0 : 1600 - activeStep * 520}
             className="transition-all duration-700 ease-out"
           />
         </svg>
