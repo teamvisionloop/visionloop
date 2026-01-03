@@ -1,5 +1,5 @@
 import { Zap, Shield, Users } from "lucide-react";
-import myLoopImage from "@/assets/loop.png"; // <-- your image path
+import myLoopImage from "@/assets/loop.png";
 import { useEffect, useRef } from "react";
 
 const About = () => {
@@ -10,47 +10,49 @@ const About = () => {
       description:
         "We deliver your store quickly without compromising on quality. Our workflow ensures your project is completed on time so you can start selling faster.",
     },
+        {
+      icon: Users,
+      title: "Dedicated Support",
+      description:
+        "We're with you every step of the way, from launch and beyond. Our support team is always ready to help you with updates and questions.",
+    },
     {
       icon: Shield,
       title: "Premium Quality",
       description:
         "Every store we build is crafted with attention to detail. From design to functionality, we focus on high-quality e-commerce experiences.",
     },
-    {
-      icon: Users,
-      title: "Dedicated Support",
-      description:
-        "We're with you every step of the way, from launch and beyond. Our support team is always ready to help you with updates and questions.",
-    },
   ];
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  // Fade-up animation on scroll
+  // Strong fade-up animation (whole section)
   useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const children = Array.from(containerRef.current.children) as HTMLDivElement[];
-      children.forEach((child) => {
-        const rect = child.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 50) {
-          child.classList.add("fade-up");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("section-visible");
+          observer.unobserve(entry.target);
         }
-      });
-    };
+      },
+      { threshold: 0.2 }
+    );
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // trigger on load
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section id="about" className="py-12 md:py-16 bg-secondary">
+    <section
+      ref={sectionRef}
+      id="about"
+      className="about-section py-12 md:py-16 bg-secondary"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Title */}
         <div className="flex items-center justify-center mb-6 md:mb-10 gap-3">
           <h2 className="text-3xl md:text-4xl font-bold">Why Choose Us</h2>
-          {/* Replace Infinity icon with your image */}
           <img
             src={myLoopImage}
             alt="Loop Sign"
@@ -59,28 +61,20 @@ const About = () => {
         </div>
 
         {/* Features */}
-        <div
-          ref={containerRef}
-          className="flex gap-5 overflow-x-auto md:overflow-x-visible px-4 justify-center"
-        >
+        <div className="flex gap-5 overflow-x-auto md:overflow-x-visible px-4 justify-center">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex-shrink-0 bg-background p-6 md:p-7 flex flex-col justify-start opacity-0"
-              style={{
-                width: "300px",
-                height: "300px",
-                display: "flex",
-                flexDirection: "column",
-              }}
+              className="flex-shrink-0 bg-background p-6 md:p-7"
+              style={{ width: "300px", height: "300px" }}
             >
-              {/* Icon + Title */}
               <div className="flex items-center gap-3 mb-3">
-                <feature.icon className="w-8 h-8 md:w-9 md:h-9 text-primary" />
-                <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
+                <feature.icon className="w-8 h-8 text-primary" />
+                <h3 className="text-lg md:text-xl font-semibold">
+                  {feature.title}
+                </h3>
               </div>
-              {/* Description */}
-              <p className="text-muted-foreground text-lg md:text-lg mt-2 overflow-hidden">
+              <p className="text-muted-foreground text-lg mt-2">
                 {feature.description}
               </p>
             </div>
@@ -88,16 +82,18 @@ const About = () => {
         </div>
       </div>
 
-      {/* Fade-up animation styles */}
+      {/* Strong Fade-Up Animation */}
       <style jsx>{`
-        .fade-up {
-          opacity: 1 !important;
-          transform: translateY(0) !important;
-          transition: all 0.8s ease-out;
-        }
-        div[style*='opacity:0'] {
+        .about-section {
           opacity: 0;
-          transform: translateY(20px);
+          transform: translateY(60px);
+          transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .section-visible {
+          opacity: 1;
+          transform: translateY(0);
         }
       `}</style>
     </section>
