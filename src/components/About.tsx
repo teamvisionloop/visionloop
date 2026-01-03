@@ -22,7 +22,7 @@ const steps = [
   },
 ];
 
-const WhyChooseUsResponsive = () => {
+const WhyChooseUsTimeline = () => {
   const [activeStep, setActiveStep] = useState(0);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -43,15 +43,15 @@ const WhyChooseUsResponsive = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-secondary overflow-hidden">
-      <h2 className="text-4xl font-bold text-center mb-20">
+    <section className="py-28 bg-secondary overflow-hidden">
+      <h2 className="text-4xl font-bold text-center mb-24">
         Why Choose Us
       </h2>
 
       <div className="relative max-w-7xl mx-auto px-6">
-        {/* DESKTOP: horizontal wavy line */}
+        {/* DESKTOP — HORIZONTAL WAVY LINE */}
         <svg
-          className="hidden md:block absolute top-10 left-0 w-full h-40"
+          className="hidden md:block absolute top-28 left-0 w-full h-40"
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
@@ -73,7 +73,7 @@ const WhyChooseUsResponsive = () => {
           />
         </svg>
 
-        {/* MOBILE: vertical wavy line */}
+        {/* MOBILE — VERTICAL WAVY LINE */}
         <svg
           className="md:hidden absolute left-6 top-0 h-full w-20"
           viewBox="0 0 200 1200"
@@ -97,8 +97,8 @@ const WhyChooseUsResponsive = () => {
           />
         </svg>
 
-        {/* Steps */}
-        <div className="grid md:grid-cols-3 gap-24 relative">
+        {/* STEPS */}
+        <div className="grid md:grid-cols-3 gap-28 relative">
           {steps.map((step, i) => (
             <div
               key={i}
@@ -106,13 +106,22 @@ const WhyChooseUsResponsive = () => {
               data-step={i}
               className="relative flex items-start md:flex-col md:items-center"
             >
-              {/* Number */}
-              <span className="absolute -top-16 md:-top-24 text-[120px] md:text-[140px] font-bold text-gray-300 opacity-30 select-none">
+              {/* Large background number */}
+              <span className="absolute -top-20 md:-top-28 text-[120px] md:text-[140px] font-bold text-gray-300 opacity-30 select-none">
                 {step.number}
               </span>
 
-              {/* Dot */}
-              <div className="relative z-10 mt-2 md:mt-0">
+              {/* DOT — DROPS DOWN ON DESKTOP */}
+              <div
+                className={`relative z-10
+                  transition-all duration-700 ease-out
+                  ${
+                    activeStep >= i
+                      ? "md:translate-y-0 md:opacity-100"
+                      : "md:-translate-y-20 md:opacity-0"
+                  }
+                `}
+              >
                 <div
                   className={`w-6 h-6 rounded-full bg-black flex items-center justify-center transition-transform duration-500 ${
                     activeStep >= i ? "scale-150" : "scale-100"
@@ -122,9 +131,9 @@ const WhyChooseUsResponsive = () => {
                 </div>
               </div>
 
-              {/* Content */}
+              {/* CONTENT */}
               <div
-                className={`ml-8 md:ml-0 mt-0 md:mt-10 transition-all duration-700 ${
+                className={`ml-8 md:ml-0 mt-0 md:mt-12 transition-all duration-700 ${
                   activeStep >= i
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -149,4 +158,4 @@ const WhyChooseUsResponsive = () => {
   );
 };
 
-export default WhyChooseUsResponsive;
+export default WhyChooseUsTimeline;
