@@ -38,15 +38,13 @@ const Portfolio = () => {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
 
-  const years = [2024, 2025, 2026];
-
   const projects: Project[] = [
-    { title: "Luxury Brands", image: luxuryBrands, fullImage: luxuryFull, year: years[Math.floor(Math.random() * years.length)] },
-    { title: "Fuzzy", image: fuzzy, fullImage: fuzzyFull, year: years[Math.floor(Math.random() * years.length)] },
-    { title: "Faya Studio", image: fayaStudio, fullImage: fayaFull, year: years[Math.floor(Math.random() * years.length)] },
-    { title: "Temple Of Scent", image: temple, fullImage: templeFull, year: years[Math.floor(Math.random() * years.length)] },
-    { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull, year: years[Math.floor(Math.random() * years.length)] },
-    { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull, year: years[Math.floor(Math.random() * years.length)] },
+    { title: "Luxury Brands", image: luxuryBrands, fullImage: luxuryFull, year: 2024 },
+    { title: "Fuzzy", image: fuzzy, fullImage: fuzzyFull, year: 2025 },
+    { title: "Faya Studio", image: fayaStudio, fullImage: fayaFull, year: 2024 },
+    { title: "Temple Of Scent", image: temple, fullImage: templeFull, year: 2026 },
+    { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull, year: 2024 },
+    { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull, year: 2024 },
   ];
 
   // Prevent body scroll when modal is open
@@ -62,15 +60,12 @@ const Portfolio = () => {
   }, [activeImage]);
 
   return (
-    <section id="portfolio" className="section-padding">
+    <section id="portfolio" className="section-padding" style={{ fontFamily: "inherit" }}>
       <div className="max-w-7xl mx-auto">
 
         {/* Heading */}
         <div className="mb-10 px-4 text-center">
-          <h2
-            className="text-3xl md:text-4xl font-semibold select-text"
-            style={{ fontFamily: "inherit" }}
-          >
+          <h2 className="text-3xl md:text-4xl font-semibold select-text">
             Our Featured Projects
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
@@ -106,11 +101,15 @@ const Portfolio = () => {
 
                   {/* Brand info box */}
                   <div className="mt-2 w-full bg-gray-200 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
-                    <span className="font-semibold">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="flex items-center gap-2">
-                      {project.title}
-                      <span className="inline-block w-1 h-1 bg-black rounded-full" />
+                    {/* Left: number + brand name */}
+                    <span className="font-semibold flex items-center gap-2">
+                      {String(index + 1).padStart(2, "0")} {project.title}
                     </span>
+
+                    {/* Middle: dot */}
+                    <span className="inline-block w-1 h-1 bg-black rounded-full" />
+
+                    {/* Right: year */}
                     <span>{project.year}</span>
                   </div>
                 </div>
