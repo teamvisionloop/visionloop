@@ -30,9 +30,17 @@ interface Project {
 }
 
 const Portfolio = () => {
-  const [emblaRef] = useEmblaCarousel(
+  const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
-    [Autoplay({ delay: 4000, stopOnInteraction: false })]
+    []
+  );
+
+  const autoplay = useRef(
+    Autoplay({
+      delay: 4000,
+      stopOnInteraction: false,
+      stopOnMouseEnter: false,
+    })
   );
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -49,11 +57,8 @@ const Portfolio = () => {
 
   // Prevent body scroll when modal is open
   useEffect(() => {
-    if (activeImage) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (activeImage) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -80,6 +85,19 @@ const Portfolio = () => {
     });
   }, []);
 
+  // Restart carousel from start smoothly
+  useEffect(() => {
+    if (!emblaApi) return;
+    const loopRestart = () => {
+      if (emblaApi) emblaApi.scrollTo(0, true);
+    };
+    emblaApi.on("scrollEnd", () => {
+      if (emblaApi && emblaApi.selectedScrollSnap() === emblaApi.scrollSnapList().length - 1) {
+        loopRestart();
+      }
+    });
+  }, [emblaApi]);
+
   return (
     <section id="portfolio" className="section-padding" style={{ fontFamily: "inherit" }}>
       {/* Inline animation CSS */}
@@ -96,10 +114,7 @@ const Portfolio = () => {
       <div className="max-w-7xl mx-auto">
 
         {/* Heading */}
-        <div
-          ref={(el) => el && fadeRefs.current.push(el)}
-          className="mb-10 px-4 text-center opacity-0"
-        >
+        <div ref={(el) => el && fadeRefs.current.push(el)} className="mb-10 px-4 text-center opacity-0">
           <h2 className="text-3xl md:text-4xl font-bold select-text">
             Selected Work
           </h2>
@@ -109,36 +124,36 @@ const Portfolio = () => {
           </p>
         </div>
 
-        {/* Carousel */}
-        <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex gap-4 px-4 md:px-6 lg:px-12">
+        {/* Carousel container (fade-up) */}
+        <div
+          ref={(el) => el && fadeRefs.current.push(el)}
+          className="overflow-hidden opacity-0"
+        >
+          <div ref={emblaRef} className="flex gap-4 px-4 md:px-6 lg:px-12">
             {projects.map((project, index) => (
               <div
                 key={index}
-                className="flex-[0_0_auto]" // container fits image width
-                ref={(el) => el && fadeRefs.current.push(el)}
-                style={{ opacity: 0 }}
+                className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
               >
                 <div
-                  onClick={() => {
-                    setActiveImage(project.fullImage);
-                    setZoom(1);
-                  }}
+                  onClick={() => { setActiveImage(project.fullImage); setZoom(1); }}
                   className="cursor-pointer"
                 >
-                  {/* Thumbnail image - auto height based on image, full image shown */}
-                  <div className="relative w-full overflow-hidden rounded-[6px]">
+                  {/* Thumbnail image with fixed size */}
+                  <div className="relative w-full h-[200px] sm:h-[300px] overflow-hidden rounded-[6px]">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full object-contain rounded-[6px]" // shows full image
+                      className="w-full h-full object-contain rounded-[6px]"
                     />
                     <div className="absolute inset-0 bg-black/20 rounded-[6px]" />
                   </div>
 
                   {/* Brand info box */}
-                  <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between opacity-0"
-                       ref={(el) => el && fadeRefs.current.push(el)}>
+                  <div
+                    className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between opacity-0"
+                    ref={(el) => el && fadeRefs.current.push(el)}
+                  >
                     <span className="font-semibold flex items-center gap-2">
                       {String(index + 1).padStart(2, "0")} {project.title}
                     </span>
