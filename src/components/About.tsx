@@ -144,7 +144,7 @@ const WhyChooseUsTimeline = () => {
               style={{
                 left: DESKTOP_DOT_POSITIONS[i],
                 transform: `translateX(-50%) ${
-                  i === 2 ? "translateY(25px)" : ""
+                  i === 2 ? "translateY(32px)" : ""
                 }`,
               }}
             >
