@@ -50,36 +50,58 @@ const WhyChooseUsTimeline = () => {
 
       <div className="relative max-w-7xl mx-auto px-6">
 
-        {/* ================= DESKTOP TIMELINE ================= */}
-        <svg
-          className="hidden md:block absolute left-0 w-full h-40"
-          style={{ top: "96px" }} // aligns to dot center
-          viewBox="0 0 1200 200"
-          fill="none"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
-            stroke="#d1d5db"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-          <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
-            stroke="#000"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeDasharray="1400"
-            strokeDashoffset={1400 - activeStep * 460}
-            className="transition-all duration-700 ease-out"
-          />
-        </svg>
+        {/* ================= DOT ROW (DESKTOP REFERENCE LINE) ================= */}
+        <div className="relative hidden md:grid grid-cols-3 gap-28 items-center h-20">
 
-        {/* ================= MOBILE TIMELINE ================= */}
+          {/* DESKTOP WAVY LINE — LOCKED TO DOT CENTERS */}
+          <svg
+            className="absolute inset-0 w-full h-full"
+            viewBox="0 0 1200 200"
+            fill="none"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0 100
+                 C 200 20, 400 180, 600 100
+                 C 800 20, 1000 180, 1200 100"
+              stroke="#d1d5db"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+            <path
+              d="M0 100
+                 C 200 20, 400 180, 600 100
+                 C 800 20, 1000 180, 1200 100"
+              stroke="#000"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeDasharray="1400"
+              strokeDashoffset={1400 - activeStep * 460}
+              className="transition-all duration-700 ease-out"
+            />
+          </svg>
+
+          {/* DOTS */}
+          {steps.map((_, i) => (
+            <div
+              key={i}
+              className={`relative z-10 flex justify-center
+                transition-all duration-700 ease-out
+                ${
+                  activeStep >= i
+                    ? "translate-y-0 opacity-100"
+                    : "-translate-y-20 opacity-0"
+                }
+              `}
+            >
+              <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
+                <div className="w-2.5 h-2.5 bg-white rounded-full" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ================= MOBILE WAVY LINE ================= */}
         <svg
           className="md:hidden absolute left-6 top-0 h-full w-20"
           viewBox="0 0 200 1200"
@@ -107,8 +129,8 @@ const WhyChooseUsTimeline = () => {
           />
         </svg>
 
-        {/* ================= STEPS ================= */}
-        <div className="grid md:grid-cols-3 gap-28 relative">
+        {/* ================= CONTENT ================= */}
+        <div className="grid md:grid-cols-3 gap-28 mt-16 relative">
           {steps.map((step, i) => (
             <div
               key={i}
@@ -117,29 +139,13 @@ const WhyChooseUsTimeline = () => {
               className="relative flex items-start md:flex-col md:items-center"
             >
               {/* Background number */}
-              <span className="absolute -top-20 md:-top-28 text-[120px] md:text-[140px] font-bold text-gray-300 opacity-30 select-none">
+              <span className="absolute -top-20 text-[140px] font-bold text-gray-300 opacity-30 select-none">
                 {step.number}
               </span>
 
-              {/* DOT (CENTERED ON TIMELINE) */}
+              {/* Content */}
               <div
-                className={`relative z-10
-                  transition-all duration-700 ease-out
-                  ${
-                    activeStep >= i
-                      ? "md:translate-y-0 md:opacity-100"
-                      : "md:-translate-y-20 md:opacity-0"
-                  }
-                `}
-              >
-                <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 bg-white rounded-full" />
-                </div>
-              </div>
-
-              {/* CONTENT */}
-              <div
-                className={`ml-8 md:ml-0 mt-0 md:mt-12 transition-all duration-700 ${
+                className={`ml-8 md:ml-0 transition-all duration-700 ${
                   activeStep >= i
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -159,6 +165,7 @@ const WhyChooseUsTimeline = () => {
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
