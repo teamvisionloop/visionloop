@@ -75,8 +75,8 @@ const Hero = () => {
           </h1>
 
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12 px-4">
-            A premium development studio focused on performance, clarity, and
-            conversion — turning ideas into powerful online experiences.
+            “A results-driven agency delivering innovative solutions with clarity, creativity, and impact
+             - transforming ideas into compelling digital experiences
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
