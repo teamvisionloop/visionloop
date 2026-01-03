@@ -3,7 +3,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
 /* =======================
-   Thumbnails
+   Thumbnails & Full Images
 ======================= */
 import luxuryBrands from "@/assets/portfolio/luxury-brands-clean.webp";
 import fuzzy from "@/assets/portfolio/fuzzy.webp";
@@ -12,9 +12,6 @@ import temple from "@/assets/portfolio/temple.webp";
 import fayaEgThumb from "@/assets/portfolio/faya-eg-thumb.webp";
 import lehabThumb from "@/assets/portfolio/lehab-scents-thumb.webp";
 
-/* =======================
-   Full Images
-======================= */
 import luxuryFull from "@/assets/portfolio/luxury-brands-full.webp";
 import fuzzyFull from "@/assets/portfolio/fuzzy-full.webp";
 import fayaFull from "@/assets/portfolio/faya-studio-full.webp";
@@ -49,13 +46,17 @@ const Portfolio = () => {
 
   // Prevent body scroll when modal is open
   useEffect(() => {
-    if (activeImage) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    document.body.style.overflow = activeImage ? "hidden" : "";
+    
+    // Hide navbar when modal is open
+    const navbar = document.querySelector("nav");
+    if (navbar) {
+      navbar.style.display = activeImage ? "none" : "block";
     }
+
     return () => {
       document.body.style.overflow = "";
+      if (navbar) navbar.style.display = "block";
     };
   }, [activeImage]);
 
@@ -80,7 +81,6 @@ const Portfolio = () => {
 
   return (
     <>
-      {/* Inline CSS for slower fade-up animation */}
       <style>{`
         .fade-up-section {
           opacity: 0;
@@ -95,7 +95,6 @@ const Portfolio = () => {
 
       <section id="portfolio" className="section-padding fade-up-section" style={{ fontFamily: "inherit" }}>
         <div className="max-w-7xl mx-auto">
-
           {/* Heading */}
           <div className="mb-10 px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold select-text">
@@ -111,10 +110,7 @@ const Portfolio = () => {
           <div ref={emblaRef} className="overflow-hidden">
             <div className="flex gap-4 px-4 md:px-6 lg:px-12">
               {projects.map((project, index) => (
-                <div
-                  key={index}
-                  className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
-                >
+                <div key={index} className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]">
                   <div
                     onClick={() => {
                       setActiveImage(project.fullImage);
@@ -122,7 +118,6 @@ const Portfolio = () => {
                     }}
                     className="cursor-pointer"
                   >
-                    {/* Thumbnail image */}
                     <div className="relative w-full h-[300px] overflow-hidden rounded-md">
                       <img
                         src={project.image}
@@ -131,8 +126,6 @@ const Portfolio = () => {
                       />
                       <div className="absolute inset-0 bg-black/20" />
                     </div>
-
-                    {/* Brand info box */}
                     <div className="mt-2 w-full bg-gray-100 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
                       <span className="font-semibold flex items-center gap-2">
                         {String(index + 1).padStart(2, "0")} {project.title}
@@ -154,33 +147,18 @@ const Portfolio = () => {
               <div className="absolute top-6 right-6 z-10 flex gap-1.5">
                 <button
                   className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setZoom((z) => Math.min(z + 1, 6));
-                  }}
-                >
-                  +
-                </button>
+                  onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.min(z + 1, 6)); }}
+                >+</button>
 
                 <button
                   className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setZoom((z) => Math.max(z - 1, 1));
-                  }}
-                >
-                  −
-                </button>
+                  onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.max(z - 1, 1)); }}
+                >−</button>
 
                 <button
                   className="text-red-300 text-2xl w-16 h-16 flex items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveImage(null);
-                  }}
-                >
-                  ✕
-                </button>
+                  onClick={(e) => { e.stopPropagation(); setActiveImage(null); }}
+                >✕</button>
               </div>
 
               <div
