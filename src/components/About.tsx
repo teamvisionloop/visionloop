@@ -49,32 +49,32 @@ const About = () => {
         {/* Title */}
         <div className="flex items-center justify-center mb-6 md:mb-10 gap-3">
           <h2 className="text-3xl md:text-4xl font-bold">Why Choose Us</h2>
-          <Infinity className="w-7 h-7 md:w-8 md:h-8 text-primary" />
+          <Infinity className="w-8 h-8 md:w-10 md:h-10 text-primary" />
         </div>
 
         {/* Features */}
         <div
           ref={containerRef}
-          className="flex gap-4 overflow-x-auto md:overflow-x-visible px-4 justify-center"
+          className="flex gap-5 overflow-x-auto md:overflow-x-visible px-4 justify-center"
         >
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex-shrink-0 bg-background p-5 md:p-6 flex flex-col justify-start opacity-0"
+              className="flex-shrink-0 bg-background p-6 md:p-7 flex flex-col justify-start opacity-0"
               style={{
-                width: "260px",
-                height: "260px",
+                width: "300px",
+                height: "300px",
                 display: "flex",
                 flexDirection: "column",
               }}
             >
               {/* Icon + Title */}
-              <div className="flex items-center gap-2 mb-3">
-                <feature.icon className="w-7 h-7 md:w-8 md:h-8 text-primary" />
+              <div className="flex items-center gap-3 mb-3">
+                <feature.icon className="w-8 h-8 md:w-9 md:h-9 text-primary" />
                 <h3 className="text-lg md:text-xl font-semibold">{feature.title}</h3>
               </div>
               {/* Description */}
-              <p className="text-muted-foreground text-base md:text-lg mt-2 overflow-hidden">
+              <p className="text-muted-foreground text-lg md:text-lg mt-2 overflow-hidden">
                 {feature.description}
               </p>
             </div>
