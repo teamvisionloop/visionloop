@@ -52,24 +52,24 @@ const WhyChooseUsTimeline = () => {
 
         {/* ================= DESKTOP TIMELINE ================= */}
         <svg
-          className="hidden md:block absolute left-0 w-full h-40"
-          style={{ top: "96px" }} // aligns to dot center
+          className="hidden md:block absolute w-full h-48"
+          style={{ top: "96px", left: 0 }} // aligned under dots
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
         >
+          {/* Background path */}
           <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
+            d="M100 100
+               C400 100, 800 100, 1100 100"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
+          {/* Active path */}
           <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
+            d="M100 100
+               C400 100, 800 100, 1100 100"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
@@ -81,23 +81,24 @@ const WhyChooseUsTimeline = () => {
 
         {/* ================= MOBILE TIMELINE ================= */}
         <svg
-          className="md:hidden absolute left-6 top-0 h-full w-20"
+          className="md:hidden absolute h-full w-20"
+          style={{ left: "1rem", top: 0 }} // slightly left to match dots
           viewBox="0 0 200 1200"
           fill="none"
           preserveAspectRatio="none"
         >
+          {/* Background path */}
           <path
-            d="M100 0
-               C 20 200, 180 400, 100 600
-               C 20 800, 180 1000, 100 1200"
+            d="M100 100
+               C100 400, 100 800, 100 1200"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
+          {/* Active path */}
           <path
-            d="M100 0
-               C 20 200, 180 400, 100 600
-               C 20 800, 180 1000, 100 1200"
+            d="M100 100
+               C100 400, 100 800, 100 1200"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
@@ -147,11 +148,8 @@ const WhyChooseUsTimeline = () => {
               >
                 <div className="flex items-center gap-3 mb-3">
                   <step.icon className="w-6 h-6 text-primary" />
-                  <h3 className="text-xl font-semibold">
-                    {step.title}
-                  </h3>
+                  <h3 className="text-xl font-semibold">{step.title}</h3>
                 </div>
-
                 <p className="text-muted-foreground text-lg max-w-sm">
                   {step.text}
                 </p>
@@ -159,6 +157,7 @@ const WhyChooseUsTimeline = () => {
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
