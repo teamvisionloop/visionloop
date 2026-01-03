@@ -49,21 +49,27 @@ const WhyChooseUsTimeline = () => {
       </h2>
 
       <div className="relative max-w-7xl mx-auto px-6">
-        {/* DESKTOP — HORIZONTAL WAVY LINE */}
+
+        {/* ================= DESKTOP TIMELINE ================= */}
         <svg
-          className="hidden md:block absolute top-28 left-0 w-full h-40"
+          className="hidden md:block absolute left-0 w-full h-40"
+          style={{ top: "96px" }} // aligns to dot center
           viewBox="0 0 1200 200"
           fill="none"
           preserveAspectRatio="none"
         >
           <path
-            d="M0 100 C 200 20, 400 180, 600 100 C 800 20, 1000 180, 1200 100"
+            d="M0 100
+               C 200 20, 400 180, 600 100
+               C 800 20, 1000 180, 1200 100"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
           <path
-            d="M0 100 C 200 20, 400 180, 600 100 C 800 20, 1000 180, 1200 100"
+            d="M0 100
+               C 200 20, 400 180, 600 100
+               C 800 20, 1000 180, 1200 100"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
@@ -73,7 +79,7 @@ const WhyChooseUsTimeline = () => {
           />
         </svg>
 
-        {/* MOBILE — VERTICAL WAVY LINE */}
+        {/* ================= MOBILE TIMELINE ================= */}
         <svg
           className="md:hidden absolute left-6 top-0 h-full w-20"
           viewBox="0 0 200 1200"
@@ -81,13 +87,17 @@ const WhyChooseUsTimeline = () => {
           preserveAspectRatio="none"
         >
           <path
-            d="M100 0 C 20 200, 180 400, 100 600 C 20 800, 180 1000, 100 1200"
+            d="M100 0
+               C 20 200, 180 400, 100 600
+               C 20 800, 180 1000, 100 1200"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
           <path
-            d="M100 0 C 20 200, 180 400, 100 600 C 20 800, 180 1000, 100 1200"
+            d="M100 0
+               C 20 200, 180 400, 100 600
+               C 20 800, 180 1000, 100 1200"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
@@ -97,7 +107,7 @@ const WhyChooseUsTimeline = () => {
           />
         </svg>
 
-        {/* STEPS */}
+        {/* ================= STEPS ================= */}
         <div className="grid md:grid-cols-3 gap-28 relative">
           {steps.map((step, i) => (
             <div
@@ -106,12 +116,12 @@ const WhyChooseUsTimeline = () => {
               data-step={i}
               className="relative flex items-start md:flex-col md:items-center"
             >
-              {/* Large background number */}
+              {/* Background number */}
               <span className="absolute -top-20 md:-top-28 text-[120px] md:text-[140px] font-bold text-gray-300 opacity-30 select-none">
                 {step.number}
               </span>
 
-              {/* DOT — DROPS DOWN ON DESKTOP */}
+              {/* DOT (CENTERED ON TIMELINE) */}
               <div
                 className={`relative z-10
                   transition-all duration-700 ease-out
@@ -122,11 +132,7 @@ const WhyChooseUsTimeline = () => {
                   }
                 `}
               >
-                <div
-                  className={`w-6 h-6 rounded-full bg-black flex items-center justify-center transition-transform duration-500 ${
-                    activeStep >= i ? "scale-150" : "scale-100"
-                  }`}
-                >
+                <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
                   <div className="w-2.5 h-2.5 bg-white rounded-full" />
                 </div>
               </div>
