@@ -94,17 +94,24 @@ const Portfolio = () => {
                   }}
                   className="cursor-pointer"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-md">
+                  {/* Thumbnail image with exact size and black overlay */}
+                  <div className="relative w-full h-[300px] overflow-hidden rounded-md">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="absolute inset-0 w-full h-full object-cover rounded-md"
+                      className="w-full h-full object-cover"
                     />
+                    <div className="absolute inset-0 bg-black/20" />
                   </div>
 
-                  {/* Brand title + year below the image */}
-                  <div className="mt-2 w-full bg-gray-200 text-black text-center text-sm py-2 rounded-[6px]">
-                    {project.title} • {project.year}
+                  {/* Brand info box */}
+                  <div className="mt-2 w-full bg-gray-200 text-black px-3 py-2 rounded-[6px] flex items-center justify-between">
+                    <span className="font-semibold">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="flex items-center gap-2">
+                      {project.title}
+                      <span className="inline-block w-1 h-1 bg-black rounded-full" />
+                    </span>
+                    <span>{project.year}</span>
                   </div>
                 </div>
               </div>
