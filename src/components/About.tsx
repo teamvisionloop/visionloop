@@ -118,7 +118,7 @@ const WhyChooseUsTimeline = () => {
               }`}
               style={{
                 left: DESKTOP_DOT_POSITIONS[i],
-                transform: `translateX(-50%) ${i === 2 ? "translateY(14px)" : ""}`,
+                transform: `translateX(-50%) ${i === 2 ? "translateY(32px)" : ""}`,
               }}
             >
               <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center">
