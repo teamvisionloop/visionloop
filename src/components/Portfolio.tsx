@@ -44,15 +44,12 @@ const Portfolio = () => {
     { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull, year: 2024 },
   ];
 
-  // Prevent body scroll when modal is open
+  // Prevent body scroll and hide navbar when modal is open
   useEffect(() => {
     document.body.style.overflow = activeImage ? "hidden" : "";
-    
-    // Hide navbar when modal is open
+
     const navbar = document.querySelector("nav");
-    if (navbar) {
-      navbar.style.display = activeImage ? "none" : "block";
-    }
+    if (navbar) navbar.style.display = activeImage ? "none" : "block";
 
     return () => {
       document.body.style.overflow = "";
