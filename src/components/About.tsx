@@ -22,7 +22,7 @@ const steps = [
   },
 ];
 
-// Desktop X positions aligned with SVG wave
+// Desktop X positions aligned to SVG wave
 const DESKTOP_DOT_POSITIONS = ["16.5%", "50%", "83.5%"];
 
 const WhyChooseUsTimeline = () => {
@@ -33,7 +33,7 @@ const WhyChooseUsTimeline = () => {
     const isMobile = window.innerWidth < 768;
     const hasPlayed = sessionStorage.getItem("timelinePlayed");
 
-    // Mobile: animation already played → lock state
+    // Mobile: lock animation after first play
     if (isMobile && hasPlayed) {
       setActiveStep(steps.length - 1);
       return;
@@ -59,6 +59,7 @@ const WhyChooseUsTimeline = () => {
     return () => observer.disconnect();
   }, []);
 
+  // When last step reached → timeline fully black
   const isComplete = activeStep >= steps.length - 1;
 
   return (
@@ -77,6 +78,7 @@ const WhyChooseUsTimeline = () => {
           fill="none"
           preserveAspectRatio="none"
         >
+          {/* Background */}
           <path
             d="M0 100
                C 200 20, 400 180, 600 100
@@ -85,6 +87,8 @@ const WhyChooseUsTimeline = () => {
             strokeWidth="4"
             strokeLinecap="round"
           />
+
+          {/* Animated / Final Black Path */}
           <path
             d="M0 100
                C 200 20, 400 180, 600 100
@@ -98,7 +102,7 @@ const WhyChooseUsTimeline = () => {
           />
         </svg>
 
-        {/* ================= MOBILE TIMELINE ================= */}
+        {/* ================= MOBILE WAVY TIMELINE ================= */}
         <svg
           className="md:hidden absolute h-full w-20"
           style={{ left: "-0.5rem", top: "20px" }}
@@ -127,8 +131,8 @@ const WhyChooseUsTimeline = () => {
           />
         </svg>
 
-        {/* ================= DESKTOP DOTS ================= */}
-        <div className="hidden md:block absolute top-[-6px] w-full h-0">
+        {/* ================= DESKTOP DOTS (SVG-ALIGNED) ================= */}
+        <div className="hidden md:block absolute top-[-16px] w-full h-0">
           {steps.map((_, i) => (
             <div
               key={i}
@@ -139,7 +143,9 @@ const WhyChooseUsTimeline = () => {
               }`}
               style={{
                 left: DESKTOP_DOT_POSITIONS[i],
-                transform: "translate(-50%, 16px)", // moved DOWN
+                transform: `translateX(-50%) ${
+                  i === 2 ? "translateY(14px)" : ""
+                }`,
               }}
             >
               <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center">
@@ -149,7 +155,7 @@ const WhyChooseUsTimeline = () => {
           ))}
         </div>
 
-        {/* ================= STEPS ================= */}
+        {/* ================= STEPS CONTENT ================= */}
         <div className="grid md:grid-cols-3 gap-28 relative">
           {steps.map((step, i) => (
             <div
@@ -170,12 +176,12 @@ const WhyChooseUsTimeline = () => {
                 </div>
               </div>
 
-              {/* FADE-UP CONTENT */}
+              {/* CONTENT */}
               <div
-                className={`ml-8 md:ml-0 mt-0 md:mt-20 transition-all duration-700 ease-out ${
+                className={`ml-8 md:ml-0 mt-0 md:mt-16 transition-all duration-700 ${
                   activeStep >= i
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-10"
+                    : "opacity-0 translate-y-8"
                 }`}
               >
                 <div className="flex items-center gap-3 mb-3">
