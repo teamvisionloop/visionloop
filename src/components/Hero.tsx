@@ -75,7 +75,7 @@ const Hero = () => {
           </h1>
 
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12 px-4">
-            “A results-driven agency delivering innovative solutions with clarity, creativity, and impact
+            A results-driven agency delivering innovative solutions with clarity, creativity, and impact
              - transforming ideas into compelling digital experiences
           </p>
 
