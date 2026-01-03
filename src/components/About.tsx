@@ -22,44 +22,32 @@ const steps = [
   },
 ];
 
-// Desktop X positions aligned to SVG wave
 const DESKTOP_DOT_POSITIONS = ["16.5%", "50%", "83.5%"];
 
 const WhyChooseUsTimeline = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(-1);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const hasPlayed = sessionStorage.getItem("timelinePlayed");
-
-    // Mobile: lock animation after first play
-    if (isMobile && hasPlayed) {
-      setActiveStep(steps.length - 1);
-      return;
-    }
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
 
           const index = Number(entry.target.dataset.step);
-          setActiveStep(index);
-
-          if (isMobile && index === steps.length - 1) {
-            sessionStorage.setItem("timelinePlayed", "true");
-          }
+          setActiveStep((prev) => Math.max(prev, index));
         });
       },
-      { threshold: 0.6 }
+      {
+        threshold: 0.5,
+        rootMargin: "0px 0px -15% 0px",
+      }
     );
 
     stepRefs.current.forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
-  // When last step reached → timeline fully black
   const isComplete = activeStep >= steps.length - 1;
 
   return (
@@ -78,21 +66,14 @@ const WhyChooseUsTimeline = () => {
           fill="none"
           preserveAspectRatio="none"
         >
-          {/* Background */}
           <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
+            d="M0 100 C 200 20, 400 180, 600 100 C 800 20, 1000 180, 1200 100"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
-
-          {/* Animated / Final Black Path */}
           <path
-            d="M0 100
-               C 200 20, 400 180, 600 100
-               C 800 20, 1000 180, 1200 100"
+            d="M0 100 C 200 20, 400 180, 600 100 C 800 20, 1000 180, 1200 100"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
@@ -111,41 +92,33 @@ const WhyChooseUsTimeline = () => {
           preserveAspectRatio="none"
         >
           <path
-            d="M100 0
-               C 20 200, 180 400, 100 600
-               C 20 800, 180 1000, 100 1200"
+            d="M100 0 C 20 200, 180 400, 100 600 C 20 800, 180 1000, 100 1200"
             stroke="#d1d5db"
             strokeWidth="4"
             strokeLinecap="round"
           />
           <path
-            d="M100 0
-               C 20 200, 180 400, 100 600
-               C 20 800, 180 1000, 100 1200"
+            d="M100 0 C 20 200, 180 400, 100 600 C 20 800, 180 1000, 100 1200"
             stroke="#000"
             strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray="1600"
-            strokeDashoffset={1600 - activeStep * 520}
+            strokeDashoffset={1600 - Math.max(activeStep, 0) * 520}
             className="transition-all duration-700 ease-out"
           />
         </svg>
 
-        {/* ================= DESKTOP DOTS (SVG-ALIGNED) ================= */}
+        {/* ================= DESKTOP DOTS ================= */}
         <div className="hidden md:block absolute top-[-16px] w-full h-0">
           {steps.map((_, i) => (
             <div
               key={i}
               className={`absolute transition-all duration-700 ${
-                activeStep >= i
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-75"
+                activeStep >= i ? "opacity-100 scale-100" : "opacity-0 scale-75"
               }`}
               style={{
                 left: DESKTOP_DOT_POSITIONS[i],
-                transform: `translateX(-50%) ${
-                  i === 2 ? "translateY(32px)" : ""
-                }`,
+                transform: `translateX(-50%) ${i === 2 ? "translateY(14px)" : ""}`,
               }}
             >
               <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center">
@@ -155,7 +128,7 @@ const WhyChooseUsTimeline = () => {
           ))}
         </div>
 
-        {/* ================= STEPS CONTENT ================= */}
+        {/* ================= STEPS ================= */}
         <div className="grid md:grid-cols-3 gap-28 relative">
           {steps.map((step, i) => (
             <div
@@ -164,19 +137,17 @@ const WhyChooseUsTimeline = () => {
               data-step={i}
               className="relative flex items-start md:flex-col md:items-center"
             >
-              {/* Background number */}
-              <span className="absolute -top-20 md:-top-28 text-[120px] md:text-[140px] font-bold text-gray-300 opacity-30 select-none">
+              <span className="absolute -top-20 md:-top-28 text-[120px] md:text-[140px] font-bold text-gray-300 opacity-30">
                 {step.number}
               </span>
 
-              {/* MOBILE DOT */}
+              {/* Mobile dot */}
               <div className="md:hidden relative z-10">
                 <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
                   <div className="w-3 h-3 bg-white rounded-full" />
                 </div>
               </div>
 
-              {/* CONTENT */}
               <div
                 className={`ml-8 md:ml-0 mt-0 md:mt-16 transition-all duration-700 ${
                   activeStep >= i
