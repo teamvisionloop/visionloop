@@ -26,6 +26,7 @@ interface Project {
   title: string;
   image: string;
   fullImage: string;
+  year: number;
 }
 
 const Portfolio = () => {
@@ -37,13 +38,15 @@ const Portfolio = () => {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
 
+  const years = [2024, 2025, 2026];
+
   const projects: Project[] = [
-    { title: "Luxury Brands", image: luxuryBrands, fullImage: luxuryFull },
-    { title: "Fuzzy", image: fuzzy, fullImage: fuzzyFull },
-    { title: "Faya Studio", image: fayaStudio, fullImage: fayaFull },
-    { title: "Temple Of Scent", image: temple, fullImage: templeFull },
-    { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull },
-    { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull },
+    { title: "Luxury Brands", image: luxuryBrands, fullImage: luxuryFull, year: years[Math.floor(Math.random() * years.length)] },
+    { title: "Fuzzy", image: fuzzy, fullImage: fuzzyFull, year: years[Math.floor(Math.random() * years.length)] },
+    { title: "Faya Studio", image: fayaStudio, fullImage: fayaFull, year: years[Math.floor(Math.random() * years.length)] },
+    { title: "Temple Of Scent", image: temple, fullImage: templeFull, year: years[Math.floor(Math.random() * years.length)] },
+    { title: "Faya EG", image: fayaEgThumb, fullImage: fayaEgFull, year: years[Math.floor(Math.random() * years.length)] },
+    { title: "Lehab Scents", image: lehabThumb, fullImage: lehabFull, year: years[Math.floor(Math.random() * years.length)] },
   ];
 
   // Prevent body scroll when modal is open
@@ -63,14 +66,14 @@ const Portfolio = () => {
       <div className="max-w-7xl mx-auto">
 
         {/* Heading */}
-        <div className="mb-10 px-4">
+        <div className="mb-10 px-4 text-center">
           <h2
             className="text-3xl md:text-4xl font-semibold select-text"
-            style={{ fontFamily: "inherit" }} // inherit site's font
+            style={{ fontFamily: "inherit" }}
           >
             Our Featured Projects
           </h2>
-          <p className="mt-3 text-muted-foreground max-w-xl">
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
             A curated selection of fashion and fragrance brands designed with
             precision, clarity, and strong visual identity.
           </p>
@@ -91,18 +94,17 @@ const Portfolio = () => {
                   }}
                   className="cursor-pointer"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-md">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover rounded-md"
                     />
-                    <div className="absolute inset-0 bg-black/20" />
                   </div>
 
-                  {/* Brand title below the image */}
-                  <div className="mt-2 w-full bg-gray-200 text-black text-center text-sm py-2">
-                    {project.title}
+                  {/* Brand title + year below the image */}
+                  <div className="mt-2 w-full bg-gray-200 text-black text-center text-sm py-2 rounded-[6px]">
+                    {project.title} • {project.year}
                   </div>
                 </div>
               </div>
