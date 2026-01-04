@@ -26,11 +26,17 @@ const services = [
 ];
 
   return (
-<section class="py-24 bg-black text-white" style="border-radius: 30px;">
-      <div className="max-w-5xl mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold mb-12">Our Services</h2>
-
-        <div className="space-y-4">
+  <section
+  <section
+    className="py-24 bg-black text-white"
+    style={{ borderRadius: "30px" }}
+  >
+    <div className="max-w-6xl mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold">What We Can Offer</h2>
+        <p className="mt-4 text-gray-300 text-lg">
+Shape Whats Next        </p>
+      </div>
           {services.map((service, index) => {
             const isOpen = openIndex === index;
 
