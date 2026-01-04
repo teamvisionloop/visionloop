@@ -25,7 +25,7 @@ const ServicesAccordion = () => {
     },
   ];
 
-  // Intersection Observer for fade-up animation
+  // Fade-up animation on scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -67,15 +67,14 @@ const ServicesAccordion = () => {
           transform: translateY(0);
         }
 
-        /* Accordion smooth open/close */
         .accordion-content {
           max-height: 0;
           overflow: hidden;
-          transition: max-height 0.5s ease, opacity 0.5s ease;
           opacity: 0;
+          transition: max-height 0.5s ease, opacity 0.5s ease;
         }
         .accordion-content.open {
-          max-height: 1000px; /* large enough for content */
+          max-height: 1000px; /* adjust if needed */
           opacity: 1;
         }
       `}</style>
@@ -95,7 +94,7 @@ const ServicesAccordion = () => {
               className={`relative rounded-2xl overflow-hidden transition-all duration-500 fade-up
                 ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"} mb-6`}
             >
-              {/* Header */}
+              {/* Accordion Header */}
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 className="w-full flex items-center justify-between p-6 md:p-8"
@@ -112,7 +111,7 @@ const ServicesAccordion = () => {
                 <span className="text-2xl opacity-70">{isOpen ? "−" : "+"}</span>
               </button>
 
-              {/* Accordion Content */}
+              {/* Accordion Content — always rendered, toggled with CSS */}
               <div
                 className={`accordion-content px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 ${
                   isOpen ? "open" : ""
