@@ -4,6 +4,7 @@ const ServicesAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleItems, setVisibleItems] = useState<number[]>([]);
+  const [visibleHeaders, setVisibleHeaders] = useState<number[]>([]);
 
   const services = [
     {
@@ -26,14 +27,19 @@ const ServicesAccordion = () => {
     },
   ];
 
-  // Intersection Observer to trigger animations on scroll
+  // Intersection Observer for accordion items
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const index = Number(entry.target.getAttribute("data-index"));
-          if (entry.isIntersecting && !visibleItems.includes(index)) {
-            setVisibleItems((prev) => [...prev, index]);
+          if (entry.isIntersecting) {
+            if (!visibleItems.includes(index)) {
+              setVisibleItems((prev) => [...prev, index]);
+            }
+            if (!visibleHeaders.includes(index)) {
+              setVisibleHeaders((prev) => [...prev, index]);
+            }
           }
         });
       },
@@ -46,19 +52,32 @@ const ServicesAccordion = () => {
     return () => {
       children?.forEach((child) => observer.unobserve(child));
     };
-  }, [visibleItems]);
+  }, [visibleItems, visibleHeaders]);
 
   return (
     <section className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
       <div className="max-w-6xl mx-auto px-4" ref={containerRef}>
-        <div className="text-center mb-12 opacity-0 translate-y-6 transition-all duration-700 delay-1000 animate-fade-up visible:opacity-100 visible:translate-y-0">
-          <h2 className="text-4xl font-bold">What We Can Offer</h2>
-          <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <h2
+            className={`text-4xl font-bold opacity-0 translate-y-6 transition-all duration-700
+              ${visibleHeaders.includes(-1) ? "opacity-100 translate-y-0" : ""}`}
+            data-index={-1}
+          >
+            What We Can Offer
+          </h2>
+          <p
+            className={`mt-4 text-gray-300 text-lg opacity-0 translate-y-6 transition-all duration-700 delay-150
+              ${visibleHeaders.includes(-1) ? "opacity-100 translate-y-0" : ""}`}
+          >
+            Shape What's Next
+          </p>
         </div>
 
         {services.map((service, index) => {
           const isOpen = openIndex === index;
           const isVisible = visibleItems.includes(index);
+          const headerVisible = visibleHeaders.includes(index);
 
           return (
             <div
@@ -72,7 +91,8 @@ const ServicesAccordion = () => {
               {/* Header */}
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="w-full flex items-center justify-between p-6 md:p-8"
+                className={`w-full flex items-center justify-between p-6 md:p-8 opacity-0 translate-y-6 transition-all duration-700
+                  ${headerVisible ? "opacity-100 translate-y-0" : ""}`}
               >
                 <div className="flex items-center gap-6">
                   <span
@@ -81,17 +101,14 @@ const ServicesAccordion = () => {
                   >
                     {String(index + 1).padStart(2, "0")}.
                   </span>
-
                   <span className="text-lg md:text-xl font-medium">{service.title}</span>
                 </div>
-
                 <span className="text-2xl opacity-70">{isOpen ? "−" : "+"}</span>
               </button>
 
               {/* Content */}
               {isOpen && (
                 <div className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6">
-                  {/* Left */}
                   <div>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {service.tags.map((tag, i) => (
@@ -100,11 +117,8 @@ const ServicesAccordion = () => {
                         </span>
                       ))}
                     </div>
-
                     <p className="text-white/70 mb-6">{service.description}</p>
                   </div>
-
-                  {/* Right (optional, only if image exists) */}
                   {service.image && (
                     <div className="rounded-xl overflow-hidden">
                       <img
