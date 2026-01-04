@@ -54,7 +54,7 @@ const ServicesAccordion = () => {
   }, [visibleIndexes]);
 
   return (
-    <section className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
+    <section id="services" className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
       <div className="max-w-6xl mx-auto px-4" ref={containerRef}>
         {/* Section Header */}
         <div
