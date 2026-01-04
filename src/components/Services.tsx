@@ -26,7 +26,7 @@ const ServicesAccordion = () => {
     },
   ];
 
-  // Intersection Observer to trigger animations on scroll
+  // Intersection Observer for scroll animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -40,22 +40,29 @@ const ServicesAccordion = () => {
       { threshold: 0.2 }
     );
 
-    const children = containerRef.current?.querySelectorAll(".accordion-item");
-    children?.forEach((child) => observer.observe(child));
+    const items = containerRef.current?.querySelectorAll(".accordion-item");
+    items?.forEach((item) => observer.observe(item));
 
-    return () => {
-      children?.forEach((child) => observer.unobserve(child));
-    };
+    return () => items?.forEach((item) => observer.unobserve(item));
   }, [visibleItems]);
 
   return (
     <section className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
       <div className="max-w-6xl mx-auto px-4" ref={containerRef}>
-        <div className="text-center mb-12 opacity-0 translate-y-6 transition-all duration-700 delay-1000 animate-fade-up visible:opacity-100 visible:translate-y-0">
+        {/* Section Heading */}
+        <div
+          className={`text-center mb-12 transition-all duration-700 transform ${
+            visibleItems.includes(-1)
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
+          }`}
+          data-index={-1} // special index for section header
+        >
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
+        {/* Accordion Items */}
         {services.map((service, index) => {
           const isOpen = openIndex === index;
           const isVisible = visibleItems.includes(index);
@@ -72,7 +79,8 @@ const ServicesAccordion = () => {
               {/* Header */}
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="w-full flex items-center justify-between p-6 md:p-8"
+                className={`w-full flex items-center justify-between p-6 md:p-8 transition-all duration-500
+                  ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
               >
                 <div className="flex items-center gap-6">
                   <span
@@ -90,7 +98,9 @@ const ServicesAccordion = () => {
 
               {/* Content */}
               {isOpen && (
-                <div className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6">
+                <div
+                  className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 transition-opacity transition-transform duration-500 delay-150"
+                >
                   {/* Left */}
                   <div>
                     <div className="flex flex-wrap gap-2 mb-4">
