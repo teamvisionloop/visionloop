@@ -38,8 +38,8 @@ const ServicesAccordion = () => {
           return (
             <div
               key={index}
-              className={relative rounded-2xl overflow-hidden transition-all duration-500
-                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}}
+              className={`relative rounded-2xl overflow-hidden transition-all duration-500
+                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}`}
             >
               {/* Header */}
               <button
@@ -48,8 +48,8 @@ const ServicesAccordion = () => {
               >
                 <div className="flex items-center gap-6">
                   <span
-                    className={text-4xl md:text-5xl font-bold transition-opacity
-                      ${isOpen ? "opacity-100" : "opacity-30"}}
+                    className={`text-4xl md:text-5xl font-bold transition-opacity
+                      ${isOpen ? "opacity-100" : "opacity-30"}`}
                   >
                     {String(index + 1).padStart(2, "0")}.
                   </span>
