@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const ServicesAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visibleItems, setVisibleItems] = useState<number[]>([]);
 
   const services = [
     {
@@ -24,22 +26,48 @@ const ServicesAccordion = () => {
     },
   ];
 
+  // Intersection Observer to trigger animations on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = Number(entry.target.getAttribute("data-index"));
+          if (entry.isIntersecting && !visibleItems.includes(index)) {
+            setVisibleItems((prev) => [...prev, index]);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const children = containerRef.current?.querySelectorAll(".accordion-item");
+    children?.forEach((child) => observer.observe(child));
+
+    return () => {
+      children?.forEach((child) => observer.unobserve(child));
+    };
+  }, [visibleItems]);
+
   return (
     <section className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-12">
+      <div className="max-w-6xl mx-auto px-4" ref={containerRef}>
+        <div className="text-center mb-12 opacity-0 translate-y-6 transition-all duration-700 delay-1000 animate-fade-up visible:opacity-100 visible:translate-y-0">
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
         {services.map((service, index) => {
           const isOpen = openIndex === index;
+          const isVisible = visibleItems.includes(index);
 
           return (
             <div
               key={index}
-              className={`relative rounded-2xl overflow-hidden transition-all duration-500
-                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}`}
+              className={`accordion-item relative rounded-2xl overflow-hidden transition-all duration-500
+                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}
+                ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+                transition-opacity transition-transform duration-700 delay-[${index * 150}ms]`}
+              data-index={index}
             >
               {/* Header */}
               <button
@@ -96,4 +124,4 @@ const ServicesAccordion = () => {
   );
 };
 
-export default ServicesAccordion; 
+export default ServicesAccordion;
