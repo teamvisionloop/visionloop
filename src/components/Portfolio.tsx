@@ -96,7 +96,7 @@ const Portfolio = () => {
         >
           <h2 className="text-3xl md:text-4xl font-bold select-text">Selected Work</h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            A curated selection of fashion and fragrance brands designed with precision, clarity, and strong visual identity.
+            We’ve helped businesses across different industries. Here are our recent projects.
           </p>
         </div>
 
