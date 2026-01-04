@@ -4,27 +4,26 @@ import { ArrowRight } from "lucide-react";
 const ServicesAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const services = [
-    {
-      title: "Web Design",
-      tags: ["Landing Pages", "Portfolio Sites"],
-      description:
-        "Conversion-focused websites built with performance in mind.",
-    },
-    {
-      title: "Logo design",
-      tags: ["Brand Design", "Accessibility"],
-      description:
-        "Custom logos and brand visuals designed to integrate seamlessly with your website and digital presence.",
-    },
-
-    {
-      title: "AI Automation",
-       tags: ["Workflow Automation", "Smart Features"],
-      description:
-        "Implement AI-driven workflows to automate repetitive tasks, optimize processes, and enhance efficiency.",
-    },
-  ];
+const services = [
+  {
+    title: "Web Design",
+    tags: ["Landing Pages", "Portfolio Sites"],
+    description:
+      "Conversion-focused websites built with performance in mind. Each project is crafted with attention to responsive layouts, intuitive navigation, and modern design principles to ensure a seamless user experience across all devices and platforms.",
+  },
+  {
+    title: "Logo Design",
+    tags: ["Brand Design", "Accessibility"],
+    description:
+      "Custom logos and brand visuals designed to strengthen your brand identity and enhance digital presence. Every design is thoughtfully created to be visually striking, accessible, and consistent across websites, social media, and other digital touchpoints.",
+  },
+  {
+    title: "AI Automation",
+    tags: ["Workflow Automation", "Smart Features"],
+    description:
+      "Implement AI-driven workflows to automate repetitive tasks, optimize processes, and improve overall efficiency. These solutions help reduce manual work, streamline operations, and enable smarter, data-driven decision-making within your projects or digital platforms.",
+  },
+];
 
   return (
     <section className="py-24 bg-black text-white">
