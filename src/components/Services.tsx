@@ -26,7 +26,7 @@ const services = [
 ];
 
   return (
-    <section className="py-24 bg-black text-white">
+<section class="py-24 bg-black text-white" style="border-radius: 30px;">
       <div className="max-w-5xl mx-auto px-4">
         <h2 className="text-4xl md:text-5xl font-bold mb-12">Our Services</h2>
 
