@@ -3,61 +3,73 @@ import { useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
+/* ------------------ Types ------------------ */
 interface Plan {
-  name: string;
+  tag: string;
+  duration: string;
+  title: string;
   price: string;
-  currency: string;
+  description: string;
   features: string[];
-  popular: boolean;
+  popular?: boolean;
 }
 
+/* ------------------ Data ------------------ */
 const plans: Plan[] = [
   {
-    name: "Basic",
-    price: "2,500",
-    currency: "EGP",
-    features: ["12 products", "4 pages", "Premium theme", "No free revisions"],
-    popular: false,
-  },
-  {
-    name: "Starter",
-    price: "4,500",
-    currency: "EGP",
-    features: ["25 products", "5 page website", "Premium theme", "2 free revisions"],
-    popular: false,
-  },
-  {
-    name: "Pro",
-    price: "6,500",
-    currency: "EGP",
-    features: ["35 products", "5 page website", "Premium theme", "3 free revisions"],
-    popular: true,
-  },
-  {
-    name: "Enterprise",
-    price: "9,999",
-    currency: "EGP",
+    tag: "Low-budget",
+    duration: "4–7 Days",
+    title: "$500",
+    price: "/Project",
+    description: "Have design ready to build? Or small budget?",
     features: [
-      "40 products",
-      "5 page website",
-      "Premium theme",
-      "5 free revisions",
-      "Flow automations",
-      "Basic SEO setup",
-      "Video tutorials",
-      "2 custom coded sections",
+      "Wireframe-ready project required",
+      "UI design using Figma or Framer",
+      "Online/remote collaboration",
+      "4–7 day turnaround",
+      "Weekday delivery only",
     ],
-    popular: false,
+  },
+  {
+    tag: "Standard Plan",
+    duration: "15 Days",
+    title: "$5,000",
+    price: "/Project",
+    description: "For growing brands ready to scale",
+    popular: true,
+    features: [
+      "Wireframe assistance optional",
+      "Design in Figma or Framer",
+      "Flexible remote delivery",
+      "Detailed iteration & review flow",
+      "Weekday-only execution",
+    ],
+  },
+  {
+    tag: "For Advanced Project",
+    duration: "3–6 Month",
+    title: "Contact",
+    price: "",
+    description: "For enterprises and complex design systems",
+    features: [
+      "Consultation-based scoping",
+      "Custom UX/UI, design system creation",
+      "Deep collaboration with your team",
+      "Phased delivery model",
+      "Full-stack design integration",
+    ],
   },
 ];
 
-const CARD_HEIGHT = "450px"; // Set all cards to Enterprise height
+const CARD_HEIGHT = "520px";
 
+/* ------------------ Component ------------------ */
 const Pricing = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
     [Autoplay({ delay: 5000, stopOnInteraction: false })]
   );
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onSelect = useCallback(() => {
@@ -73,32 +85,24 @@ const Pricing = () => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section id="pricing" className="section-padding">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl font-bold">Choose Your Plan</h2>
-        </div>
+    <section id="pricing" className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
 
-        {/* Mobile Carousel */}
-        <div className="md:hidden relative overflow-x-hidden">
-          <div className="overflow-visible" ref={emblaRef}>
-            <div className="flex gap-4 px-4">
-              {plans.map((plan, idx) => (
-                <div key={idx} className="flex-[0_0_85%]" style={{ height: CARD_HEIGHT }}>
-                  <PricingCard plan={plan} />
-                </div>
-              ))}
-            </div>
+        {/* Mobile */}
+        <div className="md:hidden overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-4">
+            {plans.map((plan, i) => (
+              <div key={i} className="flex-[0_0_90%]" style={{ height: CARD_HEIGHT }}>
+                <PricingCard plan={plan} />
+              </div>
+            ))}
           </div>
-
-          {/* Dots */}
-
         </div>
 
-        {/* Desktop Grid */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {plans.map((plan, idx) => (
-            <div key={idx} style={{ height: CARD_HEIGHT }}>
+        {/* Desktop */}
+        <div className="hidden md:grid grid-cols-3 gap-6">
+          {plans.map((plan, i) => (
+            <div key={i} style={{ height: CARD_HEIGHT }}>
               <PricingCard plan={plan} />
             </div>
           ))}
@@ -108,31 +112,73 @@ const Pricing = () => {
   );
 };
 
-interface PricingCardProps {
-  plan: Plan;
-}
-
-const PricingCard = ({ plan }: PricingCardProps) => (
-  <div className="relative p-6 border rounded-md bg-white flex flex-col h-full">
-    <h3 className="text-lg font-bold">{plan.name}</h3>
-    <div className="text-2xl font-bold mt-2">
-      {plan.price} <span className="text-sm">{plan.currency}</span>
-    </div>
-    <ul className="space-y-2 mt-4 flex-1">
-      {plan.features.map((f, i) => (
-        <li key={i} className="flex items-start gap-2">
-          <Check size={16} className="mt-1 flex-shrink-0" />
-          <span className="text-sm">{f}</span>
-        </li>
-      ))}
-    </ul>
-    <a
-      href="#contact"
-      className="mt-auto block w-full py-2.5 text-center text-sm font-medium border border-primary rounded-md hover:bg-primary hover:text-white transition-colors"
+/* ------------------ Card ------------------ */
+const PricingCard = ({ plan }: { plan: Plan }) => {
+  return (
+    <div
+      className={`
+        relative h-full flex flex-col rounded-3xl p-7
+        bg-[#0e0e0e]
+        text-white
+        border border-white/10
+        shadow-[0_30px_80px_rgba(0,0,0,0.6)]
+        ${plan.popular ? "bg-[#151515]" : ""}
+      `}
     >
-      Get Started
-    </a>
-  </div>
-);
+      {/* Top row */}
+      <div className="flex items-center justify-between text-xs text-white/60">
+        <span className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-white/60" />
+          {plan.tag}
+        </span>
+        <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10">
+          {plan.duration}
+        </span>
+      </div>
+
+      {/* Price */}
+      <div className="mt-8">
+        <h3 className="text-5xl font-bold leading-none">
+          {plan.title}
+        </h3>
+        {plan.price && (
+          <span className="text-sm text-white/50">{plan.price}</span>
+        )}
+      </div>
+
+      {/* Description */}
+      <p className="mt-4 text-sm text-white/60">
+        {plan.description}
+      </p>
+
+      {/* Button */}
+      <button
+        className={`
+          mt-6 w-full py-3 rounded-full text-sm font-medium transition
+          ${
+            plan.popular
+              ? "bg-white text-black hover:bg-white/90"
+              : "bg-white/10 hover:bg-white/20"
+          }
+        `}
+      >
+        Choose Plan
+      </button>
+
+      {/* Divider */}
+      <div className="my-6 h-px bg-white/10" />
+
+      {/* Features */}
+      <ul className="space-y-3 text-sm text-white/70">
+        {plan.features.map((f, i) => (
+          <li key={i} className="flex gap-2">
+            <Check size={16} className="mt-0.5 text-white/50" />
+            {f}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default Pricing;
