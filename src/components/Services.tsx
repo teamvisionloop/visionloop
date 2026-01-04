@@ -6,30 +6,23 @@ const ServicesAccordion = () => {
 
   const services = [
     {
-      title: "Branding Design",
-      tags: ["Brand Strategy", "Visual Identity"],
-      description:
-        "Modern, responsive, and user-friendly brand systems designed to engage audiences and drive conversions.",
-      image:
-        "https://images.unsplash.com/photo-1529336953121-ad3b6c65b5c8?q=80&w=800",
-    },
-    {
-      title: "Digital Design",
-      tags: ["Motion Design", "Accessibility"],
-      description:
-        "High-impact digital experiences optimized for all platforms.",
-    },
-    {
       title: "Web Design",
       tags: ["Landing Pages", "Portfolio Sites"],
       description:
         "Conversion-focused websites built with performance in mind.",
     },
     {
-      title: "UI / UX Design",
-      tags: ["User Research", "Wireframing"],
+      title: "Logo design",
+      tags: ["Brand Design", "Accessibility"],
       description:
-        "Human-centered interfaces designed for clarity and usability.",
+        "Custom logos and brand visuals designed to integrate seamlessly with your website and digital presence.",
+    },
+
+    {
+      title: "AI Automation",
+       tags: ["Workflow Automation", "Smart Features"],
+      description:
+        "Implement AI-driven workflows to automate repetitive tasks, optimize processes, and enhance efficiency.",
     },
   ];
 
@@ -92,11 +85,6 @@ const ServicesAccordion = () => {
                       <p className="text-white/70 mb-6">
                         {service.description}
                       </p>
-
-                      <button className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white text-black text-sm font-medium hover:scale-105 transition">
-                        Explore Now
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
                     </div>
 
                     {/* Right */}
