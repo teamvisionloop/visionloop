@@ -4,11 +4,13 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
 /* ------------------ Types ------------------ */
+type PlanType = "ecommerce" | "self-hosted";
+
 interface Plan {
+  type: PlanType;
   tag: string;
   duration: string;
   title: string;
-  price: string;
   description: string;
   features: string[];
   popular?: boolean;
@@ -16,35 +18,65 @@ interface Plan {
 
 /* ------------------ Data ------------------ */
 const plans: Plan[] = [
+  /* -------- ECOMMERCE -------- */
   {
+    type: "ecommerce",
     tag: "Low-budget",
     duration: "4–7 Days",
     title: "2,500 EGP",
-    price: "",
     description: "Have design ready to build? Or small budget?",
-    features: ["12 products", "3 pages", "Premium theme","Video turotials" , "No free revisions"]
+    features: [
+      "12 products",
+      "3 pages",
+      "Premium theme",
+      "Video tutorials",
+      "No free revisions",
+    ],
   },
   {
+    type: "ecommerce",
     tag: "Elite Plan",
-    duration: " 5-10 Days",
+    duration: "5–10 Days",
     title: "5,000 EGP",
-    price: "",
-    description: "For growing brands ready to scale",
     popular: true,
- features: ["35 products", "5 page website", "Premium theme", ,"Video turotials", "1 custom coded section", "3 free revisions"],
+    description: "For growing brands ready to scale",
+    features: [
+      "35 products",
+      "5 page website",
+      "Premium theme",
+      "Video tutorials",
+      "1 custom coded section",
+      "3 free revisions",
+    ],
+  },
+
+  /* -------- SELF HOSTED -------- */
+  {
+    type: "self-hosted",
+    tag: "Business Website",
+    duration: "7–10 Days",
+    title: "3,500 EGP",
+    description: "Professional self-hosted business website",
+    features: [
+      "5 pages",
+      "Custom layout",
+      "Mobile responsive",
+      "Contact form",
+      "Basic SEO setup",
+    ],
   },
   {
-    tag: "For Advanced Project",
-    duration: "10-15 days",
+    type: "self-hosted",
+    tag: "Advanced Project",
+    duration: "10–15 Days",
     title: "Contact",
-    price: "",
-    description: "for custom website build",
+    description: "Custom self-hosted website build",
     features: [
       "Consultation-based scoping",
-      "Custom UX/UI, design system creation",
-      "Deep collaboration with your team",
-      "Phased delivery model",
-      "Full-stack design integration",
+      "Custom UX/UI design",
+      "Performance optimization",
+      "Scalable architecture",
+      "Ongoing support options",
     ],
   },
 ];
@@ -53,33 +85,61 @@ const CARD_HEIGHT = "520px";
 
 /* ------------------ Component ------------------ */
 const Pricing = () => {
+  const [activeType, setActiveType] = useState<PlanType>("ecommerce");
+
+  const filteredPlans = plans.filter((p) => p.type === activeType);
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "start" },
+    { loop: false, align: "start" },
     [Autoplay({ delay: 5000, stopOnInteraction: false })]
   );
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    return () => emblaApi.off("select", onSelect);
-  }, [emblaApi, onSelect]);
+    emblaApi.reInit();
+  }, [activeType, emblaApi]);
 
   return (
     <section id="pricing" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4">
 
-        {/* Mobile */}
+        {/* ---------- FILTER BUTTONS ---------- */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex bg-black/5 p-1 rounded-full">
+            <button
+              onClick={() => setActiveType("ecommerce")}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition
+                ${
+                  activeType === "ecommerce"
+                    ? "bg-black text-white"
+                    : "text-black/60 hover:text-black"
+                }`}
+            >
+              E-commerce Websites
+            </button>
+
+            <button
+              onClick={() => setActiveType("self-hosted")}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition
+                ${
+                  activeType === "self-hosted"
+                    ? "bg-black text-white"
+                    : "text-black/60 hover:text-black"
+                }`}
+            >
+              Self-Hosted Websites
+            </button>
+          </div>
+        </div>
+
+        {/* ---------- MOBILE ---------- */}
         <div className="md:hidden overflow-hidden" ref={emblaRef}>
           <div className="flex gap-4">
-            {plans.map((plan, i) => (
+            {filteredPlans.map((plan, i) => (
               <div key={i} className="flex-[0_0_90%]" style={{ height: CARD_HEIGHT }}>
                 <PricingCard plan={plan} />
               </div>
@@ -87,9 +147,9 @@ const Pricing = () => {
           </div>
         </div>
 
-        {/* Desktop */}
-        <div className="hidden md:grid grid-cols-3 gap-6">
-          {plans.map((plan, i) => (
+        {/* ---------- DESKTOP ---------- */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPlans.map((plan, i) => (
             <div key={i} style={{ height: CARD_HEIGHT }}>
               <PricingCard plan={plan} />
             </div>
@@ -113,7 +173,7 @@ const PricingCard = ({ plan }: { plan: Plan }) => {
         ${plan.popular ? "bg-[#151515]" : ""}
       `}
     >
-      {/* Top row */}
+      {/* Top */}
       <div className="flex items-center justify-between text-xs text-white/60">
         <span className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-white/60" />
@@ -129,9 +189,6 @@ const PricingCard = ({ plan }: { plan: Plan }) => {
         <h3 className="text-5xl font-bold leading-none">
           {plan.title}
         </h3>
-        {plan.price && (
-          <span className="text-sm text-white/50">{plan.price}</span>
-        )}
       </div>
 
       {/* Description */}
