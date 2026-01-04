@@ -3,8 +3,7 @@ import { useState, useEffect, useRef } from "react";
 const ServicesAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [visibleItems, setVisibleItems] = useState<number[]>([]);
-  const [visibleHeaders, setVisibleHeaders] = useState<number[]>([]);
+  const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
 
   const services = [
     {
@@ -27,77 +26,67 @@ const ServicesAccordion = () => {
     },
   ];
 
-  // Intersection Observer for accordion items
+  // Intersection Observer for fade-up animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const index = Number(entry.target.getAttribute("data-index"));
-          if (entry.isIntersecting) {
-            if (!visibleItems.includes(index)) {
-              setVisibleItems((prev) => [...prev, index]);
-            }
-            if (!visibleHeaders.includes(index)) {
-              setVisibleHeaders((prev) => [...prev, index]);
-            }
+          if (entry.isIntersecting && !visibleIndexes.includes(index)) {
+            // Force fade-up via JS
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+            entry.target.style.transition = `opacity 0.7s ease ${index * 0.15}s, transform 0.7s ease ${index * 0.15}s`;
+
+            setVisibleIndexes((prev) => [...prev, index]);
           }
         });
       },
       { threshold: 0.2 }
     );
 
-    const children = containerRef.current?.querySelectorAll(".accordion-item");
+    const children = containerRef.current?.querySelectorAll("[data-index]");
     children?.forEach((child) => observer.observe(child));
 
     return () => {
       children?.forEach((child) => observer.unobserve(child));
     };
-  }, [visibleItems, visibleHeaders]);
+  }, [visibleIndexes]);
 
   return (
     <section className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
       <div className="max-w-6xl mx-auto px-4" ref={containerRef}>
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2
-            className={`text-4xl font-bold opacity-0 translate-y-6 transition-all duration-700
-              ${visibleHeaders.includes(-1) ? "opacity-100 translate-y-0" : ""}`}
-            data-index={-1}
-          >
-            What We Can Offer
-          </h2>
-          <p
-            className={`mt-4 text-gray-300 text-lg opacity-0 translate-y-6 transition-all duration-700 delay-150
-              ${visibleHeaders.includes(-1) ? "opacity-100 translate-y-0" : ""}`}
-          >
-            Shape What's Next
-          </p>
+        <div
+          data-index={-1}
+          style={{ opacity: 0, transform: "translateY(20px)" }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-4xl font-bold">What We Can Offer</h2>
+          <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
         {services.map((service, index) => {
           const isOpen = openIndex === index;
-          const isVisible = visibleItems.includes(index);
-          const headerVisible = visibleHeaders.includes(index);
 
           return (
             <div
               key={index}
-              className={`accordion-item relative rounded-2xl overflow-hidden transition-all duration-500
-                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}
-                ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-                transition-opacity transition-transform duration-700 delay-[${index * 150}ms]`}
               data-index={index}
+              style={{ opacity: 0, transform: "translateY(20px)" }}
+              className={`accordion-item relative rounded-2xl overflow-hidden
+                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}`}
             >
               {/* Header */}
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className={`w-full flex items-center justify-between p-6 md:p-8 opacity-0 translate-y-6 transition-all duration-700
-                  ${headerVisible ? "opacity-100 translate-y-0" : ""}`}
+                className="w-full flex items-center justify-between p-6 md:p-8"
               >
                 <div className="flex items-center gap-6">
                   <span
-                    className={`text-4xl md:text-5xl font-bold transition-opacity
-                      ${isOpen ? "opacity-100" : "opacity-30"}`}
+                    className={`text-4xl md:text-5xl font-bold transition-opacity ${
+                      isOpen ? "opacity-100" : "opacity-30"
+                    }`}
                   >
                     {String(index + 1).padStart(2, "0")}.
                   </span>
