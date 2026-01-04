@@ -33,9 +33,7 @@ const ServicesAccordion = () => {
           if (entry.isIntersecting) {
             const children = Array.from(entry.target.querySelectorAll(".fade-up"));
             children.forEach((child, i) => {
-              setTimeout(() => {
-                child.classList.add("visible");
-              }, i * 150);
+              setTimeout(() => child.classList.add("visible"), i * 150);
             });
             observer.unobserve(entry.target);
           }
@@ -44,10 +42,7 @@ const ServicesAccordion = () => {
       { threshold: 0.1 }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
+    if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
 
@@ -56,6 +51,7 @@ const ServicesAccordion = () => {
       ref={containerRef}
       className="py-24 bg-black text-white rounded-[30px] px-4"
     >
+      {/* CSS for fade-up + smooth accordion */}
       <style>{`
         .fade-up {
           opacity: 0;
@@ -69,22 +65,24 @@ const ServicesAccordion = () => {
 
         .accordion-content {
           max-height: 0;
-          overflow: hidden;
           opacity: 0;
+          overflow: hidden;
           transition: max-height 0.5s ease, opacity 0.5s ease;
         }
         .accordion-content.open {
-          max-height: 1000px; /* adjust if needed */
+          max-height: 1000px; /* big enough for content */
           opacity: 1;
         }
       `}</style>
 
       <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <div className="text-center mb-12 fade-up">
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
+        {/* Accordion Items */}
         {services.map((service, index) => {
           const isOpen = openIndex === index;
 
@@ -111,7 +109,7 @@ const ServicesAccordion = () => {
                 <span className="text-2xl opacity-70">{isOpen ? "−" : "+"}</span>
               </button>
 
-              {/* Accordion Content — always rendered, toggled with CSS */}
+              {/* Accordion Content — always rendered, visibility controlled by CSS */}
               <div
                 className={`accordion-content px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 ${
                   isOpen ? "open" : ""
@@ -130,6 +128,7 @@ const ServicesAccordion = () => {
                   </div>
                   <p className="text-white/70 mb-6">{service.description}</p>
                 </div>
+
                 {service.image && (
                   <div className="rounded-xl overflow-hidden">
                     <img
