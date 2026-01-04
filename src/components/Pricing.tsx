@@ -35,9 +35,9 @@ const plans: Plan[] = [
   },
   {
     type: "ecommerce",
-    tag: "Elite Plan",
+    tag: "Standard Plan",
     duration: "5–10 Days",
-    title: "5,000 EGP",
+    title: "4,500 EGP",
     popular: true,
     description: "For growing brands ready to scale",
     features: [
@@ -47,6 +47,24 @@ const plans: Plan[] = [
       "Video tutorials",
       "1 custom coded section",
       "3 free revisions",
+    ],
+  },
+  {
+        type: "ecommerce",
+    tag: "Enterprise",
+    duration: "5–10 Days",
+    title: "9,999 EGP",
+    popular: true,
+    description: "For growing brands ready to scale",
+    features: [
+      "40 products",
+      "5 page website",
+      "Premium theme",
+      "5 free revisions",
+      "Flow automations",
+      "Basic SEO setup",
+      "Video tutorials",
+      "2 custom coded sections",
     ],
   },
 
