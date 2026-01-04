@@ -35,7 +35,7 @@ const ServicesAccordion = () => {
             children.forEach((child, i) => {
               setTimeout(() => {
                 child.classList.add("visible");
-              }, i * 150); // stagger delay
+              }, i * 150);
             });
             observer.unobserve(entry.target);
           }
@@ -56,7 +56,6 @@ const ServicesAccordion = () => {
       ref={containerRef}
       className="py-24 bg-black text-white rounded-[30px] px-4"
     >
-      {/* Inline CSS for fade-up animation */}
       <style>{`
         .fade-up {
           opacity: 0;
@@ -67,16 +66,26 @@ const ServicesAccordion = () => {
           opacity: 1;
           transform: translateY(0);
         }
+
+        /* Accordion smooth open/close */
+        .accordion-content {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.5s ease, opacity 0.5s ease;
+          opacity: 0;
+        }
+        .accordion-content.open {
+          max-height: 1000px; /* large enough for content */
+          opacity: 1;
+        }
       `}</style>
 
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12 fade-up">
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
-        {/* Services Accordion */}
         {services.map((service, index) => {
           const isOpen = openIndex === index;
 
@@ -86,7 +95,7 @@ const ServicesAccordion = () => {
               className={`relative rounded-2xl overflow-hidden transition-all duration-500 fade-up
                 ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"} mb-6`}
             >
-              {/* Accordion Header */}
+              {/* Header */}
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 className="w-full flex items-center justify-between p-6 md:p-8"
@@ -104,35 +113,34 @@ const ServicesAccordion = () => {
               </button>
 
               {/* Accordion Content */}
-              {isOpen && (
-                <div className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 fade-up">
-                  {/* Left */}
-                  <div>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {service.tags.map((tag, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 text-xs rounded-full bg-white/10"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="text-white/70 mb-6">{service.description}</p>
+              <div
+                className={`accordion-content px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 ${
+                  isOpen ? "open" : ""
+                }`}
+              >
+                <div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {service.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 text-xs rounded-full bg-white/10"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
-
-                  {/* Right (optional image) */}
-                  {service.image && (
-                    <div className="rounded-xl overflow-hidden">
-                      <img
-                        src={service.image}
-                        alt={service.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
+                  <p className="text-white/70 mb-6">{service.description}</p>
                 </div>
-              )}
+                {service.image && (
+                  <div className="rounded-xl overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}
