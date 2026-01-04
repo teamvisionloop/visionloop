@@ -25,7 +25,7 @@ const ServicesAccordion = () => {
     },
   ];
 
-  // Fade-up animation on scroll
+  // Fade-up on scroll (Intersection Observer)
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -46,12 +46,27 @@ const ServicesAccordion = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Force accordion open with JS by setting max-height dynamically
+  const contentRefs = useRef<HTMLDivElement[]>([]);
+
+  useEffect(() => {
+    contentRefs.current.forEach((el, index) => {
+      if (!el) return;
+      if (openIndex === index) {
+        el.style.maxHeight = el.scrollHeight + "px";
+        el.style.opacity = "1";
+      } else {
+        el.style.maxHeight = "0px";
+        el.style.opacity = "0";
+      }
+    });
+  }, [openIndex]);
+
   return (
     <section
       ref={containerRef}
       className="py-24 bg-black text-white rounded-[30px] px-4"
     >
-      {/* CSS for fade-up + smooth accordion */}
       <style>{`
         .fade-up {
           opacity: 0;
@@ -64,84 +79,73 @@ const ServicesAccordion = () => {
         }
 
         .accordion-content {
-          max-height: 0;
-          opacity: 0;
           overflow: hidden;
           transition: max-height 0.5s ease, opacity 0.5s ease;
-        }
-        .accordion-content.open {
-          max-height: 1000px; /* big enough for content */
-          opacity: 1;
         }
       `}</style>
 
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12 fade-up">
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
-        {/* Accordion Items */}
-        {services.map((service, index) => {
-          const isOpen = openIndex === index;
-
-          return (
-            <div
-              key={index}
-              className={`relative rounded-2xl overflow-hidden transition-all duration-500 fade-up
-                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"} mb-6`}
+        {services.map((service, index) => (
+          <div
+            key={index}
+            className={`relative rounded-2xl overflow-hidden transition-all duration-500 fade-up
+              ${openIndex === index ? "bg-neutral-900" : "bg-neutral-900/40"} mb-6`}
+          >
+            {/* Header */}
+            <button
+              onClick={() => setOpenIndex(openIndex === index ? null : index)}
+              className="w-full flex items-center justify-between p-6 md:p-8"
             >
-              {/* Accordion Header */}
-              <button
-                onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="w-full flex items-center justify-between p-6 md:p-8"
-              >
-                <div className="flex items-center gap-6">
-                  <span
-                    className={`text-4xl md:text-5xl font-bold transition-opacity
-                      ${isOpen ? "opacity-100" : "opacity-30"}`}
-                  >
-                    {String(index + 1).padStart(2, "0")}.
-                  </span>
-                  <span className="text-lg md:text-xl font-medium">{service.title}</span>
-                </div>
-                <span className="text-2xl opacity-70">{isOpen ? "−" : "+"}</span>
-              </button>
-
-              {/* Accordion Content — always rendered, visibility controlled by CSS */}
-              <div
-                className={`accordion-content px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 ${
-                  isOpen ? "open" : ""
-                }`}
-              >
-                <div>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {service.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 text-xs rounded-full bg-white/10"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-white/70 mb-6">{service.description}</p>
-                </div>
-
-                {service.image && (
-                  <div className="rounded-xl overflow-hidden">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
+              <div className="flex items-center gap-6">
+                <span
+                  className={`text-4xl md:text-5xl font-bold transition-opacity ${
+                    openIndex === index ? "opacity-100" : "opacity-30"
+                  }`}
+                >
+                  {String(index + 1).padStart(2, "0")}.
+                </span>
+                <span className="text-lg md:text-xl font-medium">{service.title}</span>
               </div>
+              <span className="text-2xl opacity-70">{openIndex === index ? "−" : "+"}</span>
+            </button>
+
+            {/* Content always rendered */}
+            <div
+              ref={(el) => {
+                if (el) contentRefs.current[index] = el;
+              }}
+              className="accordion-content px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6"
+            >
+              <div>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {service.tags.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 text-xs rounded-full bg-white/10"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-white/70 mb-6">{service.description}</p>
+              </div>
+              {service.image && (
+                <div className="rounded-xl overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </section>
   );
