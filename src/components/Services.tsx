@@ -26,7 +26,6 @@ const ServicesAccordion = () => {
     },
   ];
 
-  // Intersection Observer to detect when items scroll into view
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -40,7 +39,7 @@ const ServicesAccordion = () => {
       { threshold: 0.2 }
     );
 
-    const items = containerRef.current?.querySelectorAll(".accordion-item");
+    const items = containerRef.current?.querySelectorAll(".accordion-item, .accordion-header");
     items?.forEach((item) => observer.observe(item));
 
     return () => items?.forEach((item) => observer.unobserve(item));
@@ -51,11 +50,10 @@ const ServicesAccordion = () => {
       <div className="max-w-6xl mx-auto px-4" ref={containerRef}>
         {/* Section Heading */}
         <div
-          className={`text-center mb-12 transition-all duration-700 transform ${
-            visibleItems.includes(-1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          className={`text-center mb-12 transition-all duration-700 transform opacity-0 translate-y-6 ${
+            visibleItems.includes(-1) ? "opacity-100 translate-y-0" : ""
           }`}
-          data-index={-1} // special index for header
-          style={{ transitionDelay: "100ms" }}
+          data-index={-1}
         >
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
@@ -69,19 +67,16 @@ const ServicesAccordion = () => {
           return (
             <div
               key={index}
-              className={`accordion-item relative rounded-2xl overflow-hidden transition-all duration-500
+              className={`accordion-item mb-4 rounded-2xl overflow-hidden transition-all duration-700 transform
+                ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
                 ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}`}
               data-index={index}
-              style={{
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? "translateY(0)" : "translateY(30px)",
-                transition: `opacity 0.7s ease-out ${index * 0.15}s, transform 0.7s ease-out ${index * 0.15}s`,
-              }}
             >
               {/* Header */}
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className={`w-full flex items-center justify-between p-6 md:p-8 transition-all duration-500`}
+                className={`accordion-header w-full flex items-center justify-between p-6 md:p-8 transition-all duration-700 transform
+                  ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
               >
                 <div className="flex items-center gap-6">
                   <span
@@ -100,10 +95,7 @@ const ServicesAccordion = () => {
 
               {/* Content */}
               {isOpen && (
-                <div
-                  className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 transition-all duration-500"
-                  style={{ opacity: 1, transform: "translateY(0)" }}
-                >
+                <div className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 transition-all duration-500 transform opacity-100 translate-y-0">
                   {/* Left */}
                   <div>
                     <div className="flex flex-wrap gap-2 mb-4">
@@ -117,7 +109,7 @@ const ServicesAccordion = () => {
                     <p className="text-white/70 mb-6">{service.description}</p>
                   </div>
 
-                  {/* Right (optional, only if image exists) */}
+                  {/* Right */}
                   {service.image && (
                     <div className="rounded-xl overflow-hidden">
                       <img
