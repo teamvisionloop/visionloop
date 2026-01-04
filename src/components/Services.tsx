@@ -7,13 +7,13 @@ const ServicesAccordion = () => {
 const services = [
   {
     title: "Web Design",
-    tags: ["Landing Pages", "Portfolio Sites"],
+    tags: ["Ecommerce", "Landing Pages", "Portfolio Sites" , ],
     description:
       "Conversion-focused websites built with performance in mind. Each project is crafted with attention to responsive layouts, intuitive navigation, and modern design principles to ensure a seamless user experience across all devices and platforms.",
   },
   {
     title: "Logo Design",
-    tags: ["Brand Design", "Accessibility"],
+    tags: ["Brand Design", "Identity"],
     description:
       "Custom logos and brand visuals designed to strengthen your brand identity and enhance digital presence. Every design is thoughtfully created to be visually striking, accessible, and consistent across websites, social media, and other digital touchpoints.",
   },
