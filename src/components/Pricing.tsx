@@ -18,7 +18,6 @@ interface Plan {
 
 /* ------------------ Data ------------------ */
 const plans: Plan[] = [
-  /* -------- ECOMMERCE -------- */
   {
     type: "ecommerce",
     tag: "Low-budget",
@@ -50,12 +49,11 @@ const plans: Plan[] = [
     ],
   },
   {
-        type: "ecommerce",
+    type: "ecommerce",
     tag: "Enterprise",
     duration: "5–12 Days",
     title: "9,999 EGP",
-    popular: true,
-    description: "For growing brands ready to scale",
+    description: "Advanced ecommerce setup",
     features: [
       "40 products",
       "5 page website",
@@ -67,62 +65,58 @@ const plans: Plan[] = [
       "2 custom coded sections",
     ],
   },
-{
-  type: "ecommerce",
-  tag: "Contact",
-  duration: "15–30 Days",
-  title: "Contact Us",
-  popular: true,
-  description: "For large or custom e-commerce projects with advanced requirements",
-  features: [
-    "Unlimited products",
-    "Unlimited pages",
-    "Fully customized premium theme",
-    "Unlimited revisions during build",
-    "Advanced flow automations",
-    "Complete on-page SEO setup",
-    "Video tutorials & handover",
-    "Custom-coded sections & integrations",
-    "Performance & speed optimization",
-  ],
-},
-
+  {
+    type: "ecommerce",
+    tag: "Contact",
+    duration: "15–30 Days",
+    title: "Contact Us",
+    popular: true,
+    description: "For large or custom e-commerce projects",
+    features: [
+      "Unlimited products",
+      "Unlimited pages",
+      "Fully customized premium theme",
+      "Unlimited revisions during build",
+      "Advanced flow automations",
+      "Complete on-page SEO setup",
+      "Video tutorials & handover",
+      "Custom integrations",
+      "Performance optimization",
+    ],
+  },
 
   /* -------- SELF HOSTED -------- */
   {
     type: "self-hosted",
-    tag: "portfolio Website",
+    tag: "Portfolio Website",
     duration: "5–9 Days",
     title: "3,500 EGP",
-    description: "Professional self-hosted business website",
+    description: "Professional self-hosted website",
     features: [
       "3 pages",
       "Custom layout",
-      "Responsive across all devices",
-      "Custom Domain Connectoin",
-      "Cloudflare hsoting",
+      "Responsive design",
+      "Custom domain connection",
+      "Cloudflare hosting",
     ],
   },
-{
-  type: "self-hosted",
-  tag: "Contact",
-  duration: "10–25 Days",
-  title: "Contact Us",
-  description: "For custom self-hosted websites with advanced functionality",
-  features: [
-    "5 pages",
-    "Fully custom UX/UI design",
-    "Responsive across all devices",
-    "Unlimited revisions during build",
-    "Deployment & handover support",
-    "Custom Domain Connectoin",
-    "Cloudflare hsoting",
-  ],
-},
-
+  {
+    type: "self-hosted",
+    tag: "Contact",
+    duration: "10–25 Days",
+    title: "Contact Us",
+    description: "Custom self-hosted website build",
+    features: [
+      "Unlimited pages",
+      "Fully custom UX/UI",
+      "Responsive across all devices",
+      "Unlimited revisions during build",
+      "Deployment & handover",
+      "Custom domain connection",
+      "Cloudflare hosting",
+    ],
+  },
 ];
-
-const CARD_HEIGHT = "520px";
 
 /* ------------------ Component ------------------ */
 const Pricing = () => {
@@ -131,13 +125,9 @@ const Pricing = () => {
   const filteredPlans = plans.filter((p) => p.type === activeType);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: false, align: "start" },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+    { loop: true, align: "start" },
+    [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-  }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -147,6 +137,14 @@ const Pricing = () => {
   return (
     <section id="pricing" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4">
+
+        {/* ---------- HEADING ---------- */}
+        <div className="text-center mb-14">
+          <h2 className="text-4xl font-bold text-black">Pricing</h2>
+          <p className="mt-3 text-gray-500 text-sm">
+            Featured Website Plans
+          </p>
+        </div>
 
         {/* ---------- FILTER BUTTONS ---------- */}
         <div className="flex justify-center mb-12">
@@ -177,23 +175,21 @@ const Pricing = () => {
           </div>
         </div>
 
-        {/* ---------- MOBILE ---------- */}
+        {/* ---------- MOBILE CAROUSEL ---------- */}
         <div className="md:hidden overflow-hidden" ref={emblaRef}>
           <div className="flex gap-4">
             {filteredPlans.map((plan, i) => (
-              <div key={i} className="flex-[0_0_90%]" style={{ height: CARD_HEIGHT }}>
+              <div key={i} className="flex-[0_0_90%]">
                 <PricingCard plan={plan} />
               </div>
             ))}
           </div>
         </div>
 
-        {/* ---------- DESKTOP ---------- */}
+        {/* ---------- DESKTOP GRID ---------- */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPlans.map((plan, i) => (
-            <div key={i} style={{ height: CARD_HEIGHT }}>
-              <PricingCard plan={plan} />
-            </div>
+            <PricingCard key={i} plan={plan} />
           ))}
         </div>
       </div>
@@ -206,12 +202,12 @@ const PricingCard = ({ plan }: { plan: Plan }) => {
   return (
     <div
       className={`
-        relative h-full flex flex-col rounded-3xl p-7
+        relative flex flex-col rounded-3xl p-7
         bg-[#0e0e0e]
         text-white
         border border-white/10
         shadow-[0_30px_80px_rgba(0,0,0,0.6)]
-        ${plan.popular ? "bg-[#151515]" : ""}
+        h-full
       `}
     >
       {/* Top */}
@@ -226,11 +222,9 @@ const PricingCard = ({ plan }: { plan: Plan }) => {
       </div>
 
       {/* Price */}
-      <div className="mt-8">
-        <h3 className="text-5xl font-bold leading-none">
-          {plan.title}
-        </h3>
-      </div>
+      <h3 className="mt-8 text-5xl font-bold leading-none">
+        {plan.title}
+      </h3>
 
       {/* Description */}
       <p className="mt-4 text-sm text-white/60">
@@ -242,19 +236,19 @@ const PricingCard = ({ plan }: { plan: Plan }) => {
         className={`
           mt-6 w-full py-3 rounded-full text-sm font-medium transition
           ${
-            plan.popular
+            plan.tag === "Contact"
               ? "bg-white text-black hover:bg-white/90"
               : "bg-white/10 hover:bg-white/20"
           }
         `}
       >
-        Choose Plan
+        {plan.tag === "Contact" ? "Request Quote" : "Choose Plan"}
       </button>
 
       {/* Divider */}
       <div className="my-6 h-px bg-white/10" />
 
-      {/* Features */}
+      {/* Features (auto height, no overflow issues) */}
       <ul className="space-y-3 text-sm text-white/70">
         {plan.features.map((f, i) => (
           <li key={i} className="flex gap-2">
