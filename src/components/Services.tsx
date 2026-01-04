@@ -12,17 +12,17 @@ const ServicesAccordion = () => {
       description:
         "Conversion-focused websites built with performance in mind. Each project is crafted with attention to responsive layouts, intuitive navigation, and modern design principles to ensure a seamless user experience across all devices and platforms.",
     },
+        {
+      title: "AI Automation",
+      tags: ["Workflow Automation", "Smart Features"],
+      description:
+        "Implement AI-driven workflows to automate repetitive tasks, optimize processes, and improve overall efficiency. These solutions help reduce manual work, streamline operations, and enable smarter, data-driven decision-making within your projects or digital platforms.",
+    },
     {
       title: "Logo Design",
       tags: ["Brand Design", "Identity"],
       description:
         "Custom logos and brand visuals designed to strengthen your brand identity and enhance digital presence. Every design is thoughtfully created to be visually striking, accessible, and consistent across websites, social media, and other digital touchpoints.",
-    },
-    {
-      title: "AI Automation",
-      tags: ["Workflow Automation", "Smart Features"],
-      description:
-        "Implement AI-driven workflows to automate repetitive tasks, optimize processes, and improve overall efficiency. These solutions help reduce manual work, streamline operations, and enable smarter, data-driven decision-making within your projects or digital platforms.",
     },
   ];
 
