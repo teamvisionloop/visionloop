@@ -22,7 +22,7 @@ const plans: Plan[] = [
   {
     type: "ecommerce",
     tag: "Low-budget",
-    duration: "4–7 Days",
+    duration: "1–4 Days",
     title: "2,500 EGP",
     description: "Have design ready to build? Or small budget?",
     features: [
@@ -36,7 +36,7 @@ const plans: Plan[] = [
   {
     type: "ecommerce",
     tag: "Standard Plan",
-    duration: "5–10 Days",
+    duration: "4–10 Days",
     title: "4,500 EGP",
     popular: true,
     description: "For growing brands ready to scale",
@@ -52,7 +52,7 @@ const plans: Plan[] = [
   {
         type: "ecommerce",
     tag: "Enterprise",
-    duration: "5–10 Days",
+    duration: "5–12 Days",
     title: "9,999 EGP",
     popular: true,
     description: "For growing brands ready to scale",
@@ -67,36 +67,59 @@ const plans: Plan[] = [
       "2 custom coded sections",
     ],
   },
+{
+  type: "ecommerce",
+  tag: "Contact",
+  duration: "15–30 Days",
+  title: "Contact Us",
+  popular: true,
+  description: "For large or custom e-commerce projects with advanced requirements",
+  features: [
+    "Unlimited products",
+    "Unlimited pages",
+    "Fully customized premium theme",
+    "Unlimited revisions during build",
+    "Advanced flow automations",
+    "Complete on-page SEO setup",
+    "Video tutorials & handover",
+    "Custom-coded sections & integrations",
+    "Performance & speed optimization",
+  ],
+},
+
 
   /* -------- SELF HOSTED -------- */
   {
     type: "self-hosted",
-    tag: "Business Website",
-    duration: "7–10 Days",
+    tag: "portfolio Website",
+    duration: "5–9 Days",
     title: "3,500 EGP",
     description: "Professional self-hosted business website",
     features: [
-      "5 pages",
+      "3 pages",
       "Custom layout",
-      "Mobile responsive",
-      "Contact form",
-      "Basic SEO setup",
+      "Responsive across all devices",
+      "Custom Domain Connectoin",
+      "Cloudflare hsoting",
     ],
   },
-  {
-    type: "self-hosted",
-    tag: "Advanced Project",
-    duration: "10–15 Days",
-    title: "Contact",
-    description: "Custom self-hosted website build",
-    features: [
-      "Consultation-based scoping",
-      "Custom UX/UI design",
-      "Performance optimization",
-      "Scalable architecture",
-      "Ongoing support options",
-    ],
-  },
+{
+  type: "self-hosted",
+  tag: "Contact",
+  duration: "10–25 Days",
+  title: "Contact Us",
+  description: "For custom self-hosted websites with advanced functionality",
+  features: [
+    "5 pages",
+    "Fully custom UX/UI design",
+    "Responsive across all devices",
+    "Unlimited revisions during build",
+    "Deployment & handover support",
+    "Custom Domain Connectoin",
+    "Cloudflare hsoting",
+  ],
+},
+
 ];
 
 const CARD_HEIGHT = "520px";
