@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 const ServicesAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const services = [
     {
@@ -25,130 +24,76 @@ const ServicesAccordion = () => {
     },
   ];
 
-  // Fade-up on scroll (Intersection Observer)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const children = Array.from(entry.target.querySelectorAll(".fade-up"));
-            children.forEach((child, i) => {
-              setTimeout(() => child.classList.add("visible"), i * 150);
-            });
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  // Force accordion open with JS by setting max-height dynamically
-  const contentRefs = useRef<HTMLDivElement[]>([]);
-
-  useEffect(() => {
-    contentRefs.current.forEach((el, index) => {
-      if (!el) return;
-      if (openIndex === index) {
-        el.style.maxHeight = el.scrollHeight + "px";
-        el.style.opacity = "1";
-      } else {
-        el.style.maxHeight = "0px";
-        el.style.opacity = "0";
-      }
-    });
-  }, [openIndex]);
-
   return (
-    <section
-      ref={containerRef}
-      className="py-24 bg-black text-white rounded-[30px] px-4"
-    >
-      <style>{`
-        .fade-up {
-          opacity: 0;
-          transform: translateY(30px);
-          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .fade-up.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .accordion-content {
-          overflow: hidden;
-          transition: max-height 0.5s ease, opacity 0.5s ease;
-        }
-      `}</style>
-
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12 fade-up">
+    <section className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
-        {services.map((service, index) => (
-          <div
-            key={index}
-            className={`relative rounded-2xl overflow-hidden transition-all duration-500 fade-up
-              ${openIndex === index ? "bg-neutral-900" : "bg-neutral-900/40"} mb-6`}
-          >
-            {/* Header */}
-            <button
-              onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full flex items-center justify-between p-6 md:p-8"
-            >
-              <div className="flex items-center gap-6">
-                <span
-                  className={`text-4xl md:text-5xl font-bold transition-opacity ${
-                    openIndex === index ? "opacity-100" : "opacity-30"
-                  }`}
-                >
-                  {String(index + 1).padStart(2, "0")}.
-                </span>
-                <span className="text-lg md:text-xl font-medium">{service.title}</span>
-              </div>
-              <span className="text-2xl opacity-70">{openIndex === index ? "−" : "+"}</span>
-            </button>
+        {services.map((service, index) => {
+          const isOpen = openIndex === index;
 
-            {/* Content always rendered */}
+          return (
             <div
-              ref={(el) => {
-                if (el) contentRefs.current[index] = el;
-              }}
-              className="accordion-content px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6"
+              key={index}
+              className={relative rounded-2xl overflow-hidden transition-all duration-500
+                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}}
             >
-              <div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {service.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 text-xs rounded-full bg-white/10"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              {/* Header */}
+              <button
+                onClick={() => setOpenIndex(isOpen ? null : index)}
+                className="w-full flex items-center justify-between p-6 md:p-8"
+              >
+                <div className="flex items-center gap-6">
+                  <span
+                    className={text-4xl md:text-5xl font-bold transition-opacity
+                      ${isOpen ? "opacity-100" : "opacity-30"}}
+                  >
+                    {String(index + 1).padStart(2, "0")}.
+                  </span>
+
+                  <span className="text-lg md:text-xl font-medium">{service.title}</span>
                 </div>
-                <p className="text-white/70 mb-6">{service.description}</p>
-              </div>
-              {service.image && (
-                <div className="rounded-xl overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover"
-                  />
+
+                <span className="text-2xl opacity-70">{isOpen ? "−" : "+"}</span>
+              </button>
+
+              {/* Content */}
+              {isOpen && (
+                <div className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6">
+                  {/* Left */}
+                  <div>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {service.tags.map((tag, i) => (
+                        <span key={i} className="px-3 py-1 text-xs rounded-full bg-white/10">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <p className="text-white/70 mb-6">{service.description}</p>
+                  </div>
+
+                  {/* Right (optional, only if image exists) */}
+                  {service.image && (
+                    <div className="rounded-xl overflow-hidden">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
 };
 
-export default ServicesAccordion;
+export default ServicesAccordion; 
