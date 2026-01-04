@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const ServicesAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const services = [
     {
@@ -24,24 +25,68 @@ const ServicesAccordion = () => {
     },
   ];
 
+  // Intersection Observer for fade-up animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const children = Array.from(entry.target.querySelectorAll(".fade-up"));
+            children.forEach((child, i) => {
+              setTimeout(() => {
+                child.classList.add("visible");
+              }, i * 150); // stagger delay
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="py-24 bg-black text-white" style={{ borderRadius: "30px" }}>
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-12">
+    <section
+      ref={containerRef}
+      className="py-24 bg-black text-white rounded-[30px] px-4"
+    >
+      {/* Inline CSS for fade-up animation */}
+      <style>{`
+        .fade-up {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-up.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `}</style>
+
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12 fade-up">
           <h2 className="text-4xl font-bold">What We Can Offer</h2>
           <p className="mt-4 text-gray-300 text-lg">Shape What's Next</p>
         </div>
 
+        {/* Services Accordion */}
         {services.map((service, index) => {
           const isOpen = openIndex === index;
 
           return (
             <div
               key={index}
-              className={`relative rounded-2xl overflow-hidden transition-all duration-500
-                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"}`}
+              className={`relative rounded-2xl overflow-hidden transition-all duration-500 fade-up
+                ${isOpen ? "bg-neutral-900" : "bg-neutral-900/40"} mb-6`}
             >
-              {/* Header */}
+              {/* Accordion Header */}
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 className="w-full flex items-center justify-between p-6 md:p-8"
@@ -53,30 +98,30 @@ const ServicesAccordion = () => {
                   >
                     {String(index + 1).padStart(2, "0")}.
                   </span>
-
                   <span className="text-lg md:text-xl font-medium">{service.title}</span>
                 </div>
-
                 <span className="text-2xl opacity-70">{isOpen ? "−" : "+"}</span>
               </button>
 
-              {/* Content */}
+              {/* Accordion Content */}
               {isOpen && (
-                <div className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6">
+                <div className="px-6 md:px-8 pb-8 grid md:grid-cols-2 gap-6 fade-up">
                   {/* Left */}
                   <div>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {service.tags.map((tag, i) => (
-                        <span key={i} className="px-3 py-1 text-xs rounded-full bg-white/10">
+                        <span
+                          key={i}
+                          className="px-3 py-1 text-xs rounded-full bg-white/10"
+                        >
                           {tag}
                         </span>
                       ))}
                     </div>
-
                     <p className="text-white/70 mb-6">{service.description}</p>
                   </div>
 
-                  {/* Right (optional, only if image exists) */}
+                  {/* Right (optional image) */}
                   {service.image && (
                     <div className="rounded-xl overflow-hidden">
                       <img
